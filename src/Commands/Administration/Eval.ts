@@ -4,16 +4,16 @@ import {CommandHelper} from "../../Classes/CommandHelper";
 import {Message} from "discord.js";
 
 @Command({
-    name: 'Ping',
+    name: 'Eval',
     description: 'Ping command',
-    module: 'General'
+    module: 'Administration'
 })
-export class Ping implements BaseCommand {
+export class Eval implements BaseCommand {
     async runCommand(helper: CommandHelper) {
         helper.message.channel.send('NANANANANANAANNA');
     }
 
     async hasPermission(message: Message) {
-        return true;
+        return ['96626362277720064'].includes(message.author.id);
     }
 }

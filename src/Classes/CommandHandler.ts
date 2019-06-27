@@ -20,7 +20,7 @@ export class CommandHandler {
 
         const helper = new CommandHelper(message, this.client, module, {});
 
-        if (command.hasPermission(message)) {
+        if (await command.hasPermission(message)) {
             await command.run(helper);
         } else {
             // TODO: Handle no permission

@@ -7,7 +7,7 @@ interface Base {
     description: string
 }
 export interface Module extends Base {
-    module: any
+    module?: any
 }
 export interface Command extends Base {
     module: string,
@@ -27,6 +27,8 @@ export function Module(info: Module): ClassDecorator {
 
 export function Command(info: Command): ClassDecorator {
     return function(Command: any) {
+        if (!info.module)
+            throw new Error(`Command: ${info.name} must specify a module!`);
         const loaded = new Command();
         Client.commands.set(info.name.toLowerCase(), {
             ...info,
