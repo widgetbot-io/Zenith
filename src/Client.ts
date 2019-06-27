@@ -2,6 +2,7 @@ import {Client as Bot, ClientOptions, Collection, Message} from 'discord.js';
 import {CommandLoader} from "./Classes";
 import {ModuleLoader} from "./Classes/ModuleLoader";
 import {Command, Module} from "./services/decorators";
+import {CommandHandler} from "./Classes/CommandHandler";
 
 interface Options {
     token: string,
@@ -11,6 +12,8 @@ interface Options {
 }
 
 export class Client extends Bot {
+    private commandHandler: CommandHandler = new CommandHandler(this);
+
     private commandLoader: CommandLoader;
     private moduleLoader: ModuleLoader;
 
@@ -35,7 +38,7 @@ export class Client extends Bot {
         // TODO: Event loader & handler
         // use this.digestEvent
 
-        // this.start();
+        this.start();
     }
 
     digestEvent(event: string, cb: (...args) => void ): void {
@@ -58,6 +61,6 @@ export class Client extends Bot {
     }
 
     async onMessage(message: Message): Promise<void> {
-        console.log(message.cleanContent);
+        await this.commandHandler.handleMessage(message);
     }
 }
