@@ -10,11 +10,12 @@ export class CommandHandler {
     async handleMessage(message: Message) {
         if (!message.author) return;
 
-
-        const command: Command = Client.commands.get('ping');
+        const command: Command = Client.commands.get(message.cleanContent);
+        console.log(command);
         if (!command) return;
 
-        const module = Client.modules.get(command.module);
+        const module = Client.modules.get(command.module.toLowerCase());
+        console.log(module);
         if (!module) return; // TODO: Throw error properly.
 
         const helper = new CommandHelper(message, this.client, module, {});

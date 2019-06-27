@@ -18,7 +18,7 @@ export interface Command extends Base {
 export function Module(info: Module): ClassDecorator {
     return function(Module: any) {
         const loaded = new Module();
-        Client.modules.set(info.name, {
+        Client.modules.set(info.name.toLowerCase(), {
             ...info,
             module: loaded
         });
@@ -28,7 +28,7 @@ export function Module(info: Module): ClassDecorator {
 export function Command(info: Command): ClassDecorator {
     return function(Command: any) {
         const loaded = new Command();
-        Client.commands.set(info.name, {
+        Client.commands.set(info.name.toLowerCase(), {
             ...info,
             run: loaded.runCommand,
             hasPermission: loaded.hasPermission
