@@ -1,6 +1,5 @@
 import {Client} from '../Client';
 import * as _cliProgress from 'cli-progress';
-import {BaseCommand} from './Command';
 import {sync} from 'glob';
 
 export class CommandLoader {

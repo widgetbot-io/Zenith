@@ -1,8 +1,8 @@
-import {Command, Module} from "../../services/decorators";
-import {BaseCommand} from "../../Classes/Command";
+import { Command } from "../../services/decorators";
 import {CommandHelper} from "../../Classes/CommandHelper";
 import {Message} from "discord.js";
 import * as util from "util";
+import {BaseCommand} from "../../interfaces";
 
 @Command({
     name: 'Eval',

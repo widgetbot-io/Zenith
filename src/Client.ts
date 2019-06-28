@@ -2,18 +2,19 @@ import {Client as Bot, Collection, Message} from 'discord.js';
 import {CommandLoader} from "./Classes";
 import {ModuleLoader} from "./Classes/ModuleLoader";
 import {CommandHandler} from "./Classes/CommandHandler";
-import {Options, Command as ICommand, Module as IModule} from "./interfaces";
+import { Options, Command as ICommand, Module as IModule } from "./interfaces";
 
 export class Client extends Bot {
+    public static commands: Collection<string, ICommand> = new Collection();
+    public static modules: Collection<string, IModule> = new Collection();
+
     private commandHandler: CommandHandler = new CommandHandler(this);
     private commandLoader: CommandLoader = new CommandLoader(this);
     private moduleLoader: ModuleLoader = new ModuleLoader(this);
 
-    public static commands: Collection<string, ICommand> = new Collection();
-    public static modules: Collection<string, IModule> = new Collection();
-
     constructor(private settings: Options) {
         super(settings.clientOptions);
+
         // TODO: Framework settings
         // TODO: Allow for custom logger/config
 

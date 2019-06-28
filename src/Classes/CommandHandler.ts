@@ -1,8 +1,8 @@
 import {Client} from "../Client";
 import {Message} from "discord.js";
 import {CommandHelper} from "./CommandHelper";
-import {Command} from "../services/decorators";
-import {Ratelimit, RatelimitType} from "./Ratelimit";
+import {Ratelimit} from "./Ratelimit";
+import {Command, RatelimitType} from "../interfaces";
 
 export class CommandHandler {
     private rateLimit: Ratelimit = new Ratelimit();
