@@ -14,12 +14,11 @@ export class Eval implements BaseCommand {
         let res: any;
         const args = helper.message.content.split(' ').splice(1);
         const code = args.join(' ');
-
             try {
-                res = await eval(`(async () => {${code}})()`);
+                res = await eval(code);
                 res = util.inspect(res, false, 0);
                 await helper.send(
-                    `Input: \n \`\`\`js\n(async () => {\n${code}\n})()\`\`\`\n Async Output: \n \`\`\`js\n${res}\`\`\``
+                    `Input: \n \`\`\`js\n${code}\`\`\`\n Async Output: \n \`\`\`js\n${res}\`\`\``
                 );
             } catch (err) {
                 await helper.send(`\`\`\`js\n${err}\`\`\``);
