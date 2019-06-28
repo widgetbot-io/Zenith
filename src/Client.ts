@@ -1,4 +1,4 @@
-import {Client as Bot, Collection, Message} from 'discord.js';
+import {Client as Bot, Collection} from 'discord.js';
 import {CommandLoader} from "./Classes";
 import {ModuleLoader} from "./Classes/ModuleLoader";
 import {CommandHandler} from "./Classes/CommandHandler";

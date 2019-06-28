@@ -1,6 +1,6 @@
-export { Base, Command, Module } from './decoraters';
+export { Base, Command, Module } from './decorators';
 export { BaseCommand } from './command';
 export { Limit, LimitSettings, RatelimitType } from './ratelimit';
 export { Options } from './client';
-export {  } from './decoraters';
-export {  } from './decoraters';
+export {  } from './decorators';
+export {  } from './decorators';
