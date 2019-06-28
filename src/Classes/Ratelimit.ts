@@ -1,23 +1,9 @@
-export enum RatelimitType {
-    CHANNEL,
-    USER
-}
-interface Limit {
-    amount: number,
-    time: Date
-}
-interface LimitSettings {
-    user: {
-        amount: number,
-        time: number
-    },
-    channel: {
-        amount: number,
-        time: number
-    }
-}
+import {Limit, LimitSettings, RatelimitType} from "../interfaces";
 
 export class Ratelimit {
+    private channelLimits: {[key: string]: Limit} = {};
+    private userLimits: {[key: string]: Limit} = {};
+
     private limits: LimitSettings = {
         user: {
             amount: 4,
@@ -28,11 +14,6 @@ export class Ratelimit {
             time: 1000
         }
     };
-
-    private channelLimits: {[key: string]: Limit} = {};
-    private userLimits: {[key: string]: Limit} = {};
-
-    constructor() {}
 
     async increment(Id: string, type: RatelimitType): Promise<void> {
         switch (type) {

@@ -1,15 +1,8 @@
-import {Client as Bot, ClientOptions, Collection, Message} from 'discord.js';
+import {Client as Bot, Collection, Message} from 'discord.js';
 import {CommandLoader} from "./Classes";
 import {ModuleLoader} from "./Classes/ModuleLoader";
-import {Command, Module} from "./services/decorators";
 import {CommandHandler} from "./Classes/CommandHandler";
-
-interface Options {
-    token: string,
-    prefix: string,
-    clientOptions: ClientOptions,
-    roots: string[],
-}
+import {Options, Command as ICommand, Module as IModule} from "./interfaces";
 
 export class Client extends Bot {
     private commandHandler: CommandHandler = new CommandHandler(this);
@@ -17,8 +10,8 @@ export class Client extends Bot {
     private commandLoader: CommandLoader;
     private moduleLoader: ModuleLoader;
 
-    public static commands: Collection<string, Command> = new Collection();
-    public static modules: Collection<string, Module> = new Collection();
+    public static commands: Collection<string, ICommand> = new Collection();
+    public static modules: Collection<string, IModule> = new Collection();
 
     constructor(private settings: Options) {
         super(settings.clientOptions);
