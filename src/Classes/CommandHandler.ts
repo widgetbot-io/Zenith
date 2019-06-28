@@ -5,6 +5,7 @@ import {Ratelimit} from "./Ratelimit";
 import {Command, RatelimitType} from "../interfaces";
 
 export class CommandHandler {
+	public ranCommands: {[key: string]: Message} = {};
     private rateLimit: Ratelimit = new Ratelimit();
     constructor(private client: Client) {}
 
