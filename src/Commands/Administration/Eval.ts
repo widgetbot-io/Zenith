@@ -18,11 +18,11 @@ export class Eval implements BaseCommand {
             try {
                 res = await eval(`(async () => {${code}})()`);
                 res = util.inspect(res, false, 0);
-                await helper.message.channel.send(
+                await helper.send(
                     `Input: \n \`\`\`js\n(async () => {\n${code}\n})()\`\`\`\n Async Output: \n \`\`\`js\n${res}\`\`\``
                 );
             } catch (err) {
-                await helper.message.channel.send(`\`\`\`js\n${err}\`\`\``);
+                await helper.send(`\`\`\`js\n${err}\`\`\``);
             }
     }
 

@@ -1,7 +1,7 @@
 import {Command, Module} from "../../services/decorators";
-import {BaseCommand} from "../../Classes/Command";
 import {CommandHelper} from "../../Classes/CommandHelper";
 import {Message} from "discord.js";
+import {BaseCommand} from "../../interfaces";
 
 @Command({
     name: 'Ping',
@@ -10,7 +10,7 @@ import {Message} from "discord.js";
 })
 export class Ping implements BaseCommand {
     async runCommand(helper: CommandHelper) {
-        helper.message.channel.send('NANANANANANAANNA');
+        await helper.send('NANANANANANAANNA');
     }
 
     async hasPermission(message: Message) {
