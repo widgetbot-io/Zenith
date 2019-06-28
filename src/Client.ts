@@ -8,9 +8,9 @@ export class Client extends Bot {
     public static commands: Collection<string, ICommand> = new Collection();
     public static modules: Collection<string, IModule> = new Collection();
 
-    private commandHandler: CommandHandler = new CommandHandler(this);
-    private commandLoader: CommandLoader = new CommandLoader(this);
-    private moduleLoader: ModuleLoader = new ModuleLoader(this);
+    public commandHandler: CommandHandler = new CommandHandler(this);
+    public commandLoader: CommandLoader = new CommandLoader(this);
+    public moduleLoader: ModuleLoader = new ModuleLoader(this);
 
     constructor(private settings: Options) {
         super(settings.clientOptions);
@@ -18,7 +18,8 @@ export class Client extends Bot {
         // TODO: Framework settings
         // TODO: Allow for custom logger/config
 
-        this.on('message', m => this.onMessage(m));
+        this.on('message', m => this.commandHandler.handleMessage);
+        this.on('messageUpdate', m => this.commandHandler.handleMessage);
 
         // TODO: Framework Module loading
         // TODO: Framework Command loading
@@ -50,9 +51,5 @@ export class Client extends Bot {
                 });
             }).catch(e => { console.error(e) });
         }).catch(e => { console.error(e) })
-    }
-
-    async onMessage(message: Message): Promise<void> {
-        await this.commandHandler.handleMessage(message);
     }
 }
