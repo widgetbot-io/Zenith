@@ -1,5 +1,6 @@
-import {Client} from "../Client";
-import {BaseCommand} from "./Command";
+import {Client} from '../Client';
+import * as _cliProgress from 'cli-progress';
+import {BaseCommand} from './Command';
 import {sync} from 'glob';
 
 export class CommandLoader {
@@ -14,10 +15,19 @@ export class CommandLoader {
         return files;
     }
 
-    async loadCommands(): Promise<boolean> {
-        const commands: string[] = this.getLoadableCommands();
+    async loadCommands(): Promise<void> {
+        let start: number = 0;
+        const progressBar = new _cliProgress.Bar({}, _cliProgress.Presets.shades_classic);
+        const commands: string[] = await this.getLoadableCommands();
 
-        for (const command of commands) require(command);
-        return true;
+        console.log('Loading Commands...');
+        progressBar.start(commands.length, start);
+        for (const command of commands) {
+            start += 1;
+            await progressBar.update(start);
+            await require(command);
+        }
+
+        await progressBar.stop();
     }
 }

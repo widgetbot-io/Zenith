@@ -1,5 +1,5 @@
 import {Client} from "../Client";
-import {BaseCommand} from "./Command";
+import * as _cliProgress from 'cli-progress';
 import {sync} from 'glob';
 
 export class ModuleLoader {
@@ -15,8 +15,18 @@ export class ModuleLoader {
     }
 
     async loadModules(): Promise<void> {
-        const modules: string[] = this.getLoadableModules();
+        let start: number = 0;
+        const progressBar = new _cliProgress.Bar({}, _cliProgress.Presets.shades_classic);
+        const modules: string[] = await this.getLoadableModules();
 
-        for (const module of modules) require(module);
+        console.log('Loading Modules...');
+        progressBar.start(modules.length, start);
+        for (const module of modules) {
+            start += 1;
+            await progressBar.update(start);
+            await require(module);
+        }
+
+        await progressBar.stop();
     }
 }
