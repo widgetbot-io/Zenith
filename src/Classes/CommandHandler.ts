@@ -10,11 +10,11 @@ export class CommandHandler {
     async handleMessage(message: Message) {
         if (!message.author) return;
 
-        const command: Command = Client.commands.get(message.cleanContent);
+        const command: Command = Client.commands.get(message.cleanContent.split(' ')[0]);
         console.log(command);
         if (!command) return;
 
-        const module = Client.modules.get(command.module.toLowerCase());
+        const module = Client.modules.get(command.module.toLowerCase()).module;
         console.log(module);
         if (!module) return; // TODO: Throw error properly.
 

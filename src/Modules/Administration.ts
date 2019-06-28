@@ -4,4 +4,6 @@ import {Module} from "../services/decorators";
     name: 'Administration',
     description: 'Yeah'
 })
-export class Administration {}
+export class Administration {
+    test(): void {}
+}
