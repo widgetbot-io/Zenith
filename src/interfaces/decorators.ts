@@ -13,3 +13,6 @@ export interface Command extends Base {
 	run?: (helper: CommandHelper) => Promise<void>;
 	hasPermission?: (message: Message) => Promise<boolean>;
 }
+export interface Event extends Base {
+	run?: (...args) => Promise<void>;
+}

@@ -1,5 +1,5 @@
 import { Client } from '../Client';
-import { Command, Module } from '../interfaces';
+import { Command, Module, Event } from '../interfaces';
 
 export function Module(info: Module): ClassDecorator {
     return function(Module: any) {
@@ -7,6 +7,16 @@ export function Module(info: Module): ClassDecorator {
         Client.modules.set(info.name.toLowerCase(), {
             ...info,
             module: loaded
+        });
+    }
+}
+
+export function Event(info: Event): ClassDecorator {
+    return function(Event: any) {
+        const loaded = new Event();
+        Client.events.set(info.name.toLowerCase(), {
+            ...info,
+            run: loaded.runCommand
         });
     }
 }
