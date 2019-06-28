@@ -13,6 +13,10 @@ export class CommandHelper {
         return this.message.guild;
     }
 
+    public get author() {
+        return this.message.author;
+    }
+
     public async send(content: string): Promise<Message> {
         let message;
 
