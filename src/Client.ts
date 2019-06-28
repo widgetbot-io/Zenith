@@ -18,8 +18,8 @@ export class Client extends Bot {
         // TODO: Framework settings
         // TODO: Allow for custom logger/config
 
-        this.on('message', m => this.commandHandler.handleMessage);
-        this.on('messageUpdate', m => this.commandHandler.handleMessage);
+        this.on('message', m =>this.commandHandler.handleMessage(m));
+        this.on('messageUpdate', (o, n) => this.commandHandler.handleMessage(n));
 
         // TODO: Framework Module loading
         // TODO: Framework Command loading
