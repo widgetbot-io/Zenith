@@ -6,9 +6,8 @@ import {Options, Command as ICommand, Module as IModule} from "./interfaces";
 
 export class Client extends Bot {
     private commandHandler: CommandHandler = new CommandHandler(this);
-
-    private commandLoader: CommandLoader;
-    private moduleLoader: ModuleLoader;
+    private commandLoader: CommandLoader = new CommandLoader(this);
+    private moduleLoader: ModuleLoader = new ModuleLoader(this);
 
     public static commands: Collection<string, ICommand> = new Collection();
     public static modules: Collection<string, IModule> = new Collection();
@@ -20,10 +19,7 @@ export class Client extends Bot {
 
         this.on('message', m => this.onMessage(m));
 
-        this.moduleLoader = new ModuleLoader(this);
         // TODO: Framework Module loading
-
-        this.commandLoader = new CommandLoader(this);
         // TODO: Framework Command loading
 
         // TODO: Event loader & handler
