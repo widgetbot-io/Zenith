@@ -3,10 +3,7 @@ import * as _cliProgress from 'cli-progress';
 import {sync} from 'glob';
 
 export class CommandLoader {
-    constructor(private Client: Client) {
-
-    }
-
+    constructor(private Client: Client) { }
     getLoadableCommands(): string[] {
         let files: string[] = sync(`${__dirname}/../Commands/**/*.**`);
         files = files.filter(a => !a.endsWith('.d.ts') || !a.endsWith('.map'));
