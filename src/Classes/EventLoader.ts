@@ -28,9 +28,10 @@ export class EventLoader {
     }
 
     async digestEvents() {
-        console.log('hi');
         for (const event of Client.events) {
-            console.log(event);
+            this.Client.digestEvent(event[0], async (client, ...args) => {
+                await event[1].run(client, args);
+            })
         }
     }
 }

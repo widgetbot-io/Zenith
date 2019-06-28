@@ -23,8 +23,6 @@ export function Event(info: Event): ClassDecorator {
 
 export function Command(info: Command): ClassDecorator {
     return function(Command: any) {
-        if (!info.module)
-            throw new Error(`Command: ${info.name} must specify a module!`);
         const loaded = new Command();
         Client.commands.set(info.name.toLowerCase(), {
             ...info,

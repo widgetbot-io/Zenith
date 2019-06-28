@@ -1,16 +1,19 @@
-import {Client as Bot, Collection} from 'discord.js';
-import {CommandLoader} from "./Classes";
-import {ModuleLoader} from "./Classes/ModuleLoader";
-import {CommandHandler} from "./Classes/CommandHandler";
-import { Options, Command as ICommand, Module as IModule } from "./interfaces";
+import { Client as Bot, Collection } from 'discord.js';
+import { CommandLoader } from "./Classes";
+import { ModuleLoader } from "./Classes/ModuleLoader";
+import { CommandHandler } from "./Classes/CommandHandler";
+import { Options, Command as ICommand, Module as IModule, Event as IEvent } from "./interfaces";
+import {EventLoader} from "./Classes/EventLoader";
 
 export class Client extends Bot {
     public static commands: Collection<string, ICommand> = new Collection();
+    public static events: Collection<string, IEvent> = new Collection();
     public static modules: Collection<string, IModule> = new Collection();
 
     public commandHandler: CommandHandler = new CommandHandler(this);
     public commandLoader: CommandLoader = new CommandLoader(this);
     public moduleLoader: ModuleLoader = new ModuleLoader(this);
+    public eventLoader: EventLoader = new EventLoader(this);
 
     constructor(private settings: Options) {
         super(settings.clientOptions);
@@ -18,7 +21,6 @@ export class Client extends Bot {
         // TODO: Framework settings
         // TODO: Allow for custom logger/config
 
-        this.on('message', m =>this.commandHandler.handleMessage(m));
         this.on('messageUpdate', (o, n) => this.commandHandler.handleMessage(n));
 
         // TODO: Framework Module loading
@@ -30,11 +32,10 @@ export class Client extends Bot {
         this.start();
     }
 
-    digestEvent(event: string, cb: (...args) => void ): void {
+    public digestEvent(event: string, cb: (client: Client, ...args) => void ): void {
         this.on(event, (...args) => {
-            // TODO Promises w/ catch
             try {
-                cb(...args);
+                cb(this, ...args);
             } catch (e) {
                 console.error(e);
             }
@@ -43,12 +44,12 @@ export class Client extends Bot {
 
     async start(): Promise<void> {
         this.moduleLoader.loadModules().then(() => {
-            this.commandLoader.loadCommands().then(() => {
-                this.login(this.settings.token).then(() => {
-                    console.log('Bot ready!')
-                }).catch((err) => {
-                    console.log(err)
-                });
+            this.eventLoader.loadEvents().then(() => {
+                this.commandLoader.loadCommands().then(() => {
+                    this.eventLoader.digestEvents().then(() => {
+                        this.login(this.settings.token).catch(e => { console.error(e) });
+                    }).catch(e => { console.error(e) });
+                }).catch(e => { console.error(e) });
             }).catch(e => { console.error(e) });
         }).catch(e => { console.error(e) })
     }
