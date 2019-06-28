@@ -28,11 +28,9 @@ export class Client extends Bot {
         this.on('message', m => this.onMessage(m));
 
         this.moduleLoader = new ModuleLoader(this);
-        this.moduleLoader.loadModules();
         // TODO: Framework Module loading
 
         this.commandLoader = new CommandLoader(this);
-        this.commandLoader.loadCommands();
         // TODO: Framework Command loading
 
         // TODO: Event loader & handler
@@ -53,11 +51,15 @@ export class Client extends Bot {
     }
 
     async start(): Promise<void> {
-        await this.login(this.settings.token).then(() => {
-            console.log('Bot ready!')
-        }).catch((err) => {
-            console.log(err)
-        });
+        this.moduleLoader.loadModules().then(() => {
+            this.commandLoader.loadCommands().then(() => {
+                this.login(this.settings.token).then(() => {
+                    console.log('Bot ready!')
+                }).catch((err) => {
+                    console.log(err)
+                });
+            }).catch(e => { console.error(e) });
+        }).catch(e => { console.error(e) })
     }
 
     async onMessage(message: Message): Promise<void> {
