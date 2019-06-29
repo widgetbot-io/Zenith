@@ -1,3 +1,5 @@
+import 'reflect-metadata';
+
 import { Client as Bot, Collection } from 'discord.js';
 import { CommandLoader } from "./Classes";
 import { ModuleLoader } from "./Classes/ModuleLoader";
