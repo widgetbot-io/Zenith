@@ -22,16 +22,9 @@ export class Client extends Bot {
     constructor(public settings: Options) {
         super(settings.clientOptions);
 
-        // TODO: Framework settings
         // TODO: Allow for custom logger/config
 
         this.on('messageUpdate', (o, n) => this.commandHandler.handleMessage(n));
-
-        // TODO: Framework Module loading
-        // TODO: Framework Command loading
-
-        // TODO: Event loader & handler
-        // use this.digestEvent
 
         this.start();
     }
