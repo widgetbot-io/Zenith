@@ -4,8 +4,8 @@ import {sync} from 'glob';
 
 export class EventLoader {
     constructor(private client: Client) { }
-    getLoadableEvents(): string[] {
-        let files: string[] = sync(`${__dirname}/../Events/**/*.**`);
+    getLoadableEvents(directory: string = `${__dirname}/../Events/**/*.**`): string[] {
+        let files: string[] = sync(directory);
         files = files.filter(a => !a.endsWith('.d.ts') || !a.endsWith('.map'));
 
         return files;
@@ -27,7 +27,22 @@ export class EventLoader {
         await progressBar.stop();
     }
 
-    async loadCustomEvents(): Promise<void> {}
+    async loadCustomEvents(): Promise<void> {
+        let events: string[][] = [];
+
+        // TODO: Progress bar
+        for (const eventDir of this.client.settings.dirs.events) {
+            events.push(await this.getLoadableEvents(eventDir))
+        }
+
+        for (const event of events) {
+            for (const e of event) {
+                require(e);
+            }
+        }
+
+        console.log('Loaded custom Commands');
+    }
 
     async digestEvents() {
         for (const event of Client.events) {

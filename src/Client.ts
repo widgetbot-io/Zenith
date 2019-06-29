@@ -17,7 +17,7 @@ export class Client extends Bot {
     public moduleLoader: ModuleLoader = new ModuleLoader(this);
     public eventLoader: EventLoader = new EventLoader(this);
 
-    constructor(private settings: Options) {
+    constructor(public settings: Options) {
         super(settings.clientOptions);
 
         // TODO: Framework settings

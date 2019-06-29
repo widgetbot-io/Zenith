@@ -8,9 +8,9 @@ const client = new Client({
 	prefix: '>>',
 	roots: ['96626362277720064'],
 	dirs: {
-		commands: [`${__dirname}\\Commands`],
-		events: [`${__dirname}\\Events`],
-		modules: [`${__dirname}\\Modules`]
+		commands: [`${__dirname}/Commands/**/*.**`],
+		events: [`${__dirname}/Events/**/*.**`],
+		modules: [`${__dirname}/Modules/*.**`]
 	}
 });
 

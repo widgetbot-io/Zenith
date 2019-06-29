@@ -4,8 +4,8 @@ import {sync} from 'glob';
 
 export class CommandLoader {
     constructor(private Client: Client) { }
-    getLoadableCommands(): string[] {
-        let files: string[] = sync(`${__dirname}/../Commands/**/*.**`);
+    getLoadableCommands(directory: string = `${__dirname}/../Commands/**/*.**`): string[] {
+        let files: string[] = sync(directory);
         files = files.filter(a => !a.endsWith('.d.ts') || !a.endsWith('.map'));
 
         return files;
@@ -27,5 +27,20 @@ export class CommandLoader {
         await progressBar.stop();
     }
 
-    async loadCustomCommands(): Promise<void> {}
+    async loadCustomCommands(): Promise<void> {
+        let commands: string[][] = [];
+
+        // TODO: Progress bar
+        for (const commandDir of this.Client.settings.dirs.commands) {
+            commands.push(await this.getLoadableCommands(commandDir))
+        }
+
+        for (const command of commands) {
+            for (const c of command) {
+                require(c);
+            }
+        }
+
+        console.log('Loaded custom Commands');
+    }
 }

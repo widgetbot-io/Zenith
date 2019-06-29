@@ -4,8 +4,8 @@ import {sync} from 'glob';
 
 export class ModuleLoader {
     constructor(private Client: Client) { }
-    getLoadableModules(): string[] {
-        let files: string[] = sync(`${__dirname}/../Modules/*.**`);
+    getLoadableModules(directory: string = `${__dirname}/../Modules/*.**`): string[] {
+        let files: string[] = sync(directory);
         files = files.filter(a => !a.endsWith('.d.ts') || !a.endsWith('.map'));
 
         return files;
@@ -27,5 +27,20 @@ export class ModuleLoader {
         await progressBar.stop();
     }
 
-    async loadCustomModules(): Promise<void> {}
+    async loadCustomModules(): Promise<void> {
+        let modules: string[][] = [];
+
+        // TODO: Progress bar
+        for (const moduleDir of this.Client.settings.dirs.modules) {
+            modules.push(await this.getLoadableModules(moduleDir))
+        }
+
+        for (const module of modules) {
+            for (const m of module) {
+                require(m);
+            }
+        }
+
+        console.log('Loaded custom modules');
+    }
 }
