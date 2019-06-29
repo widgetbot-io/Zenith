@@ -1,5 +1,6 @@
 import {CommandHelper} from "../Classes/CommandHelper";
 import {Message} from "discord.js";
+import {Client} from "../Client";
 
 export interface Base {
 	name: string,

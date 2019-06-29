@@ -3,7 +3,7 @@ import * as _cliProgress from 'cli-progress';
 import {sync} from 'glob';
 
 export class EventLoader {
-    constructor(private Client: Client) { }
+    constructor(private client: Client) { }
     getLoadableEvents(): string[] {
         let files: string[] = sync(`${__dirname}/../Events/**/*.**`);
         files = files.filter(a => !a.endsWith('.d.ts') || !a.endsWith('.map'));
@@ -29,8 +29,10 @@ export class EventLoader {
 
     async digestEvents() {
         for (const event of Client.events) {
-            this.Client.digestEvent(event[0], async (client, ...args) => {
-                await event[1].run(client, args);
+            this.client.digestEvent(event[0], async (...args) => {
+                console.log(...args);
+                // @ts-ignore
+                await event[1].run(...args);
             })
         }
     }

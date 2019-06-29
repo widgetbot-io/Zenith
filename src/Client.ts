@@ -32,10 +32,10 @@ export class Client extends Bot {
         this.start();
     }
 
-    public digestEvent(event: string, cb: (client: Client, ...args) => void ): void {
+    public digestEvent(event: string, cb: (...args) => void ): void {
         this.on(event, (...args) => {
             try {
-                cb(this, ...args);
+                cb(...args);
             } catch (e) {
                 console.error(e);
             }

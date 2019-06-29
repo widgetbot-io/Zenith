@@ -7,9 +7,9 @@ import {Message} from "discord.js";
 	description: 'Message Update Event'
 })
 export default class {
-	async runCommand(client: Client, oldMessage: Message, newMessage: Message): Promise<void> {
+	async runCommand(oldMessage: Message, newMessage: Message): Promise<void> {
 		if (oldMessage === newMessage) return;
 
-		await client.commandHandler.handleMessage(newMessage)
+		await (newMessage.client as Client).commandHandler.handleMessage(newMessage)
 	}
 }

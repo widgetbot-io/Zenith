@@ -7,8 +7,7 @@ import {Message} from "discord.js";
 	description: 'haha'
 })
 export default class {
-	async runCommand(client: Client, message: Message): Promise<void> {
-		console.log(message.cleanContent);
-		await client.commandHandler.handleMessage(message)
+	async runCommand(message: Message): Promise<void> {
+		await (message.client as Client).commandHandler.handleMessage(message)
 	}
 }
