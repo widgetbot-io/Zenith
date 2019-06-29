@@ -3,7 +3,8 @@ import {Client} from "../Client";
 import {Message} from "discord.js";
 
 @Event({
-	name: 'message',
+	name: 'Message Handler',
+	eventName: 'message',
 	description: 'haha'
 })
 export default class {

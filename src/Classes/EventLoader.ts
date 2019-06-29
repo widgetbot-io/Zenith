@@ -46,7 +46,7 @@ export class EventLoader {
 
     async digestEvents() {
         for (const event of Client.events) {
-            this.client.digestEvent(event[0], async (...args) => {
+            this.client.digestEvent(event[1].eventName, async (...args) => {
                 // @ts-ignore
                 await event[1].run(...args);
             })

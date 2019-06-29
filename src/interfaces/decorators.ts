@@ -15,5 +15,6 @@ export interface Command extends Base {
 	hasPermission?: (message: Message) => Promise<boolean>;
 }
 export interface Event extends Base {
+	eventName: string,
 	run?: (...args) => Promise<void>;
 }
