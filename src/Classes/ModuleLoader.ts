@@ -26,4 +26,6 @@ export class ModuleLoader {
 
         await progressBar.stop();
     }
+
+    async loadCustomModules(): Promise<void> {}
 }

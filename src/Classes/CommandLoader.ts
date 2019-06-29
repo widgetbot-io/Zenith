@@ -26,4 +26,6 @@ export class CommandLoader {
 
         await progressBar.stop();
     }
+
+    async loadCustomCommands(): Promise<void> {}
 }

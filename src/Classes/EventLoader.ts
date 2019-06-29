@@ -27,10 +27,11 @@ export class EventLoader {
         await progressBar.stop();
     }
 
+    async loadCustomEvents(): Promise<void> {}
+
     async digestEvents() {
         for (const event of Client.events) {
             this.client.digestEvent(event[0], async (...args) => {
-                console.log(...args);
                 // @ts-ignore
                 await event[1].run(...args);
             })
