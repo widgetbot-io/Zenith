@@ -24,8 +24,6 @@ export class Client extends Bot {
 
         // TODO: Allow for custom logger/config
 
-        this.on('messageUpdate', (o, n) => this.commandHandler.handleMessage(n));
-
         this.start();
     }
 
