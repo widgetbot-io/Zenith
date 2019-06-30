@@ -13,5 +13,3 @@ const client = new Client({
 		modules: [`${__dirname}/Modules/*.**`]
 	}
 });
-
-console.log(__dirname)
