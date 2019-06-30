@@ -12,12 +12,12 @@ export class CommandHandler {
     async handleMessage(message: Message) {
         if (!message.author) return;
 
-        const command: Command = Client.commands.get(message.cleanContent.toLowerCase().split(' ')[0]);
-        console.log(command);
+        if (!message.cleanContent.startsWith(this.client.settings.prefix)) return;
+
+        const command: Command = Client.commands.get(message.cleanContent.toLowerCase().substr(this.client.settings.prefix.length).split(' ')[0]);
         if (!command) return;
 
         const module = Client.modules.get(command.module.toLowerCase()).module;
-        console.log(module);
         if (!module) return; // TODO: Throw error properly.
 
         if (await this.rateLimit.checkRatelimit(message.channel.id, message.author.id) === false) {
