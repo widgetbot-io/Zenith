@@ -8,7 +8,7 @@ import {ArgumentHelper} from "./ArgumentHelper";
 export class CommandHandler {
 	public ranCommands: {[key: string]: Message | Message[]} = {};
     private rateLimit: Ratelimit = new Ratelimit();
-    constructor(private client: Bot) {}
+    constructor(private bot: Bot) {}
 
     static parseMessage(prefix: string, content: string) {
         const command = content.substr(prefix.length).split(' ')[0];
@@ -25,9 +25,9 @@ export class CommandHandler {
 
     async handleMessage(message: Message) {
         if (!message.author) return;
-        if (!message.cleanContent.startsWith(this.client.settings.prefix)) return;
+        if (!message.cleanContent.startsWith(this.bot.settings.prefix)) return;
 
-        const parsed = CommandHandler.parseMessage(this.client.settings.prefix, message.cleanContent);
+        const parsed = CommandHandler.parseMessage(this.bot.settings.prefix, message.cleanContent);
         const command: Command | undefined = Bot.commands.get(parsed.command.toLowerCase());
         if (!command) return;
 
@@ -40,9 +40,9 @@ export class CommandHandler {
 
 
         const argHelper = new ArgumentHelper(command, parsed, message.cleanContent,);
-        const helper = new CommandHelper(message, this.client, module.module, argHelper);
+        const helper = new CommandHelper(message, this.bot, this.bot.client ,module.module, argHelper);
 
-        if (this.client.settings.roots.includes(message.author.id) || await command.hasPermission!(message)) {
+        if (this.bot.settings.roots.includes(message.author.id) || await command.hasPermission!(message)) {
             await this.rateLimit.increment(message.author.id, RatelimitType.USER);
             await this.rateLimit.increment(message.channel.id, RatelimitType.CHANNEL);
 

@@ -4,7 +4,7 @@ import {sync} from 'glob';
 import {BaseLoader} from "./BaseLoader";
 
 export class CommandLoader extends BaseLoader {
-    constructor(private client: Bot) { super() }
+    constructor(private bot: Bot) { super() }
 
     async loadCommands(): Promise<void> {
         let start: number = 0;
@@ -26,7 +26,7 @@ export class CommandLoader extends BaseLoader {
         let commands: string[][] = [];
 
         // TODO: Progress bar
-        for (const commandDir of this.client.settings.dirs.commands) {
+        for (const commandDir of this.bot.settings.dirs.commands) {
             commands.push(await this.getLoadable(commandDir))
         }
 

@@ -4,7 +4,7 @@ import {sync} from 'glob';
 import {BaseLoader} from ".";
 
 export class EventLoader extends BaseLoader {
-    constructor(private client: Bot) { super() }
+    constructor(private bot: Bot) { super() }
 
     async loadEvents(): Promise<void> {
         let start: number = 0;
@@ -26,7 +26,7 @@ export class EventLoader extends BaseLoader {
         let events: string[][] = [];
 
         // TODO: Progress bar
-        for (const eventDir of this.client.settings.dirs.events) {
+        for (const eventDir of this.bot.settings.dirs.events) {
             events.push(await this.getLoadable(eventDir))
         }
 
@@ -41,7 +41,7 @@ export class EventLoader extends BaseLoader {
 
     async digestEvents() {
         for (const event of Bot.events) {
-            this.client.digestEvent(event[1].eventName, async (...args) => {
+            this.bot.digestEvent(event[1].eventName, async (...args) => {
                 // @ts-ignore
                 await event[1].run(...args);
             })

@@ -19,7 +19,7 @@ export class Bot extends Client {
     public eventLoader: EventLoader = new EventLoader(this);
 
     private events: {[key: string]: Function[]} = {};
-    constructor(public settings: Options) {
+    constructor(public settings: Options, public client: any) {
         super(settings.clientOptions);
 
         // TODO: Allow for custom logger/config

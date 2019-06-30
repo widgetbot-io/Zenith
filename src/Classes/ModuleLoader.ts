@@ -4,7 +4,7 @@ import {sync} from 'glob';
 import {BaseLoader} from ".";
 
 export class ModuleLoader extends BaseLoader {
-    constructor(private client: Bot) { super() }
+    constructor(private bot: Bot) { super() }
 
     async loadModules(): Promise<void> {
         let start: number = 0;
@@ -26,7 +26,7 @@ export class ModuleLoader extends BaseLoader {
         let modules: string[][] = [];
 
         // TODO: Progress bar
-        for (const moduleDir of this.client.settings.dirs.modules) {
+        for (const moduleDir of this.bot.settings.dirs.modules) {
             modules.push(await this.getLoadable(moduleDir))
         }
 
