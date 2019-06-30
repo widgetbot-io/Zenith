@@ -36,6 +36,6 @@ export class ModuleLoader extends BaseLoader {
             }
         }
 
-        console.log('Loaded custom modules');
+        console.log('Loaded custom modules \n');
     }
 }

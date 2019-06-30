@@ -36,6 +36,6 @@ export class CommandLoader extends BaseLoader {
             }
         }
 
-        console.log('Loaded custom Commands');
+        console.log('Loaded custom Commands \n');
     }
 }

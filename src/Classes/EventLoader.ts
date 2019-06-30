@@ -36,7 +36,7 @@ export class EventLoader extends BaseLoader {
             }
         }
 
-        console.log('Loaded custom Commands');
+        console.log('Loaded custom Commands \n');
     }
 
     async digestEvents() {
