@@ -2,7 +2,7 @@ import {Bot} from "../Bot";
 import {Message} from "discord.js";
 import {CommandHelper} from "./CommandHelper";
 import {Ratelimit} from "./Ratelimit";
-import {Command, Module, RatelimitType} from "../interfaces";
+import {ICommand, IModule, RatelimitType} from "../interfaces";
 import {ArgumentHelper} from "./ArgumentHelper";
 
 export class CommandHandler {
@@ -28,10 +28,10 @@ export class CommandHandler {
         if (!message.cleanContent.startsWith(this.bot.settings.prefix)) return;
 
         const parsed = CommandHandler.parseMessage(this.bot.settings.prefix, message.cleanContent);
-        const command: Command | undefined = Bot.commands.get(parsed.command.toLowerCase());
+        const command: ICommand | undefined = Bot.commands.get(parsed.command.toLowerCase());
         if (!command) return;
 
-        const module: Module | undefined = Bot.modules.get(command.module.toLowerCase());
+        const module: IModule | undefined = Bot.modules.get(command.module.toLowerCase());
         if (!module || !module.module) return; // TODO: Throw error properly.
 
         if (await this.rateLimit.checkRatelimit(message.channel.id, message.author.id) === false) {

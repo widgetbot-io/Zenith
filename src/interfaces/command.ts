@@ -1,4 +1,4 @@
-import {CommandHelper} from "../Classes/CommandHelper";
+import {CommandHelper} from "../Classes";
 import {Message} from "discord.js";
 
 export interface BaseCommand {
@@ -7,5 +7,5 @@ export interface BaseCommand {
 }
 
 export interface BaseEvent {
-	runEvent(...args): Promise<void>;
+	runEvent(...args: any): Promise<void>;
 }
