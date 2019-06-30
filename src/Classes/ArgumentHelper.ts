@@ -16,15 +16,17 @@ export class ArgumentHelper {
 		if (!argument.startsWith('-'))
 			return false;
 
-		argument = argument.substr(2);
+		const longArgument = argument.substr(2);
+		const shortArgument = argument.substr(1);
+
 		for (const arg of this.args) {
 			if (arg instanceof FlagArgument) {
-				if (arg.name === argument) {
+				if (arg.name === longArgument || arg.short === shortArgument) {
 					return true;
 				}
 			} else if (arg instanceof FlagArgumentWithValue) {
-				if (arg.name === argument) {
-
+				if (arg.name === longArgument || arg.short === shortArgument) {
+					return true;
 				}
 			}
 		}
@@ -35,13 +37,15 @@ export class ArgumentHelper {
 	async get(name: string) {
 		let id: number = -1, arg: BaseArgument;
 		for (const arg in this.args) {
-			if (this.args[arg].name === name)
-			// @ts-ignore TODO: make this less for'y and more not for'y
-				id = arg;
+			if (this.args[arg].name === name || this.args[arg].short === name) {
+				console.log(this.args[arg]);
+				id = Number(arg);
+			}
 		}
 
 		if (id !== -1) {
-			arg = this.args[Number(id)];
+			arg = this.args[id];
+			console.log(arg);
 			if (arg instanceof FlagArgument || arg instanceof FlagArgumentWithValue) {
 				return await this.getFlagValue(arg);
 			} else {
@@ -52,7 +56,7 @@ export class ArgumentHelper {
 
 	private async getFlagValue(arg: BaseArgument): Promise<any> {
 		if (arg instanceof FlagArgument) {
-			return this.parsed.args.includes(`--${arg.name}`)
+			return this.parsed.args.includes(`--${arg.name}`) || this.parsed.args.includes(`-${arg.short}`)
 		} else if (arg instanceof FlagArgumentWithValue) {
 			const index = this.parsed.args.indexOf(`--${arg.name}`);
 			if (index && index >= 0) {

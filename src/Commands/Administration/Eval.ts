@@ -11,7 +11,8 @@ import {FlagArgument} from "../../Classes";
     module: 'Administration',
     arguments: [
         new FlagArgument({
-            name: 'async'
+            name: 'async',
+			short: 'a'
         })
     ]
 })
