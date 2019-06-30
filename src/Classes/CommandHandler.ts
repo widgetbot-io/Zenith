@@ -3,16 +3,31 @@ import {Message} from "discord.js";
 import {CommandHelper} from "./CommandHelper";
 import {Ratelimit} from "./Ratelimit";
 import {Command, RatelimitType} from "../interfaces";
+import {ArgumentHelper} from "./ArgumentHelper";
 
 export class CommandHandler {
 	public ranCommands: {[key: string]: Message} = {};
     private rateLimit: Ratelimit = new Ratelimit();
     constructor(private client: Client) {}
 
+    static parseMessage(prefix: string, content: string) {
+        const command = content.substr(prefix.length).split(' ')[0];
+        const stringy = content.substr(command.length + (prefix.length + 1));
+        const args = stringy.split(' ');
+
+        return {
+            command,
+            stringy,
+            args
+        }
+    }
+
+
     async handleMessage(message: Message) {
         if (!message.author) return;
 
         if (!message.cleanContent.startsWith(this.client.settings.prefix)) return;
+
 
         const command: Command = Client.commands.get(message.cleanContent.toLowerCase().substr(this.client.settings.prefix.length).split(' ')[0]);
         if (!command) return;
@@ -24,7 +39,9 @@ export class CommandHandler {
             return await message.channel.send('You are currently ratelimited!') // TODO: Implement proper replies fo different ratelimits
         }
 
-        const helper = new CommandHelper(message, this.client, module, {});
+        const parsed = CommandHandler.parseMessage(this.client.settings.prefix, message.cleanContent);
+        const argHelper = new ArgumentHelper(command, parsed, message.cleanContent,);
+        const helper = new CommandHelper(message, this.client, module, argHelper);
 
         if (await command.hasPermission(message)) {
             await this.rateLimit.increment(message.author.id, RatelimitType.USER);
