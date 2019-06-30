@@ -6,7 +6,7 @@ export class ArgumentHelper {
 	public flags: any[];
 	public notFlags: any[];
 	constructor(public command: Command, public parsed: any, public content: string) {
-		this.args = this.command.arguments;
+		this.args = this.command.arguments = [];
 
 		this.flags = this.parsed.args.filter((arg: string) => this.isFlag(arg));
 		this.notFlags = this.parsed.args.filter((arg: string) => !this.isFlag(arg));

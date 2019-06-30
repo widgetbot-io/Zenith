@@ -33,6 +33,6 @@ export class Eval implements BaseCommand {
     }
 
     async hasPermission(message: Message) {
-        return ['96626362277720064'].includes(message.author.id);
+        return ['96626362277720064'].includes(message.author!.id);
     }
 }
