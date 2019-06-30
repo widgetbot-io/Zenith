@@ -25,11 +25,11 @@ export class Bot extends Client {
         // TODO: Allow for custom logger/config
     }
 
-    public digestEvent(event: string, cb: (...args) => void ): void {
+    public digestEvent(event: string, cb: (...args: any[]) => void ): void {
         if (!(this.events[event] && this.events[event].length)) {
             this.events[event] = [cb];
 
-            this.on(event, (...args) => {
+            this.on(event, (...args: any[]) => {
                 try {
                     for (const callback of this.events[event]) {
                         callback(...args)

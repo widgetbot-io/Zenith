@@ -6,7 +6,7 @@ export class BaseArgument {
 	public short?: string;
 	constructor(options: BaseArgumentOptions) {
 		this.name = options.name;
-		this.optional = options.optional;
+		this.optional = options.optional || false;
 		this.short = options.short;
 	}
 }
@@ -27,14 +27,14 @@ export class RequiredArgument extends BaseArgument {
 }
 
 export class FlagArgument extends OptionalArgument {
-	public short: string;
+	public short?: string;
 
 	constructor(options: BaseArgumentOptions) {
 		super(options);
 	}
 }
 export class FlagArgumentWithValue extends OptionalArgument {
-	public short: string;
+	public short?: string;
 	constructor(options: BaseArgumentOptions) {
 		super(options);
 	}

@@ -11,6 +11,8 @@
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
+    "@types/cli-progress": "^1.8.1",
+    "@types/glob": "^7.1.1",
     "@types/node": "^12.0.10"
   }
 }

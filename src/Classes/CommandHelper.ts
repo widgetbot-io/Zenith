@@ -22,13 +22,16 @@ export class CommandHelper {
         let message;
 
         if (this.client.commandHandler.ranCommands[this.message.id]) {
-            const old: Message = this.client.commandHandler.ranCommands[this.message.id];
+            const old = this.client.commandHandler.ranCommands[this.message.id];
+            // @ts-ignore
             message = await old.edit(content);
         } else {
             message = await this.message.channel.send(content);
         }
 
         this.client.commandHandler.ranCommands[this.message.id] = message;
+
+        // @ts-ignore
         return message;
     }
 }

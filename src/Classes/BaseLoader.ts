@@ -1,3 +1,4 @@
+// @ts-ignore
 import {sync} from 'glob';
 
 export class BaseLoader {

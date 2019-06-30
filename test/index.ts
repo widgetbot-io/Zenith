@@ -14,6 +14,4 @@ const bot = new Bot({
 	}
 });
 
-bot.start().then(() => {
-	bot.user.setActivity('Hello i a bot.')
-});
+bot.start();
