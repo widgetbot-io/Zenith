@@ -1,20 +1,15 @@
 import {Client} from '../Client';
 import * as _cliProgress from 'cli-progress';
 import {sync} from 'glob';
+import {BaseLoader} from ".";
 
-export class EventLoader {
-    constructor(private client: Client) { }
-    getLoadableEvents(directory: string = `${__dirname}/../Events/**/*.**`): string[] {
-        let files: string[] = sync(directory);
-        files = files.filter(a => !a.endsWith('.d.ts') || !a.endsWith('.map'));
-
-        return files;
-    }
+export class EventLoader extends BaseLoader {
+    constructor(private client: Client) { super() }
 
     async loadEvents(): Promise<void> {
         let start: number = 0;
         const progressBar = new _cliProgress.Bar({}, _cliProgress.Presets.shades_classic);
-        const events: string[] = await this.getLoadableEvents();
+        const events: string[] = await this.getLoadable(`${__dirname}/../Events/**/*.**`);
 
         console.log('Loading Events...');
         progressBar.start(events.length, start);
@@ -32,7 +27,7 @@ export class EventLoader {
 
         // TODO: Progress bar
         for (const eventDir of this.client.settings.dirs.events) {
-            events.push(await this.getLoadableEvents(eventDir))
+            events.push(await this.getLoadable(eventDir))
         }
 
         for (const event of events) {
