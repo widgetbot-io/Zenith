@@ -36,7 +36,7 @@ export class CommandHandler {
         if (!module) return; // TODO: Throw error properly.
 
         if (await this.rateLimit.checkRatelimit(message.channel.id, message.author.id) === false) {
-            return await message.channel.send('You are currently ratelimited!') // TODO: Implement proper replies fo different ratelimits
+            return await message.channel.send('You are currently rate-limited!') // TODO: Implement proper replies fo different ratelimits
         }
 
         const parsed = CommandHandler.parseMessage(this.client.settings.prefix, message.cleanContent);
