@@ -35,4 +35,12 @@ export class CommandHelper {
         // @ts-ignore
         return message;
     }
+
+    public async sendTemp(content: string, timeout: number = 2500) {
+        return await this.send(content).then(msg => {
+            setTimeout(async () => {
+                await msg.delete();
+            }, timeout);
+        })
+    }
 }
