@@ -8,17 +8,17 @@ import { Options, Command as ICommand, Module as IModule, Event as IEvent } from
 import {EventLoader} from "./Classes/EventLoader";
 
 export class Client extends Bot {
-    private events: {[key: string]: Function[]} = {};
-
     public static commands: Collection<string, ICommand> = new Collection();
-    public static events: Collection<string, IEvent> = new Collection();
     public static modules: Collection<string, IModule> = new Collection();
+    public static events: Collection<string, IEvent> = new Collection();
+
 
     public commandHandler: CommandHandler = new CommandHandler(this);
     public commandLoader: CommandLoader = new CommandLoader(this);
     public moduleLoader: ModuleLoader = new ModuleLoader(this);
     public eventLoader: EventLoader = new EventLoader(this);
 
+    private events: {[key: string]: Function[]} = {};
     constructor(public settings: Options) {
         super(settings.clientOptions);
 
