@@ -25,11 +25,10 @@ export class CommandHandler {
 
     async handleMessage(message: Message) {
         if (!message.author) return;
-
         if (!message.cleanContent.startsWith(this.client.settings.prefix)) return;
 
-
-        const command: Command = Client.commands.get(message.cleanContent.toLowerCase().substr(this.client.settings.prefix.length).split(' ')[0]);
+        const parsed = CommandHandler.parseMessage(this.client.settings.prefix, message.cleanContent);
+        const command: Command = Client.commands.get(parsed.command.toLowerCase());
         if (!command) return;
 
         const module = Client.modules.get(command.module.toLowerCase()).module;
@@ -39,7 +38,7 @@ export class CommandHandler {
             return await message.channel.send('You are currently rate-limited!') // TODO: Implement proper replies fo different ratelimits
         }
 
-        const parsed = CommandHandler.parseMessage(this.client.settings.prefix, message.cleanContent);
+
         const argHelper = new ArgumentHelper(command, parsed, message.cleanContent,);
         const helper = new CommandHelper(message, this.client, module, argHelper);
 
