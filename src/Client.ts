@@ -48,20 +48,17 @@ export class Client extends Bot {
     }
 
     async start(): Promise<void> {
-        this.moduleLoader.loadModules().then(() => {
-            this.moduleLoader.loadCustomModules().then(() => {
-                this.eventLoader.loadEvents().then(() => {
-                    this.eventLoader.loadCustomEvents().then(() => {
-                        this.commandLoader.loadCommands().then(() => {
-                            this.commandLoader.loadCustomCommands().then(() => {
-                                this.eventLoader.digestEvents().then(() => {
-                                    this.login(this.settings.token).catch(e => { console.error(e) });
-                                }).catch(e => { console.error(e) });
-                            }).catch(e => { console.error(e) });
-                        }).catch(e => { console.error(e) });
-                    }).catch(e => { console.error(e) });
-                }).catch(e => { console.error(e) });
-            }).catch(e => { console.error(e) });
-        }).catch(e => { console.error(e) })
+        try {
+            await this.moduleLoader.loadModules();
+            await this.moduleLoader.loadCustomModules();
+            await this.eventLoader.loadEvents();
+            await this.eventLoader.loadCustomEvents();
+            await this.commandLoader.loadCommands();
+            await this.commandLoader.loadCustomCommands();
+            await this.eventLoader.digestEvents();
+            await this.login(this.settings.token);
+        } catch (e) {
+            console.error(e);
+        }
     }
 }
