@@ -1,11 +1,11 @@
 import { BaseArgument, FlagArgument, FlagArgumentWithValue, RequiredArgument } from './Bases';
-import { Command } from '../interfaces';
+import { ICommand } from '../interfaces';
 
 export class ArgumentHelper {
 	private args: BaseArgument[];
 	public flags: any[];
 	public notFlags: any[];
-	constructor(public command: Command, public parsed: any, public content: string) {
+	constructor(public command: ICommand, public parsed: any, public content: string) {
 		this.args = this.command.arguments = [];
 
 		this.flags = this.parsed.args.filter((arg: string) => this.isFlag(arg));

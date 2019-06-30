@@ -1,7 +1,7 @@
 import { Bot } from '../Bot';
-import { Command, Module, Event } from '../interfaces';
+import { ICommand, IModule, IEvent } from '../interfaces';
 
-export function Module(info: Module): ClassDecorator {
+export function Module(info: IModule): ClassDecorator {
     return function(Module: any) {
         const loaded = new Module();
         if(Bot.modules.get(info.name.toLowerCase())) {
@@ -15,7 +15,7 @@ export function Module(info: Module): ClassDecorator {
     }
 }
 
-export function Event(info: Event): ClassDecorator {
+export function Event(info: IEvent): ClassDecorator {
     return function(Event: any) {
         const loaded = new Event();
         if(Bot.events.get(info.name.toLowerCase())) {
@@ -29,7 +29,7 @@ export function Event(info: Event): ClassDecorator {
     }
 }
 
-export function Command(info: Command): ClassDecorator {
+export function Command(info: ICommand): ClassDecorator {
     return function(Command: any) {
         const loaded = new Command();
         if(Bot.commands.get(info.name.toLowerCase())) {

@@ -4,7 +4,7 @@ import {Client, Collection} from 'discord.js';
 import { CommandLoader } from "./Classes";
 import { ModuleLoader } from "./Classes/ModuleLoader";
 import { CommandHandler } from "./Classes/CommandHandler";
-import { Options, Command as ICommand, Module as IModule, Event as IEvent } from "./interfaces";
+import { Options, ICommand, IModule, IEvent } from "./interfaces";
 import {EventLoader} from "./Classes/EventLoader";
 
 export class Bot extends Client {

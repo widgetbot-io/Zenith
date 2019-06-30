@@ -6,16 +6,16 @@ export interface Base {
 	name: string,
 	description: string
 }
-export interface Module extends Base {
+export interface IModule extends Base {
 	module?: any
 }
-export interface Command extends Base {
+export interface ICommand extends Base {
 	arguments?: BaseArgument[]
 	module: string,
 	run?: (helper: CommandHelper) => Promise<void>;
 	hasPermission?: (message: Message) => Promise<boolean>;
 }
-export interface Event extends Base {
+export interface IEvent extends Base {
 	eventName: string,
 	run?: (...args: any[]) => Promise<void>;
 }
