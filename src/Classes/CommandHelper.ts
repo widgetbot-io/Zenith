@@ -21,8 +21,8 @@ export class CommandHelper {
     public async send(content: string): Promise<Message> {
         let message;
 
-        if (this.client.commandHandler.ranCommands[this.message.id]) {
-            const old = this.client.commandHandler.ranCommands[this.message.id];
+        if (this.bot.commandHandler.ranCommands[this.message.id]) {
+            const old = this.bot.commandHandler.ranCommands[this.message.id];
             // @ts-ignore
             message = await old.edit(content);
         } else {
@@ -30,7 +30,7 @@ export class CommandHelper {
         }
 
         // @ts-ignore
-        this.client.commandHandler.ranCommands[this.message.id] = message;
+        this.bot.commandHandler.ranCommands[this.message.id] = message;
 
         // @ts-ignore
         return message;
