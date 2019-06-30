@@ -57,12 +57,4 @@ export class Client extends Bot {
             console.error(e);
         }
     }
-
-    public configureStatus(statuses: string[], state: PresenceStatus = 'online'): void {
-        this.user.setStatus(state);
-
-        for (const status of statuses) {
-            console.log(status);
-        }
-    }
 }

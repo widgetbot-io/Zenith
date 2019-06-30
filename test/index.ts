@@ -15,5 +15,5 @@ const client = new Client({
 });
 
 client.start().then(() => {
-	client.configureStatus([`This is a bot`, `Good morning`, `Good evening`]);
+	client.user.setActivity('Hello i a bot.')
 });
