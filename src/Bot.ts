@@ -1,13 +1,13 @@
 import 'reflect-metadata';
 
-import {Client as Bot, Collection, PresenceStatus} from 'discord.js';
+import {Client, Collection} from 'discord.js';
 import { CommandLoader } from "./Classes";
 import { ModuleLoader } from "./Classes/ModuleLoader";
 import { CommandHandler } from "./Classes/CommandHandler";
 import { Options, Command as ICommand, Module as IModule, Event as IEvent } from "./interfaces";
 import {EventLoader} from "./Classes/EventLoader";
 
-export class Client extends Bot {
+export class Bot extends Client {
     public static commands: Collection<string, ICommand> = new Collection();
     public static modules: Collection<string, IModule> = new Collection();
     public static events: Collection<string, IEvent> = new Collection();

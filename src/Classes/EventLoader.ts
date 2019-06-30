@@ -1,10 +1,10 @@
-import {Client} from '../Client';
+import {Bot} from '../Bot';
 import * as _cliProgress from 'cli-progress';
 import {sync} from 'glob';
 import {BaseLoader} from ".";
 
 export class EventLoader extends BaseLoader {
-    constructor(private client: Client) { super() }
+    constructor(private client: Bot) { super() }
 
     async loadEvents(): Promise<void> {
         let start: number = 0;
@@ -40,7 +40,7 @@ export class EventLoader extends BaseLoader {
     }
 
     async digestEvents() {
-        for (const event of Client.events) {
+        for (const event of Bot.events) {
             this.client.digestEvent(event[1].eventName, async (...args) => {
                 // @ts-ignore
                 await event[1].run(...args);

@@ -1,5 +1,5 @@
 import { Event } from "../services/decorators";
-import {Client} from "../Client";
+import {Bot} from "../Bot";
 import {Message} from "discord.js";
 
 @Event({
@@ -11,6 +11,6 @@ export default class {
 	async runCommand(oldMessage: Message, newMessage: Message): Promise<void> {
 		if (oldMessage === newMessage) return;
 
-		await (newMessage.client as Client).commandHandler.handleMessage(newMessage)
+		await (newMessage.client as Bot).commandHandler.handleMessage(newMessage)
 	}
 }

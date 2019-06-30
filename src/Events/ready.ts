@@ -1,5 +1,5 @@
 import { Event } from "../services/decorators";
-import {Client} from "../Client";
+import {Bot} from "../Bot";
 
 @Event({
 	name: 'Connection Ready',
@@ -7,7 +7,7 @@ import {Client} from "../Client";
 	description: 'haha'
 })
 export default class {
-	async runCommand(client: Client): Promise<void> {
+	async runCommand(client: Bot): Promise<void> {
 		console.log('Ready event is fired.')
 	}
 }

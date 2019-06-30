@@ -1,6 +1,6 @@
-import { Client } from '../src/Client';
+import { Bot } from '../src/Bot';
 
-const client = new Client({
+const bot = new Bot({
 	token: 'Mzg1NTIxNzI4MjQ5NjU5Mzkz.D3Jh-w.F8JTC6J3EB0dwqqtTdMDrFWXUzw',
 	clientOptions: {
 		disableEveryone: true,
@@ -14,6 +14,6 @@ const client = new Client({
 	}
 });
 
-client.start().then(() => {
-	client.user.setActivity('Hello i a bot.')
+bot.start().then(() => {
+	bot.user.setActivity('Hello i a bot.')
 });

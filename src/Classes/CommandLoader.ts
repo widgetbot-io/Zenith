@@ -1,10 +1,10 @@
-import {Client} from '../Client';
+import {Bot} from '../Bot';
 import * as _cliProgress from 'cli-progress';
 import {sync} from 'glob';
 import {BaseLoader} from "./BaseLoader";
 
 export class CommandLoader extends BaseLoader {
-    constructor(private client: Client) { super() }
+    constructor(private client: Bot) { super() }
 
     async loadCommands(): Promise<void> {
         let start: number = 0;

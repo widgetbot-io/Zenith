@@ -1,4 +1,4 @@
-import {Client} from "../Client";
+import {Bot} from "../Bot";
 import {Message} from "discord.js";
 import {CommandHelper} from "./CommandHelper";
 import {Ratelimit} from "./Ratelimit";
@@ -8,7 +8,7 @@ import {ArgumentHelper} from "./ArgumentHelper";
 export class CommandHandler {
 	public ranCommands: {[key: string]: Message} = {};
     private rateLimit: Ratelimit = new Ratelimit();
-    constructor(private client: Client) {}
+    constructor(private client: Bot) {}
 
     static parseMessage(prefix: string, content: string) {
         const command = content.substr(prefix.length).split(' ')[0];
@@ -28,10 +28,10 @@ export class CommandHandler {
         if (!message.cleanContent.startsWith(this.client.settings.prefix)) return;
 
         const parsed = CommandHandler.parseMessage(this.client.settings.prefix, message.cleanContent);
-        const command: Command = Client.commands.get(parsed.command.toLowerCase());
+        const command: Command = Bot.commands.get(parsed.command.toLowerCase());
         if (!command) return;
 
-        const module = Client.modules.get(command.module.toLowerCase()).module;
+        const module = Bot.modules.get(command.module.toLowerCase()).module;
         if (!module) return; // TODO: Throw error properly.
 
         if (await this.rateLimit.checkRatelimit(message.channel.id, message.author.id) === false) {
