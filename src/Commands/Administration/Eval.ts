@@ -3,11 +3,17 @@ import {CommandHelper} from "../../Classes/CommandHelper";
 import {Message} from "discord.js";
 import * as util from "util";
 import {BaseCommand} from "../../interfaces";
+import {FlagArgument} from "../../Classes";
 
 @Command({
     name: 'Eval',
     description: 'Ping command',
-    module: 'Administration'
+    module: 'Administration',
+    arguments: [
+        new FlagArgument({
+            name: 'async'
+        })
+    ]
 })
 export class Eval implements BaseCommand {
     async runCommand(helper: CommandHelper) {
