@@ -13,3 +13,7 @@ const client = new Client({
 		modules: [`${__dirname}/Modules/*.**`]
 	}
 });
+
+client.start().then(() => {
+	client.configureStatus([`This is a bot`, `Good morning`, `Good evening`]);
+});

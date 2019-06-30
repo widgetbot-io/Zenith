@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 
-import { Client as Bot, Collection } from 'discord.js';
+import {Client as Bot, Collection, PresenceStatus} from 'discord.js';
 import { CommandLoader } from "./Classes";
 import { ModuleLoader } from "./Classes/ModuleLoader";
 import { CommandHandler } from "./Classes/CommandHandler";
@@ -23,8 +23,6 @@ export class Client extends Bot {
         super(settings.clientOptions);
 
         // TODO: Allow for custom logger/config
-
-        this.start();
     }
 
     public digestEvent(event: string, cb: (...args) => void ): void {
@@ -57,6 +55,14 @@ export class Client extends Bot {
             await this.login(this.settings.token);
         } catch (e) {
             console.error(e);
+        }
+    }
+
+    public configureStatus(statuses: string[], state: PresenceStatus = 'online'): void {
+        this.user.setStatus(state);
+
+        for (const status of statuses) {
+            console.log(status);
         }
     }
 }
