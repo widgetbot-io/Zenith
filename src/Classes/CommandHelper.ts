@@ -1,4 +1,4 @@
-import {Message} from "discord.js";
+import {Message, MessageEmbed} from "discord.js";
 import {Bot} from "../Bot";
 import {IModule} from "../interfaces";
 import {ArgumentHelper} from "./ArgumentHelper";
@@ -18,7 +18,7 @@ export class CommandHelper {
         return this.message.author;
     }
 
-    public async send(content: string): Promise<Message> {
+    public async send(content: string | MessageEmbed): Promise<Message> {
         let message;
 
         if (this.bot.commandHandler.ranCommands[this.message.id]) {

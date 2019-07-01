@@ -12,7 +12,7 @@ export class CommandHandler {
 
     static parseMessage(prefix: string, content: string) {
         const command = content.substr(prefix.length).split(' ')[0];
-        const stringy = content.substr(command.length + (prefix.length + 1));
+        const stringy = content.substr(command.length + (prefix.length));
         const args = stringy.split(' ');
 
         return {
