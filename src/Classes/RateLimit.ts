@@ -1,68 +1,73 @@
 import {Limit, LimitSettings, RatelimitType} from "../interfaces";
+import {Collection} from 'discord.js'
 
-export class Ratelimit {
-    private channelLimits: {[key: string]: Limit} = {};
-    private userLimits: {[key: string]: Limit} = {};
+export class RateLimit {
+    private static channelLimits: Collection<string, Limit> = new Collection();
+    private static userLimits: Collection<string, Limit> = new Collection();
 
     private limits: LimitSettings = {
         user: {
             amount: 4,
-            time: 600
+            timeout: 600
         },
         channel: {
             amount: 10,
-            time: 1000
+            timeout: 1000
         }
     };
 
-    async increment(Id: string, type: RatelimitType): Promise<void> {
+    async increment(id: string, type: RatelimitType): Promise<void> {
         switch (type) {
             case RatelimitType.USER: {
-                const limit = this.userLimits[Id];
-                if (!limit) {
-                    this.userLimits[Id] = {
-                        amount: 1,
-                        time: new Date()
-                    };
-                } else {
-                    limit.amount = limit.amount +1;
-                    limit.time = new Date();
+                const limit = RateLimit.userLimits.get(id);
+                if (!limit) return this.createLimit(id, RatelimitType.USER)
+                else {
+                    limit.amount = limit.amount + 1;
+                    RateLimit.userLimits.set(id, limit);
                 }
                 break;
             }
             case RatelimitType.CHANNEL: {
-                const limit = this.channelLimits[Id];
-                if (!limit) {
-                    this.channelLimits[Id] = {
-                        amount: 1,
-                        time: new Date()
-                    };
-                } else {
-                    limit.amount = limit.amount +1;
-                    limit.time = new Date();
+                const limit = RateLimit.channelLimits.get(id);
+                if (!limit) return this.createLimit(id, RatelimitType.CHANNEL)
+                else {
+                    limit.amount = limit.amount + 1;
+                    RateLimit.channelLimits.set(id, limit);
                 }
                 break;
             }
         }
     }
 
-    async checkExists(channel: string, user: string): Promise<void> {
-        if (!this.channelLimits[channel]) {
-            this.channelLimits[channel] = {
-                amount: 0,
-                time: new Date()
-            };
-        }
-        if (!this.userLimits[user]) {
-            this.userLimits[user] = {
-                amount: 0,
-                time: new Date()
-            };
+    createLimit(id: string, type: RatelimitType) {
+        const defaultLimit = {
+            amount: 1
+        };
+        switch(type) {
+            case RatelimitType.USER:
+                RateLimit.userLimits.set(id, Object.assign(defaultLimit, {timeout: setTimeout(this.passLimit(type, id), this.limits.user.timeout)}))
+                break;
+            case RatelimitType.CHANNEL:
+                RateLimit.channelLimits.set(id, Object.assign(defaultLimit, {timeout: setTimeout(this.passLimit(type, id), this.limits.channel.timeout)}))
+                break;
         }
     }
 
+    passLimit(type: RatelimitType, id: string) {
+        return () => {
+            switch (type) {
+                case RatelimitType.USER:
+                    RateLimit.userLimits.delete(id);
+                    break;
+                case RatelimitType.CHANNEL:
+                    RateLimit.channelLimits.delete(id);
+                    break;
+            }
+        }
+    }
+    
+
     async checkRatelimit(channelId: string, userId: string, type?: RatelimitType): Promise<boolean> {
-        await this.checkExists(channelId, userId);
         switch (type) {
             case RatelimitType.CHANNEL: { break; }
             case RatelimitType.USER: { break; }

@@ -1,13 +1,13 @@
 import {Bot} from "../Bot";
 import {Message} from "discord.js";
 import {CommandHelper} from "./CommandHelper";
-import {Ratelimit} from "./Ratelimit";
+import {RateLimit} from "./RateLimit";
 import {ICommand, IModule, RatelimitType} from "../interfaces";
 import {ArgumentHelper} from "./ArgumentHelper";
 
 export class CommandHandler {
 	public ranCommands: {[key: string]: Message | Message[]} = {};
-    private rateLimit: Ratelimit = new Ratelimit();
+    private rateLimit: RateLimit = new RateLimit();
     constructor(private bot: Bot) {}
 
     static parseMessage(prefix: string, content: string) {
@@ -45,7 +45,9 @@ export class CommandHandler {
         if (this.bot.settings.roots.includes(message.author.id) || await command.hasPermission!(message)) {
             await this.rateLimit.increment(message.author.id, RatelimitType.USER);
             await this.rateLimit.increment(message.channel.id, RatelimitType.CHANNEL);
-
+            if (await this.rateLimit.checkRatelimit(message.channel.id, message.author.id) === false) {
+                return await message.channel.send('You are currently rate-limited!') // TODO: Implement proper replies fo different ratelimits
+            }
             await command.run!(helper);
         } else {
             // TODO: Handle no permission

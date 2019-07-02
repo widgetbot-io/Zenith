@@ -1,15 +1,15 @@
 export interface Limit {
 	amount: number,
-	time: Date
+	timeout: typeof setTimeout
 }
 export interface LimitSettings {
 	user: {
 		amount: number,
-		time: number
+		timeout: number
 	},
 	channel: {
 		amount: number,
-		time: number
+		timeout: number
 	}
 }
 
