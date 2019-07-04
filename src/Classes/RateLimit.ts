@@ -8,11 +8,11 @@ export class RateLimit {
     private limits: LimitSettings = {
         user: {
             amount: 4,
-            timeout: 600
+            timeout: 2000
         },
         channel: {
             amount: 10,
-            timeout: 1000
+            timeout: 5000
         }
     };
 
@@ -68,34 +68,11 @@ export class RateLimit {
     
 
     async checkRatelimit(channelId: string, userId: string, type?: RatelimitType): Promise<boolean> {
-        switch (type) {
-            case RatelimitType.CHANNEL: { break; }
-            case RatelimitType.USER: { break; }
-            default: {
-                if (this.channelLimits[channelId].amount >= this.limits.channel.amount) {
-                    if (this.channelLimits[channelId].time.getTime() + this.limits.channel.time < new Date().getTime()) {
-                        console.log('You were ratelimited by have passed the needed time to bypass the ratelimit, resetting count. Channel');
-                        this.channelLimits[channelId].amount = 0;
-                    } else {
-                        console.log('You are currently ratelimited by channel.');
-                        return false;
-                    }
-                } else {
-                    console.log('You are not ratelimited by channel...')
-                }
-                if (this.userLimits[userId].amount >= this.limits.user.amount) {
-                    if (this.userLimits[userId].time.getTime() + this.limits.user.time < new Date().getTime()) {
-                        console.log('You were ratelimited by have passed the needed time to bypass the ratelimit, resetting count. User');
-                        this.userLimits[userId].amount = 0;
-                    } else {
-                        console.log('You are currently ratelimited by user.');
-                        return false;
-                    }
-                } else {
-                    console.log('You are not ratelimited by user...');
-                }
-            }
-        }
-        return true;
+        const channel = RateLimit.channelLimits.get(channelId);
+        const user = RateLimit.userLimits.get(userId);
+        console.log(channel, user);
+        if (!channel || !user) return false;
+        return channel.amount >= this.limits.channel.amount || user.amount >= this.limits.user.amount;
     }
+    
 }

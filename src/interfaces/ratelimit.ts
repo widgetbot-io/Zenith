@@ -1,6 +1,8 @@
+import Timeout = NodeJS.Timeout;
+
 export interface Limit {
 	amount: number,
-	timeout: typeof setTimeout
+	timeout: Timeout
 }
 export interface LimitSettings {
 	user: {
