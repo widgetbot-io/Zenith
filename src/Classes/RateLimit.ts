@@ -74,5 +74,5 @@ export class RateLimit {
         if (!channel || !user) return false;
         return channel.amount >= this.limits.channel.amount || user.amount >= this.limits.user.amount;
     }
-    
+
 }
