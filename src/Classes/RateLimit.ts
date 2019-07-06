@@ -8,7 +8,7 @@ export class RateLimit {
     private limits: LimitSettings = {
         user: {
             amount: 4,
-            timeout: 2000
+            timeout: 5000
         },
         channel: {
             amount: 10,
@@ -70,7 +70,6 @@ export class RateLimit {
     async checkRatelimit(channelId: string, userId: string, type?: RatelimitType): Promise<boolean> {
         const channel = RateLimit.channelLimits.get(channelId);
         const user = RateLimit.userLimits.get(userId);
-        console.log(channel, user);
         if (!channel || !user) return false;
         return channel.amount >= this.limits.channel.amount || user.amount >= this.limits.user.amount;
     }
