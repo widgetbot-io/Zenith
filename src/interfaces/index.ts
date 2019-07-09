@@ -4,3 +4,4 @@ export { Limit, LimitSettings, RatelimitType } from './ratelimit';
 export { Options } from './client';
 export { BaseArgumentOptions } from './arguments';
 export {  } from './decorators';
+export { IRedis } from './drivers';

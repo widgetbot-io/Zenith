@@ -4,7 +4,7 @@ import {Client, Collection} from 'discord.js';
 import { CommandLoader } from "./Classes";
 import { ModuleLoader } from "./Classes/ModuleLoader";
 import { CommandHandler } from "./Classes/CommandHandler";
-import { Options, ICommand, IModule, IEvent } from "./interfaces";
+import { Options, ICommand, IModule, IEvent, IRedis } from "./interfaces";
 import {EventLoader} from "./Classes/EventLoader";
 
 export class Bot extends Client {
@@ -19,8 +19,10 @@ export class Bot extends Client {
     public eventLoader: EventLoader = new EventLoader(this);
 
     private events: {[key: string]: Function[]} = {};
+    public driver?: IRedis;
     constructor(public settings: Options, public client: any) {
         super(settings.clientOptions);
+        this.driver = settings.driver;
 
         // TODO: Allow for custom logger/config
     }

@@ -22,6 +22,16 @@ export class CommandHandler {
         }
     }
 
+    async checkBlacklist(message: Message, userId: string, guildId: string): Promise<boolean> {
+        if (!this.bot.driver) return false;
+
+        const global = this.bot.driver.get('Blacklist', userId);
+        const user = this.bot.driver.get(`Blacklist:${guildId}`, userId);
+
+        return (!(global !== undefined || user !== undefined));
+    }
+
+
 
     async handleMessage(message: Message) {
         if (!message.author) return;
@@ -33,6 +43,9 @@ export class CommandHandler {
 
         const module: IModule | undefined = Bot.modules.get(command.module.toLowerCase());
         if (!module || !module.module) return; // TODO: Throw error properly.
+
+        if (await this.checkBlacklist(message, message.author.id, message.guild.id))
+            return;
 
         if (await this.rateLimit.checkRatelimit(message.channel.id, message.author.id) === false) {
             return await message.channel.send('You are currently rate-limited!') // TODO: Implement proper replies fo different ratelimits

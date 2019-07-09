@@ -1,4 +1,5 @@
 import {ClientOptions} from "discord.js";
+import {IRedis} from ".";
 
 export interface Options {
 	token: string,
@@ -6,6 +7,7 @@ export interface Options {
 	dirs: DirectoryOptions,
 	clientOptions: ClientOptions,
 	roots: string[]
+	driver?: IRedis
 }
 
 export interface DirectoryOptions {
