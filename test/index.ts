@@ -1,4 +1,4 @@
-import { Bot } from '../src/Bot';
+import { Bot } from '../src';
 
 const bot = new Bot({
 	token: 'Mzg1NTIxNzI4MjQ5NjU5Mzkz.D3Jh-w.F8JTC6J3EB0dwqqtTdMDrFWXUzw',
@@ -12,6 +12,6 @@ const bot = new Bot({
 		events: [`${__dirname}/Events/**/*.**`],
 		modules: [`${__dirname}/Modules/*.**`]
 	}
-});
+}, {});
 
 bot.start();
