@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2017",
+    "declaration": true,
+    "sourceMap": true,
+    "inlineSources": true,
+    "skipDefaultLibCheck": true,
+    "skipLibCheck": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "outDir": "./build"
+  },
+  "exclude": [
+    "node_modules",
+    "tests"
+  ],
+  "include": [
+    "./src/**/*.ts"
+  ]
+}

@@ -34,11 +34,6 @@ export class CommandHandler {
         const module: IModule | undefined = Bot.modules.get(command.module.toLowerCase());
         if (!module || !module.module) return; // TODO: Throw error properly.
 
-        if (await this.rateLimit.checkRatelimit(message.channel.id, message.author.id) === false) {
-            return await message.channel.send('You are currently rate-limited!') // TODO: Implement proper replies fo different ratelimits
-        }
-
-
         const argHelper = new ArgumentHelper(command, parsed, message.cleanContent,);
         const helper = new CommandHelper(message, this.bot, this.bot.client ,module.module, argHelper);
 
