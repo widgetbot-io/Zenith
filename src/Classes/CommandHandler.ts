@@ -52,7 +52,7 @@ export class CommandHandler {
         }
 
 
-        const argHelper = new ArgumentHelper(command, parsed, message.cleanContent,);
+        const argHelper = new ArgumentHelper(command, parsed, message.cleanContent);
         const helper = new CommandHelper(message, this.bot, this.bot.client ,module.module, argHelper);
 
         if (this.bot.settings.roots.includes(message.author.id) || await command.hasPermission!(message)) {
