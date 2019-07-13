@@ -1,7 +1,7 @@
 import { Bot } from '../src';
 
 const bot = new Bot({
-	token: 'Mzg1NTIxNzI4MjQ5NjU5Mzkz.D3Jh-w.F8JTC6J3EB0dwqqtTdMDrFWXUzw',
+	token: 'Mzg1NTIxNzI4MjQ5NjU5Mzkz.XSoX2w.S-p6Xmv_DUMWT4GZxsVsMa2Wmuk',
 	clientOptions: {
 		disableEveryone: true,
 	},
@@ -11,6 +11,16 @@ const bot = new Bot({
 		commands: [`${__dirname}/Commands/**/*.**`],
 		events: [`${__dirname}/Events/**/*.**`],
 		modules: [`${__dirname}/Modules/*.**`]
+	},
+	limits: {
+		user: {
+			amount: 4,
+			timeout: 5000
+		},
+		channel: {
+			amount: 2,
+			timeout: 5000
+		}
 	}
 }, {});
 

@@ -1,26 +1,17 @@
 import {Limit, LimitSettings, RatelimitType} from "../interfaces";
-import {Collection} from 'discord.js'
+import {Collection, Message} from 'discord.js'
+import {Bot} from "../Bot";
 
 export class RateLimit {
+    constructor(private bot: Bot) {}
     private static channelLimits: Collection<string, Limit> = new Collection();
     private static userLimits: Collection<string, Limit> = new Collection();
-
-    private limits: LimitSettings = {
-        user: {
-            amount: 4,
-            timeout: 5000
-        },
-        channel: {
-            amount: 10,
-            timeout: 5000
-        }
-    };
 
     async increment(id: string, type: RatelimitType): Promise<void> {
         switch (type) {
             case RatelimitType.USER: {
                 const limit = RateLimit.userLimits.get(id);
-                if (!limit) return this.createLimit(id, RatelimitType.USER)
+                if (!limit) return this.createLimit(id, RatelimitType.USER);
                 else {
                     limit.amount = limit.amount + 1;
                     RateLimit.userLimits.set(id, limit);
@@ -29,7 +20,7 @@ export class RateLimit {
             }
             case RatelimitType.CHANNEL: {
                 const limit = RateLimit.channelLimits.get(id);
-                if (!limit) return this.createLimit(id, RatelimitType.CHANNEL)
+                if (!limit) return this.createLimit(id, RatelimitType.CHANNEL);
                 else {
                     limit.amount = limit.amount + 1;
                     RateLimit.channelLimits.set(id, limit);
@@ -40,15 +31,12 @@ export class RateLimit {
     }
 
     createLimit(id: string, type: RatelimitType) {
-        const defaultLimit = {
-            amount: 1
-        };
         switch(type) {
             case RatelimitType.USER:
-                RateLimit.userLimits.set(id, Object.assign(defaultLimit, {timeout: setTimeout(this.passLimit(type, id), this.limits.user.timeout)}))
+                RateLimit.userLimits.set(id, Object.assign({ amount: 1 }, {timeout: setTimeout(this.passLimit(type, id), this.bot.settings.limits.user.timeout)}));
                 break;
             case RatelimitType.CHANNEL:
-                RateLimit.channelLimits.set(id, Object.assign(defaultLimit, {timeout: setTimeout(this.passLimit(type, id), this.limits.channel.timeout)}))
+                RateLimit.channelLimits.set(id, Object.assign({ amount: 1 }, {timeout: setTimeout(this.passLimit(type, id), this.bot.settings.limits.channel.timeout)}));
                 break;
         }
     }
@@ -65,13 +53,36 @@ export class RateLimit {
             }
         }
     }
-    
 
-    async checkRatelimit(channelId: string, userId: string, type?: RatelimitType): Promise<boolean> {
+    async checkRatelimit(message: Message, channelId: string, userId: string, type?: RatelimitType): Promise<boolean> {
         const channel = RateLimit.channelLimits.get(channelId);
         const user = RateLimit.userLimits.get(userId);
-        if (!channel || !user) return false;
-        return channel.amount >= this.limits.channel.amount || user.amount >= this.limits.user.amount;
+
+        switch (type) {
+            case RatelimitType.CHANNEL: {
+                if (!channel) return false;
+                message.channel.send(`This channel is currently rate-limited for xxx.`);
+                return channel.amount >= this.bot.settings.limits.channel.amount;
+            }
+            case RatelimitType.USER: {
+                if (!user) return false;
+                message.channel.send(`You are currently rate-limited for xxx.`);
+                return user.amount >= this.bot.settings.limits.user.amount;
+            }
+            default: {
+                if (!channel || !user) return false;
+
+                if (channel.amount >= this.bot.settings.limits.channel.amount) {
+                    message.channel.send(`This channel is currently rate-limited for xxx.`);
+                    return true;
+                } else if (user.amount >= this.bot.settings.limits.user.amount) {
+                    message.channel.send(`You are currently rate-limited for xxx.`);
+                    return true;
+                }
+
+                return false;
+            }
+        }
     }
 
 }
