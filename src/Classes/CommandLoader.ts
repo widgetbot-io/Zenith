@@ -16,6 +16,10 @@ export class CommandLoader extends BaseLoader {
         for (const command of commands) {
             start += 1;
             await progressBar.update(start);
+
+            if (command.endsWith('.d.ts')) continue;
+            if (command.endsWith('.map')) continue;
+
             await require(command);
         }
 
@@ -32,6 +36,8 @@ export class CommandLoader extends BaseLoader {
 
         for (const command of commands) {
             for (const c of command) {
+                if (c.endsWith('.d.ts')) continue;
+                if (c.endsWith('.map')) continue;
                 require(c);
             }
         }

@@ -16,6 +16,9 @@ export class EventLoader extends BaseLoader {
         for (const event of events) {
             start += 1;
             await progressBar.update(start);
+
+            if (event.endsWith('.d.ts')) continue;
+            if (event.endsWith('.map')) continue;
             await require(event);
         }
 
@@ -32,6 +35,8 @@ export class EventLoader extends BaseLoader {
 
         for (const event of events) {
             for (const e of event) {
+                if (e.endsWith('.d.ts')) continue;
+                if (e.endsWith('.map')) continue;
                 require(e);
             }
         }
