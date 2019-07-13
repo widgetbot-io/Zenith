@@ -16,6 +16,10 @@ export class ModuleLoader extends BaseLoader {
         for (const module of modules) {
             start += 1;
             await progressBar.update(start);
+
+            if (module.endsWith('.d.ts')) continue;
+            if (module.endsWith('.map')) continue;
+
             await require(module);
         }
 
@@ -32,6 +36,9 @@ export class ModuleLoader extends BaseLoader {
 
         for (const module of modules) {
             for (const m of module) {
+                if (m.endsWith('.d.ts')) continue;
+                if (m.endsWith('.map')) continue;
+
                 require(m);
             }
         }
