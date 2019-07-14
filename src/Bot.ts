@@ -52,7 +52,7 @@ export class Bot extends Client {
             await this.commandLoader.loadCommands();
             await this.commandLoader.loadCustomCommands();
             await this.eventLoader.digestEvents();
-            await this.login(this.settings.token);
+            // await this.login(this.settings.token);
         } catch (e) {
             console.error(e);
         }
