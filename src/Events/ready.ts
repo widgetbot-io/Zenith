@@ -1,5 +1,6 @@
 import { Event } from "../services/decorators";
 import {Bot} from "../Bot";
+import {Logger} from "../Classes";
 
 @Event({
 	name: 'Connection Ready',
@@ -8,6 +9,6 @@ import {Bot} from "../Bot";
 })
 export default class {
 	async runCommand(client: Bot): Promise<void> {
-		console.log('Ready event is fired.')
+		Logger.Info(`Event`, 'Ready event is fired.')
 	}
 }
