@@ -1,6 +1,6 @@
 {
   "name": "zenith-ts",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "main": "compiled/index.js",
   "license": "MIT",
   "dependencies": {
