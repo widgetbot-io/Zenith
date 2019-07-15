@@ -1,4 +1,4 @@
-import {Module} from "../services/decorators";
+import {Module} from "..";
 
 @Module({
     name: 'Administration',
