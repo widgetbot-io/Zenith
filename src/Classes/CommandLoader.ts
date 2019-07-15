@@ -40,6 +40,6 @@ export class CommandLoader extends BaseLoader {
             console.log();
             return;
         }
-        this.logger.info(`Loaded ${count} custom Commands`);
+        this.logger.info(`Loaded ${count} custom Commands \n`);
     }
 }

@@ -41,6 +41,6 @@ export class ModuleLoader extends BaseLoader {
             console.log();
             return;
         }
-        this.logger.info(`Loaded ${count} custom Modules`);
+        this.logger.info(`Loaded ${count} custom Modules \n`);
     }
 }

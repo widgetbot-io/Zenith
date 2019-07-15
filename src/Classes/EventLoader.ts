@@ -42,7 +42,7 @@ export class EventLoader extends BaseLoader {
             console.log();
             return;
         }
-        this.logger.info(`Loaded ${count} custom Events`);
+        this.logger.info(`Loaded ${count} custom Events \n`);
     }
 
     async digestEvents() {
