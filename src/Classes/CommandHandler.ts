@@ -7,7 +7,7 @@ import {ArgumentHelper} from "./ArgumentHelper";
 
 export class CommandHandler {
 	public ranCommands: {[key: string]: Message | Message[]} = {};
-    private rateLimit: RateLimit = new RateLimit();
+    private rateLimit: RateLimit = new RateLimit(this.bot);
     constructor(private bot: Bot) {}
 
     static parseMessage(prefix: string, content: string) {
