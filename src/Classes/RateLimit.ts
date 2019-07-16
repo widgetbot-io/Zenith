@@ -80,10 +80,10 @@ export class RateLimit {
                 }
 
                 if (channel.amount >= channelLimit.amount) {
-                    message.channel.send(`This channel is currently rate-limited for xxx. ${RateLimit.calcTimeLeft(channel.set, new Date(), channelLimit.timeout)}ms left.`);
+                    message.channel.send(`This channel is currently rate-limited. ${RateLimit.calcTimeLeft(channel.set, new Date(), channelLimit.timeout)}ms left.`);
                     return true;
                 } else if (user.amount >= userLimit.amount) {
-                    message.channel.send(`You are currently rate-limited for xxx. ${RateLimit.calcTimeLeft(user.set, new Date(), userLimit.timeout)}ms left.`);
+                    message.channel.send(`You are currently rate-limited. ${RateLimit.calcTimeLeft(user.set, new Date(), userLimit.timeout)}ms left.`);
                     return true;
                 }
 
@@ -93,7 +93,8 @@ export class RateLimit {
     }
 
     static calcTimeLeft(setTime: Date, now: Date, timeout: number): number {
-        return timeout - (setTime.getTime() - now.getTime())
+        // rounds to 2 DP
+        return +(timeout - (setTime.getTime() - now.getTime())).toFixed(2)
     }
 
 }
