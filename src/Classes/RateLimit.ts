@@ -31,12 +31,13 @@ export class RateLimit {
     }
 
     createLimit(id: string, type: RatelimitType) {
+        const composableLimit = { amount: 0, set: new Date() };
         switch(type) {
             case RatelimitType.USER:
-                RateLimit.userLimits.set(id, Object.assign({ amount: 1 }, {timeout: setTimeout(this.passLimit(type, id), this.bot.settings.limits.user.timeout)}));
+                RateLimit.userLimits.set(id, Object.assign(composableLimit, {timeout: setTimeout(this.passLimit(type, id), this.bot.settings.limits.user.timeout)}));
                 break;
             case RatelimitType.CHANNEL:
-                RateLimit.channelLimits.set(id, Object.assign({ amount: 1 }, {timeout: setTimeout(this.passLimit(type, id), this.bot.settings.limits.channel.timeout)}));
+                RateLimit.channelLimits.set(id, Object.assign(composableLimit, {timeout: setTimeout(this.passLimit(type, id), this.bot.settings.limits.channel.timeout)}));
                 break;
         }
     }
@@ -57,6 +58,8 @@ export class RateLimit {
     async checkRatelimit(message: Message, channelId: string, userId: string, type?: RatelimitType): Promise<boolean> {
         const channel = RateLimit.channelLimits.get(channelId);
         const user = RateLimit.userLimits.get(userId);
+        const channelLimit = this.bot.settings.limits.channel;
+        const userLimit = this.bot.settings.limits.user;
 
         switch (type) {
             case RatelimitType.CHANNEL: {
@@ -70,19 +73,27 @@ export class RateLimit {
                 return user.amount >= this.bot.settings.limits.user.amount;
             }
             default: {
-                if (!channel || !user) return false;
+                if (!channel || !user) {
+                    this.createLimit(userId, RatelimitType.USER)
+                    this.createLimit(channelId, RatelimitType.CHANNEL)
+                    return false;
+                }
 
-                if (channel.amount >= this.bot.settings.limits.channel.amount) {
-                    message.channel.send(`This channel is currently rate-limited for xxx.`);
+                if (channel.amount >= channelLimit.amount) {
+                    message.channel.send(`This channel is currently rate-limited for xxx. ${RateLimit.calcTimeLeft(channel.set, new Date(), channelLimit.timeout)}ms left.`);
                     return true;
-                } else if (user.amount >= this.bot.settings.limits.user.amount) {
-                    message.channel.send(`You are currently rate-limited for xxx.`);
+                } else if (user.amount >= userLimit.amount) {
+                    message.channel.send(`You are currently rate-limited for xxx. ${RateLimit.calcTimeLeft(user.set, new Date(), userLimit.timeout)}ms left.`);
                     return true;
                 }
 
                 return false;
             }
         }
+    }
+
+    static calcTimeLeft(setTime: Date, now: Date, timeout: number): number {
+        return timeout - (setTime.getTime() - now.getTime())
     }
 
 }
