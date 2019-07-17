@@ -49,7 +49,7 @@ export class EventLoader extends BaseLoader {
         for (const event of Bot.events) {
             this.bot.digestEvent(event[1].eventName, async (...args) => {
                 // @ts-ignore
-                await event[1].run(...args);
+                await event[1].run.call({ bot: this.bot }, ...args);
             })
         }
     }

@@ -10,7 +10,8 @@ import {BaseCommand} from "../../interfaces/command";
 })
 export class Ping extends BaseCommand {
     async runCommand(helper: CommandHelper) {
-        await helper.send('NANANANANANAANNA');
+        const message = await helper.send(`Ping`);
+        await message.edit(`Pong! Latency is ${message.createdTimestamp - helper.message.createdTimestamp}ms.`)
     }
 
     async hasPermission(message: Message) {
