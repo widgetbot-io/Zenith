@@ -22,11 +22,8 @@ import {FlagArgument} from "../../Classes";
 export class Eval extends BaseCommand {
     async runCommand(helper: CommandHelper) {
         let res: any;
-        const args = helper.message.content.split(' ').splice(1);
+
         const code = await helper.argHelper.get('code');
-
-        console.log(code);
-
             try {
                 res = await eval(code);
                 res = util.inspect(res, false, 0);
