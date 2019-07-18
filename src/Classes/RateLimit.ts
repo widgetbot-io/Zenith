@@ -37,6 +37,7 @@ export class RateLimit {
                 RateLimit.userLimits.set(id, Object.assign(composableLimit, {timeout: setTimeout(this.passLimit(type, id), this.bot.settings.limits.user.timeout)}));
                 break;
             case RatelimitType.CHANNEL:
+                console.log('created channel')
                 RateLimit.channelLimits.set(id, Object.assign(composableLimit, {timeout: setTimeout(this.passLimit(type, id), this.bot.settings.limits.channel.timeout)}));
                 break;
         }
@@ -44,11 +45,14 @@ export class RateLimit {
 
     passLimit(type: RatelimitType, id: string) {
         return () => {
+            console.log('passed')
             switch (type) {
                 case RatelimitType.USER:
+                    console.log('user')
                     RateLimit.userLimits.delete(id);
                     break;
                 case RatelimitType.CHANNEL:
+                    console.log('channel')
                     RateLimit.channelLimits.delete(id);
                     break;
             }
@@ -73,17 +77,20 @@ export class RateLimit {
                 return user.amount >= this.bot.settings.limits.user.amount;
             }
             default: {
-                if (!channel || !user) {
+                if (!user) {
                     this.createLimit(userId, RatelimitType.USER)
+                    return false;
+                } else if (!channel) {
                     this.createLimit(channelId, RatelimitType.CHANNEL)
                     return false;
                 }
-
+                console.log(channel.amount)
+                console.log(RateLimit.calcTimeLeft(channel.set, new Date(), channelLimit.timeout));
                 if (channel.amount >= channelLimit.amount) {
-                    message.channel.send(`This channel is currently rate-limited. ${RateLimit.calcTimeLeft(channel.set, new Date(), channelLimit.timeout)}ms left.`);
+                    message.channel.send(`This channel is currently rate-limited. ${RateLimit.calcTimeLeft(channel.set, new Date(), channelLimit.timeout)}s left.`);
                     return true;
                 } else if (user.amount >= userLimit.amount) {
-                    message.channel.send(`You are currently rate-limited. ${RateLimit.calcTimeLeft(user.set, new Date(), userLimit.timeout)}ms left.`);
+                    message.channel.send(`You are currently rate-limited. ${RateLimit.calcTimeLeft(user.set, new Date(), userLimit.timeout)}s left.`);
                     return true;
                 }
 
@@ -94,7 +101,7 @@ export class RateLimit {
 
     static calcTimeLeft(setTime: Date, now: Date, timeout: number): number {
         // rounds to 2 DP
-        return +(timeout - (setTime.getTime() - now.getTime())).toFixed(2)
+        return +(((timeout - ( now.getTime() - setTime.getTime()))/1000).toFixed(2))
     }
 
 }

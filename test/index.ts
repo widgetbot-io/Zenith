@@ -1,11 +1,11 @@
 import { Bot } from '../src';
 
 const bot = new Bot({
-	token: 'Mzg1NTIxNzI4MjQ5NjU5Mzkz.XSoX2w.S-p6Xmv_DUMWT4GZxsVsMa2Wmuk',
+	token: 'Mzg1NTIxNzI4MjQ5NjU5Mzkz.XS-Qhw.vspW03hY4VEXB1I-0RrFVFHaUaU',
 	clientOptions: {
 		disableEveryone: true,
 	},
-	prefix: '<<',
+	prefix: '<>',
 	roots: ['96626362277720064'],
 	dirs: {
 		commands: [`${__dirname}/Commands/**/*.**`],
@@ -14,12 +14,12 @@ const bot = new Bot({
 	},
 	limits: {
 		user: {
-			amount: 4,
+			amount: 2,
 			timeout: 5000
 		},
 		channel: {
-			amount: 2,
-			timeout: 5000
+			amount: 3,
+			timeout: 50000
 		}
 	}
 }, {});
