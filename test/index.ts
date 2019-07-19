@@ -14,7 +14,7 @@ const bot = new Bot({
 	},
 	limits: {
 		user: {
-			amount: 2,
+			amount: 10000,
 			timeout: 5000
 		},
 		channel: {

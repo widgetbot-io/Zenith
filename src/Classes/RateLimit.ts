@@ -31,13 +31,12 @@ export class RateLimit {
     }
 
     createLimit(id: string, type: RatelimitType) {
-        const composableLimit = { amount: 0, set: new Date() };
+        const composableLimit = { amount: 1, set: new Date() };
         switch(type) {
             case RatelimitType.USER:
                 RateLimit.userLimits.set(id, Object.assign(composableLimit, {timeout: setTimeout(this.passLimit(type, id), this.bot.settings.limits.user.timeout)}));
                 break;
             case RatelimitType.CHANNEL:
-                console.log('created channel')
                 RateLimit.channelLimits.set(id, Object.assign(composableLimit, {timeout: setTimeout(this.passLimit(type, id), this.bot.settings.limits.channel.timeout)}));
                 break;
         }
@@ -45,14 +44,11 @@ export class RateLimit {
 
     passLimit(type: RatelimitType, id: string) {
         return () => {
-            console.log('passed')
             switch (type) {
                 case RatelimitType.USER:
-                    console.log('user')
                     RateLimit.userLimits.delete(id);
                     break;
                 case RatelimitType.CHANNEL:
-                    console.log('channel')
                     RateLimit.channelLimits.delete(id);
                     break;
             }
@@ -60,8 +56,8 @@ export class RateLimit {
     }
 
     async checkRatelimit(message: Message, channelId: string, userId: string, type?: RatelimitType): Promise<boolean> {
-        const channel = RateLimit.channelLimits.get(channelId);
-        const user = RateLimit.userLimits.get(userId);
+        let channel = RateLimit.channelLimits.get(channelId);
+        let user = RateLimit.userLimits.get(userId);
         const channelLimit = this.bot.settings.limits.channel;
         const userLimit = this.bot.settings.limits.user;
 
@@ -79,18 +75,19 @@ export class RateLimit {
             default: {
                 if (!user) {
                     this.createLimit(userId, RatelimitType.USER)
-                    return false;
-                } else if (!channel) {
-                    this.createLimit(channelId, RatelimitType.CHANNEL)
-                    return false;
+                    user = RateLimit.userLimits.get(userId);
                 }
-                console.log(channel.amount)
-                console.log(RateLimit.calcTimeLeft(channel.set, new Date(), channelLimit.timeout));
-                if (channel.amount >= channelLimit.amount) {
-                    message.channel.send(`This channel is currently rate-limited. ${RateLimit.calcTimeLeft(channel.set, new Date(), channelLimit.timeout)}s left.`);
+                if (!channel) {
+                    this.createLimit(channelId, RatelimitType.CHANNEL)
+                    channel = RateLimit.channelLimits.get(channelId);
+                }
+
+
+               if (channel!.amount >= channelLimit.amount) {
+                    message.channel.send(`This channel is currently rate-limited. ${RateLimit.calcTimeLeft(channel!.set, new Date(), channelLimit.timeout)}s left.`);
                     return true;
-                } else if (user.amount >= userLimit.amount) {
-                    message.channel.send(`You are currently rate-limited. ${RateLimit.calcTimeLeft(user.set, new Date(), userLimit.timeout)}s left.`);
+                } else if (user!.amount >= userLimit.amount) {
+                    message.channel.send(`You are currently rate-limited. ${RateLimit.calcTimeLeft(user!.set, new Date(), userLimit.timeout)}s left.`);
                     return true;
                 }
 
