@@ -47,7 +47,7 @@ export class Bot extends Client {
         }
     }
 
-    async start(): Promise<void> {
+    async setup(): Promise<this> {
         try {
             await this.moduleLoader.loadModules();
             await this.moduleLoader.loadCustomModules();
@@ -56,9 +56,20 @@ export class Bot extends Client {
             await this.commandLoader.loadCommands();
             await this.commandLoader.loadCustomCommands();
             await this.eventLoader.digestEvents();
+        } catch (e) {
+            this.logger.error(e);
+        }
+
+        return this;
+    }
+
+    async connect(): Promise<this> {
+        try {
             await this.login(this.settings.token);
         } catch (e) {
             this.logger.error(e);
         }
+
+        return this;
     }
 }

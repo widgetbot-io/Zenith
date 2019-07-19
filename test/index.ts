@@ -14,4 +14,5 @@ const bot = new Bot({
 	}
 }, {});
 
-bot.start();
+bot.setup();
+bot.connect();
