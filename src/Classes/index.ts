@@ -2,3 +2,4 @@ export { BaseArgument, OptionalArgument, RequiredArgument, FlagArgument, FlagArg
 export { CommandLoader } from './CommandLoader';
 export { BaseLoader } from './BaseLoader';
 export { CommandHelper } from './CommandHelper';
+export { Logger } from './Logger';

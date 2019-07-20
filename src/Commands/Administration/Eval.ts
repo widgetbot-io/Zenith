@@ -1,8 +1,8 @@
-import { Command } from "../../services/decorators";
-import {CommandHelper} from "../../Classes/CommandHelper";
+import {Command, RequiredArgument} from "../..";
+import {CommandHelper} from "../../Classes";
 import {Message} from "discord.js";
 import * as util from "util";
-import {BaseCommand} from "../../interfaces";
+import {BaseCommand} from "../../interfaces/command";
 import {FlagArgument} from "../../Classes";
 
 @Command({
@@ -13,14 +13,17 @@ import {FlagArgument} from "../../Classes";
         new FlagArgument({
             name: 'async',
 			short: 'a'
+        }),
+        new RequiredArgument({
+            name: 'code'
         })
     ]
 })
-export class Eval implements BaseCommand {
+export class Eval extends BaseCommand {
     async runCommand(helper: CommandHelper) {
         let res: any;
-        const args = helper.message.content.split(' ').splice(1);
-        const code = args.join(' ');
+
+        const code = await helper.argHelper.get('code');
             try {
                 res = await eval(code);
                 res = util.inspect(res, false, 0);

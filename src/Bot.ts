@@ -1,13 +1,15 @@
 import 'reflect-metadata';
 
 import {Client, Collection} from 'discord.js';
-import { CommandLoader } from "./Classes";
+import {CommandLoader, Logger} from "./Classes";
 import { ModuleLoader } from "./Classes/ModuleLoader";
 import { CommandHandler } from "./Classes/CommandHandler";
 import { Options, ICommand, IModule, IEvent } from "./interfaces";
 import {EventLoader} from "./Classes/EventLoader";
 
 export class Bot extends Client {
+    private logger: Logger = new Logger(`Bot`);
+
     public static commands: Collection<string, ICommand> = new Collection();
     public static modules: Collection<string, IModule> = new Collection();
     public static events: Collection<string, IEvent> = new Collection();
@@ -22,6 +24,8 @@ export class Bot extends Client {
     constructor(public settings: Options, public client: any) {
         super(settings.clientOptions);
 
+        this.logger.info(`Hello World!`)
+
         // TODO: Allow for custom logger/config
     }
 
@@ -35,7 +39,7 @@ export class Bot extends Client {
                         callback(...args)
                     }
                 } catch (e) {
-                    console.error(e);
+                    this.logger.error(e);
                 }
             })
         } else {
@@ -43,7 +47,7 @@ export class Bot extends Client {
         }
     }
 
-    async start(): Promise<void> {
+    async setup(): Promise<this> {
         try {
             await this.moduleLoader.loadModules();
             await this.moduleLoader.loadCustomModules();
@@ -52,9 +56,20 @@ export class Bot extends Client {
             await this.commandLoader.loadCommands();
             await this.commandLoader.loadCustomCommands();
             await this.eventLoader.digestEvents();
+        } catch (e) {
+            this.logger.error(e);
+        }
+
+        return this;
+    }
+
+    async connect(): Promise<this> {
+        try {
             await this.login(this.settings.token);
         } catch (e) {
-            console.error(e);
+            this.logger.error(e);
         }
+
+        return this;
     }
 }

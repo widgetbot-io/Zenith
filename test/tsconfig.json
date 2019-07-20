@@ -9,7 +9,7 @@
     "skipLibCheck": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "outDir": "./build"
+    "outDir": "./compiled"
   },
   "exclude": [
     "node_modules",

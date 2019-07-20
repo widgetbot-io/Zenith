@@ -1,28 +1,25 @@
 import {Bot} from '../Bot';
-import * as _cliProgress from 'cli-progress';
-import {sync} from 'glob';
 import {BaseLoader} from "./BaseLoader";
 
 export class CommandLoader extends BaseLoader {
-    constructor(private bot: Bot) { super() }
+    constructor(private bot: Bot) { super('Command') }
 
     async loadCommands(): Promise<void> {
-        let start: number = 0;
-        const progressBar = new _cliProgress.Bar({}, _cliProgress.Presets.shades_classic);
         const commands: string[] = await this.getLoadable(`${__dirname}/../Commands/**/*.**`);
 
-        console.log('Loading Commands...');
-        progressBar.start(commands.length, start);
+        this.logger.info('Loading Commands...');
         for (const command of commands) {
-            start += 1;
-            await progressBar.update(start);
+            if (command.endsWith('.d.ts')) continue;
+            if (command.endsWith('.map')) continue;
+
             await require(command);
         }
 
-        await progressBar.stop();
+        this.logger.info(`${commands.length} Commands loaded`)
     }
 
     async loadCustomCommands(): Promise<void> {
+        let count: number = 0;
         let commands: string[][] = [];
 
         // TODO: Progress bar
@@ -32,10 +29,17 @@ export class CommandLoader extends BaseLoader {
 
         for (const command of commands) {
             for (const c of command) {
+                if (c.endsWith('.d.ts')) continue;
+                if (c.endsWith('.map')) continue;
+                count += 1;
                 require(c);
             }
         }
 
-        console.log('Loaded custom Commands \n');
+        if (count === 0) {
+            console.log();
+            return;
+        }
+        this.logger.info(`Loaded ${count} custom Commands \n`);
     }
 }

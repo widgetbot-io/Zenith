@@ -1,5 +1,5 @@
 import { Bot } from '../Bot';
-import { ICommand, IModule, IEvent } from '../interfaces';
+import {ICommand, IModule, IEvent, BaseEvent, BaseCommand} from '../interfaces';
 
 export function Module(info: IModule): ClassDecorator {
     return function(Module: any) {
@@ -17,21 +17,21 @@ export function Module(info: IModule): ClassDecorator {
 
 export function Event(info: IEvent): ClassDecorator {
     return function(Event: any) {
-        const loaded = new Event();
+        const loaded: BaseEvent = new Event();
         if(Bot.events.get(info.name.toLowerCase())) {
             console.warn(`Event ${info.name} already exists, overwriting..`)
         }
 
         Bot.events.set(info.name.toLowerCase(), {
             ...info,
-            run: loaded.runCommand
+            run: loaded.runEvent
         });
     }
 }
 
 export function Command(info: ICommand): ClassDecorator {
     return function(Command: any) {
-        const loaded = new Command();
+        const loaded: BaseCommand = new Command();
         if(Bot.commands.get(info.name.toLowerCase())) {
             console.warn(`Command ${info.name} already exists, overwriting..`)
         }

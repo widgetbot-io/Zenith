@@ -1,11 +1,13 @@
 import {CommandHelper} from "../Classes";
 import {Message} from "discord.js";
+import {Bot} from "../Bot";
 
-export interface BaseCommand {
-	runCommand(helper: CommandHelper): Promise<void>;
-	hasPermission(message: Message): Promise<boolean>
+export abstract class BaseCommand {
+	abstract runCommand(helper: CommandHelper): Promise<void>;
+	abstract hasPermission(message: Message): Promise<boolean>;
 }
 
-export interface BaseEvent {
-	runEvent(...args: any): Promise<void>;
+export abstract class BaseEvent {
+	public bot!: Bot;
+	abstract runEvent(...args: any): Promise<void>;
 }

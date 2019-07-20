@@ -6,7 +6,7 @@ export class ArgumentHelper {
 	public flags: any[];
 	public notFlags: any[];
 	constructor(public command: ICommand, public parsed: any, public content: string) {
-		this.args = this.command.arguments = [];
+		this.args = this.command.arguments || [];
 
 		this.flags = this.parsed.args.filter((arg: string) => this.isFlag(arg));
 		this.notFlags = this.parsed.args.filter((arg: string) => !this.isFlag(arg));
@@ -38,7 +38,6 @@ export class ArgumentHelper {
 		let id: number = -1, arg: BaseArgument;
 		for (const arg in this.args) {
 			if (this.args[arg].name === name || this.args[arg].short === name) {
-				console.log(this.args[arg]);
 				id = Number(arg);
 			}
 		}

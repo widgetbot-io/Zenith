@@ -1,28 +1,26 @@
 import {Bot} from "../Bot";
-import * as _cliProgress from 'cli-progress';
-import {sync} from 'glob';
 import {BaseLoader} from ".";
 
 export class ModuleLoader extends BaseLoader {
-    constructor(private bot: Bot) { super() }
+    constructor(private bot: Bot) { super('Module') }
 
     async loadModules(): Promise<void> {
-        let start: number = 0;
-        const progressBar = new _cliProgress.Bar({}, _cliProgress.Presets.shades_classic);
         const modules: string[] = await this.getLoadable(`${__dirname}/../Modules/*.**`);
 
-        console.log('Loading Modules...');
-        progressBar.start(modules.length, start);
+        this.logger.info('Loading Modules...');
         for (const module of modules) {
-            start += 1;
-            await progressBar.update(start);
+
+            if (module.endsWith('.d.ts')) continue;
+            if (module.endsWith('.map')) continue;
+
             await require(module);
         }
 
-        await progressBar.stop();
+        this.logger.info(`${modules.length} Modules loaded`)
     }
 
     async loadCustomModules(): Promise<void> {
+        let count: number = 0;
         let modules: string[][] = [];
 
         // TODO: Progress bar
@@ -32,10 +30,17 @@ export class ModuleLoader extends BaseLoader {
 
         for (const module of modules) {
             for (const m of module) {
+                if (m.endsWith('.d.ts')) continue;
+                if (m.endsWith('.map')) continue;
+                count += 1;
                 require(m);
             }
         }
 
-        console.log('Loaded custom modules \n');
+        if (count === 0) {
+            console.log();
+            return;
+        }
+        this.logger.info(`Loaded ${count} custom Modules \n`);
     }
 }

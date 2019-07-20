@@ -4,25 +4,24 @@ import {sync} from 'glob';
 import {BaseLoader} from ".";
 
 export class EventLoader extends BaseLoader {
-    constructor(private bot: Bot) { super() }
+    constructor(private bot: Bot) { super('Event') }
 
     async loadEvents(): Promise<void> {
-        let start: number = 0;
-        const progressBar = new _cliProgress.Bar({}, _cliProgress.Presets.shades_classic);
         const events: string[] = await this.getLoadable(`${__dirname}/../Events/**/*.**`);
 
-        console.log('Loading Events...');
-        progressBar.start(events.length, start);
+        this.logger.info('Loading Events...');
         for (const event of events) {
-            start += 1;
-            await progressBar.update(start);
+
+            if (event.endsWith('.d.ts')) continue;
+            if (event.endsWith('.map')) continue;
             await require(event);
         }
 
-        await progressBar.stop();
+        this.logger.info(`${events.length} Events loaded`)
     }
 
     async loadCustomEvents(): Promise<void> {
+        let count: number = 0;
         let events: string[][] = [];
 
         // TODO: Progress bar
@@ -32,18 +31,25 @@ export class EventLoader extends BaseLoader {
 
         for (const event of events) {
             for (const e of event) {
+                if (e.endsWith('.d.ts')) continue;
+                if (e.endsWith('.map')) continue;
+                count += 1;
                 require(e);
             }
         }
 
-        console.log('Loaded custom Commands \n');
+        if (count === 0) {
+            console.log();
+            return;
+        }
+        this.logger.info(`Loaded ${count} custom Events \n`);
     }
 
     async digestEvents() {
         for (const event of Bot.events) {
             this.bot.digestEvent(event[1].eventName, async (...args) => {
                 // @ts-ignore
-                await event[1].run(...args);
+                await event[1].run.call({ bot: this.bot }, ...args);
             })
         }
     }
