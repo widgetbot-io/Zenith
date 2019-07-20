@@ -1,15 +1,18 @@
+import Timeout = NodeJS.Timeout;
+
 export interface Limit {
 	amount: number,
-	time: Date
+	timeout: Timeout,
+	set: Date
 }
 export interface LimitSettings {
 	user: {
 		amount: number,
-		time: number
+		timeout: number
 	},
 	channel: {
 		amount: number,
-		time: number
+		timeout: number
 	}
 }
 
