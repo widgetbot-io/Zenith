@@ -1,13 +1,13 @@
 import {Bot} from "../Bot";
 import {Message} from "discord.js";
 import {CommandHelper} from "./CommandHelper";
-import {Ratelimit} from "./Ratelimit";
+import {RateLimit} from "./RateLimit";
 import {ICommand, IModule, RatelimitType} from "../interfaces";
 import {ArgumentHelper} from "./ArgumentHelper";
 
 export class CommandHandler {
 	public ranCommands: {[key: string]: Message | Message[]} = {};
-    private rateLimit: Ratelimit = new Ratelimit();
+    private rateLimit: RateLimit = new RateLimit(this.bot);
     constructor(private bot: Bot) {}
 
     static parseMessage(prefix: string, content: string) {
@@ -40,10 +40,7 @@ export class CommandHandler {
         const module: IModule | undefined = Bot.modules.get(command.module.toLowerCase());
         if (!module || !module.module) return; // TODO: Throw error properly.
 
-        if (await this.rateLimit.checkRatelimit(message.channel.id, message.author.id) === false) {
-            return await message.channel.send('You are currently rate-limited!') // TODO: Implement proper replies fo different ratelimits
-        }
-
+        if (await this.rateLimit.checkRatelimit(message, message.channel.id, message.author.id)) return;
 
         const argHelper = new ArgumentHelper(command, parsed, message.cleanContent,);
         const helper = new CommandHelper(message, this.bot, this.bot.client ,module.module, argHelper);
