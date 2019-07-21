@@ -11,6 +11,16 @@ const bot = new Bot({
 		commands: [`${__dirname}/Commands/**/*.**`],
 		events: [`${__dirname}/Events/**/*.**`],
 		modules: [`${__dirname}/Modules/*.**`]
+	},
+	limits: {
+		channel: {
+			amount: 10,
+			timeout: 10000
+		},
+		user: {
+			amount: 5,
+			timeout: 5000
+		}
 	}
 }, {});
 

@@ -50,6 +50,10 @@ export class CommandHandler {
             await this.rateLimit.increment(message.channel.id, RatelimitType.CHANNEL);
 
             await command.run!(helper);
+
+            if (this.bot.settings.postCommandFunction)
+                await this.bot.settings.postCommandFunction(command);
+
         } else {
             // TODO: Handle no permission
         }

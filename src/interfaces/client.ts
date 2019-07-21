@@ -1,5 +1,6 @@
 import {ClientOptions} from "discord.js";
 import {LimitSettings} from "./ratelimit";
+import {ICommand} from "./decorators";
 
 export interface Options {
 	token: string,
@@ -7,7 +8,8 @@ export interface Options {
 	dirs: DirectoryOptions,
 	clientOptions: ClientOptions,
 	roots: string[],
-	limits: LimitSettings
+	limits: LimitSettings,
+	postCommandFunction?: (command: ICommand) => Promise<void>;
 }
 
 export interface DirectoryOptions {
