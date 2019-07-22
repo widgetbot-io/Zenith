@@ -15,12 +15,6 @@ export class CommandHandler {
         const stringy = content.substr(command.length + (prefix.length));
         const args = stringy.split(' ').splice(1);
 
-        console.log({
-            command,
-            stringy,
-            args
-        })
-
         return {
             command,
             stringy,
