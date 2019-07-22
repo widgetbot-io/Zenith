@@ -1,5 +1,5 @@
 import {Bot} from "../Bot";
-import {BaseLoader} from ".";
+import {BaseLoader} from "./BaseLoader";
 
 export class ModuleLoader extends BaseLoader {
     constructor(private bot: Bot) { super('Module') }

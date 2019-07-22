@@ -1,7 +1,7 @@
 import {Bot} from '../Bot';
 import * as _cliProgress from 'cli-progress';
 import {sync} from 'glob';
-import {BaseLoader} from ".";
+import {BaseLoader} from "./BaseLoader";
 
 export class EventLoader extends BaseLoader {
     constructor(private bot: Bot) { super('Event') }
