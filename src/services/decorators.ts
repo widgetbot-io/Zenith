@@ -1,5 +1,5 @@
-import { Bot } from '../Bot';
-import {ICommand, IModule, IEvent, BaseEvent, BaseCommand} from '../interfaces';
+import {Bot} from '../Bot';
+import {BaseCommand, BaseEvent, ICommand, IEvent, IModule} from '../interfaces';
 
 export function Module(info: IModule): ClassDecorator {
     return function(Module: any) {

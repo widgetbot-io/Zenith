@@ -1,9 +1,7 @@
 import {Bot} from "../Bot";
 import {Message} from "discord.js";
-import {CommandHelper} from "./CommandHelper";
-import {RateLimit} from "./RateLimit";
+import {ArgumentHelper, CommandHelper, RateLimit} from ".";
 import {ICommand, IModule, RatelimitType} from "../interfaces";
-import {ArgumentHelper} from "./ArgumentHelper";
 
 export class CommandHandler {
 	public ranCommands: {[key: string]: Message | Message[]} = {};

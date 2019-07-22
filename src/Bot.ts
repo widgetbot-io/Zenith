@@ -1,11 +1,8 @@
 import 'reflect-metadata';
 
 import {Client, Collection} from 'discord.js';
-import {CommandLoader, Logger} from "./Classes";
-import { ModuleLoader } from "./Classes/ModuleLoader";
-import { CommandHandler } from "./Classes/CommandHandler";
-import { Options, ICommand, IModule, IEvent } from "./interfaces";
-import {EventLoader} from "./Classes/EventLoader";
+import {CommandHandler, CommandLoader, EventLoader, Logger, ModuleLoader} from "./Classes";
+import {ICommand, IEvent, IModule, Options} from "./interfaces";
 
 export class Bot extends Client {
     private logger: Logger = new Logger(`Bot`);

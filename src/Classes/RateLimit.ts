@@ -1,11 +1,11 @@
-import {Limit, LimitSettings, RatelimitType} from "../interfaces";
+import {Limit, RatelimitType} from "../interfaces";
 import {Collection, Message} from 'discord.js'
 import {Bot} from "../Bot";
 
 export class RateLimit {
+	private static channelLimits: Collection<string, Limit> = new Collection();
+	private static userLimits: Collection<string, Limit> = new Collection();
     constructor(private bot: Bot) {}
-    private static channelLimits: Collection<string, Limit> = new Collection();
-    private static userLimits: Collection<string, Limit> = new Collection();
 
     async increment(id: string, type: RatelimitType): Promise<void> {
         switch (type) {
