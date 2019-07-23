@@ -21,7 +21,6 @@ export {
 	CommandLoader,
 	CommandHelper,
 	Logger,
-	RateLimit,
 	ArgumentHelper,
 	EventLoader,
 	ModuleLoader
