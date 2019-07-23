@@ -1,11 +1,11 @@
 import {Bot} from "../Bot";
 import {Message} from "discord.js";
-import {ArgumentHelper, CommandHelper, RateLimit} from ".";
+import {ArgumentHelper, CommandHelper} from ".";
 import {ICommand, IModule, RatelimitType} from "../interfaces";
 
 export class CommandHandler {
 	public ranCommands: {[key: string]: Message | Message[]} = {};
-    private rateLimit: RateLimit = new RateLimit(this.bot);
+    // private rateLimit: RateLimit = new RateLimit(this.bot);
     constructor(private bot: Bot) {}
 
     static parseMessage(prefix: string, content: string) {
@@ -32,14 +32,14 @@ export class CommandHandler {
         const module: IModule | undefined = Bot.modules.get(command.module.toLowerCase());
         if (!module || !module.module) return; // TODO: Throw error properly.
 
-        if (await this.rateLimit.checkRatelimit(message, message.channel.id, message.author.id)) return;
+        // if (await this.rateLimit.checkRatelimit(message, message.channel.id, message.author.id)) return;
 
         const argHelper = new ArgumentHelper(command, parsed, message.cleanContent,);
         const helper = new CommandHelper(message, this.bot, this.bot.client ,module.module, argHelper);
 
         if (this.bot.settings.roots.includes(message.author.id) || await command.hasPermission!(message)) {
-            await this.rateLimit.increment(message.author.id, RatelimitType.USER);
-            await this.rateLimit.increment(message.channel.id, RatelimitType.CHANNEL);
+            // await this.rateLimit.increment(message.author.id, RatelimitType.USER);
+            // await this.rateLimit.increment(message.channel.id, RatelimitType.CHANNEL);
 
             await command.run!(helper);
 

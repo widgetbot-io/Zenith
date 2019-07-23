@@ -1,5 +1,5 @@
 export { BaseArgument, OptionalArgument, RequiredArgument, FlagArgument, FlagArgumentWithValue } from './Bases';
-export { RateLimit } from './RateLimit'
+// export { RateLimit } from './RateLimit'
 export { CommandLoader } from './CommandLoader';
 export { EventLoader } from './EventLoader';
 export { ArgumentHelper } from './ArgumentHelper';
