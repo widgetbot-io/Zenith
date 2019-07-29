@@ -45,7 +45,6 @@ export class ArgumentHelper {
 
 		if (id !== -1) {
 			arg = this.args[id];
-			console.log(arg);
 			if (arg instanceof FlagArgument || arg instanceof FlagArgumentWithValue) {
 				return await this.getFlagValue(arg);
 			} else {
@@ -79,7 +78,6 @@ export class ArgumentHelper {
 	private getNotFlagValue(arg: BaseArgument) {
 		const index = this.getIndex(arg.name);
 
-		Logger.Warn(`test`, `${arg.name} - ${index}`);
 		let only: boolean = true;
 		if (arg instanceof RequiredArgument) {
 			for (const arg in this.args) {
