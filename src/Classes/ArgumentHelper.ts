@@ -1,5 +1,6 @@
 import { BaseArgument, FlagArgument, FlagArgumentWithValue, RequiredArgument } from './Bases';
 import { ICommand } from '../interfaces';
+import {Logger} from "./Logger";
 
 export class ArgumentHelper {
 	private args: BaseArgument[];
@@ -66,11 +67,23 @@ export class ArgumentHelper {
 		}
 	}
 
+	private getIndex(name: string): number {
+		for (const arg in this.args) {
+			if (this.args[arg].name === name)
+				return arg as unknown as number;
+		}
+
+		return -1;
+	}
+
 	private getNotFlagValue(arg: BaseArgument) {
+		const index = this.getIndex(arg.name);
+
+		Logger.Warn(`test`, `${arg.name} - ${index}`);
 		let only: boolean = true;
 		if (arg instanceof RequiredArgument) {
-			for (const arg of this.args) {
-				if (arg instanceof RequiredArgument) {
+			for (const arg in this.args) {
+				if (this.args[arg] instanceof RequiredArgument) {
 					only = false;
 				}
 			}
@@ -78,8 +91,9 @@ export class ArgumentHelper {
 			if (only) {
 				return this.notFlags.join(' ');
 			} else {
-				// throw new Error(`Not implemented.`)
-				return this.notFlags.join(' ');
+				const arg = this.notFlags[index];
+				if (arg)
+					return arg;
 			}
 		}
 	}
