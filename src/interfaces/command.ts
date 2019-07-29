@@ -3,7 +3,7 @@ import {Message} from "discord.js";
 import {Bot} from "../Bot";
 
 export abstract class BaseCommand {
-	abstract runCommand(helper: CommandHelper): Promise<void>;
+	abstract runCommand(helper: CommandHelper<any, any>): Promise<void>;
 	abstract hasPermission(message: Message): Promise<boolean>;
 }
 

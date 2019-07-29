@@ -10,9 +10,10 @@ export interface IModule extends Base {
 	module?: any
 }
 export interface ICommand extends Base {
+	aliases?: string[],
 	arguments?: BaseArgument[]
 	module: string,
-	run?: (helper: CommandHelper) => Promise<void>;
+	run?: (helper: CommandHelper<any, any>) => Promise<void>;
 	hasPermission?: (message: Message) => Promise<boolean>;
 }
 export interface IEvent extends Base {

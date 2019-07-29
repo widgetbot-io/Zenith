@@ -4,6 +4,7 @@ import {Message} from "discord.js";
 import * as util from "util";
 import {BaseCommand} from "../../interfaces/command";
 import {FlagArgument} from "../../Classes";
+import {Administration} from "../../Modules/Administration";
 
 @Command({
     name: 'Eval',
@@ -20,7 +21,7 @@ import {FlagArgument} from "../../Classes";
     ]
 })
 export class Eval extends BaseCommand {
-    async runCommand(helper: CommandHelper) {
+    async runCommand(helper: CommandHelper<{}, Administration>) {
         let res: any;
 
         const code = await helper.argHelper.get('code');

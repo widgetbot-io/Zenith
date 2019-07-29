@@ -1,10 +1,9 @@
 import {Message, MessageEmbed} from "discord.js";
 import {Bot} from "../Bot";
-import {IModule} from "../interfaces";
 import {ArgumentHelper} from "./ArgumentHelper";
 
-export class CommandHelper {
-    constructor(public message: Message, public bot: Bot, public client: any, public module: IModule, public argHelper: ArgumentHelper) {}
+export class CommandHelper<C, M> {
+    constructor(public message: Message, public bot: Bot, public client: C, public module: M, public argHelper: ArgumentHelper) {}
 
     public get channel() {
         return this.message.channel;
