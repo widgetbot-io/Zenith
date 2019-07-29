@@ -2,6 +2,7 @@ import {Bot} from "../Bot";
 import {Message} from "discord.js";
 import {ArgumentHelper, CommandHelper} from ".";
 import {ICommand, IModule, RatelimitType} from "../interfaces";
+import {Parser} from "./Parser";
 
 export class CommandHandler {
 	public ranCommands: {[key: string]: Message | Message[]} = {};
@@ -11,7 +12,7 @@ export class CommandHandler {
     static parseMessage(prefix: string, content: string) {
         const command = content.substr(prefix.length).split(' ')[0];
         const stringy = content.substr(command.length + (prefix.length));
-        const args = stringy.split(' ').splice(1);
+        const args = Parser.parseArgs(stringy);
 
         return {
             command,
