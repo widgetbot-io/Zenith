@@ -25,5 +25,6 @@ export {
 	EventLoader,
 	ModuleLoader
 } from './Classes';
+export {General, Administration} from './Modules'
 export {Module, Event, Command} from './services/decorators';
 export {Bot} from './Bot';

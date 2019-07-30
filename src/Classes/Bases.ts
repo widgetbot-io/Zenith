@@ -1,4 +1,4 @@
-import { BaseArgumentOptions } from '../interfaces';
+import {BaseArgumentOptions} from '../interfaces';
 
 export class BaseArgument {
 	public name: string;

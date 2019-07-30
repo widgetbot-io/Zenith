@@ -1,9 +1,8 @@
-import { BaseArgument, FlagArgument, FlagArgumentWithValue, RequiredArgument } from './Bases';
-import { ICommand } from '../interfaces';
-import {Logger} from "./Logger";
+import {BaseArgument, FlagArgument, FlagArgumentWithValue, RequiredArgument} from './Bases';
+import {ICommand} from '../interfaces';
 
 export class ArgumentHelper {
-	private args: BaseArgument[];
+	private readonly args: BaseArgument[];
 	public flags: any[];
 	public notFlags: any[];
 	constructor(public command: ICommand, public parsed: any, public content: string) {
@@ -20,13 +19,17 @@ export class ArgumentHelper {
 		const longArgument = argument.substr(2);
 		const shortArgument = argument.substr(1);
 
-		for (const arg of this.args) {
+		for (const i in this.args) {
+			const arg = this.args[i];
+
 			if (arg instanceof FlagArgument) {
 				if (arg.name === longArgument || arg.short === shortArgument) {
 					return true;
 				}
 			} else if (arg instanceof FlagArgumentWithValue) {
 				if (arg.name === longArgument || arg.short === shortArgument) {
+					// @ts-ignore
+					delete this.args[i + 1];
 					return true;
 				}
 			}

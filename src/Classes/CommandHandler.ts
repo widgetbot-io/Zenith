@@ -1,7 +1,7 @@
 import {Bot} from "../Bot";
 import {Message} from "discord.js";
 import {ArgumentHelper, CommandHelper} from ".";
-import {ICommand, IModule, RatelimitType} from "../interfaces";
+import {ICommand, IModule} from "../interfaces";
 import {Parser} from "./Parser";
 
 export class CommandHandler {

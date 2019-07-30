@@ -1,13 +1,10 @@
-// @ts-ignore
 import {sync} from 'glob';
 import {Logger} from "./Logger";
 
 export class BaseLoader {
-	protected logger: Logger;
-	constructor(name: string) {
-		this.logger = new Logger('Loader', name);
-	}
+	protected logger: Logger = new Logger('Loader', this.name);
 
+	constructor(protected name: string) { }
 
 	getLoadable(directory: string): string[] {
 		let files: string[] = sync(directory);
