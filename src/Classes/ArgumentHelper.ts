@@ -1,22 +1,26 @@
 import {BaseArgument, FlagArgument, FlagArgumentWithValue, RequiredArgument} from './Bases';
-import {ICommand} from '../interfaces';
+import {ICommand, Parsed} from '../interfaces';
 
 export class ArgumentHelper {
 	private readonly args: BaseArgument[];
 	public flags: any[];
 	public notFlags: any[];
-	constructor(public command: ICommand, public parsed: any, public content: string) {
+	constructor(public command: ICommand, public parsed: Parsed, public content: string) {
 		this.args = this.command.arguments || [];
 
-		this.flags = this.parsed.args.filter((arg: string) => this.isFlag(arg));
-		this.notFlags = this.parsed.args.filter((arg: string) => !this.isFlag(arg));
+		this.flags = this.parsed.args.filter((arg: string, i: number) => this.isFlag(arg, i));
+		this.notFlags = this.parsed.args.filter((arg: string, i: number) => !this.isFlag(arg, i));
 	}
 
-	isFlag(argument: string): boolean {
+	get argString(): string {
+		return this.notFlags.join(' ')
+	}
+
+	isFlag(argument: string, index: number): boolean | undefined {
 		if (!argument.startsWith('-'))
 			return false;
 
-		const longArgument = argument.substr(2);
+		const longArgument  = argument.substr(2);
 		const shortArgument = argument.substr(1);
 
 		for (const i in this.args) {
@@ -28,8 +32,6 @@ export class ArgumentHelper {
 				}
 			} else if (arg instanceof FlagArgumentWithValue) {
 				if (arg.name === longArgument || arg.short === shortArgument) {
-					// @ts-ignore
-					delete this.args[i + 1];
 					return true;
 				}
 			}
@@ -98,5 +100,4 @@ export class ArgumentHelper {
 			}
 		}
 	}
-
 }

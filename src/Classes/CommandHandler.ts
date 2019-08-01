@@ -1,7 +1,7 @@
 import {Bot} from "../Bot";
 import {Message} from "discord.js";
 import {ArgumentHelper, CommandHelper} from ".";
-import {ICommand, IModule} from "../interfaces";
+import {ICommand, IModule, Parsed} from "../interfaces";
 import {Parser} from "./Parser";
 
 export class CommandHandler {
@@ -9,7 +9,7 @@ export class CommandHandler {
     // private rateLimit: RateLimit = new RateLimit(this.bot);
     constructor(private bot: Bot) {}
 
-    static parseMessage(prefix: string, content: string) {
+    static parseMessage(prefix: string, content: string): Parsed {
         const command = content.substr(prefix.length).split(' ')[0];
         const stringy = content.substr(command.length + (prefix.length));
         const args = Parser.parseArgs(stringy);
