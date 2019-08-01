@@ -1,8 +1,8 @@
-import {Command, FlagArgument, FlagArgumentWithValue, OptionalArgument, RequiredArgument} from "../..";
+import {Command, FlagArgument, FlagArgumentWithValue, RequiredArgument} from "../..";
 import {CommandHelper} from "../../Classes";
 import {Message} from "discord.js";
 import {BaseCommand} from "../../interfaces";
-import {General} from "../../Modules/General";
+import {General} from "../../Modules";
 
 @Command({
     name: 'Test',
