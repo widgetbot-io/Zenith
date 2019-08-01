@@ -11,3 +11,9 @@ export abstract class BaseEvent {
 	public bot!: Bot;
 	abstract runEvent(...args: any): Promise<void>;
 }
+
+export interface Parsed {
+	command: string,
+	stringy: string,
+	args: string[]
+}
