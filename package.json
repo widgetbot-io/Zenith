@@ -1,6 +1,6 @@
 {
   "name": "zenith-ts",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "main": "compiled/index.js",
   "license": "MIT",
   "dependencies": {
@@ -16,6 +16,7 @@
     "@types/node": "^12.0.10"
   },
   "files": [
-    "compiled/**/*"
+    "compiled/**/*",
+    "yarn.lock"
   ]
 }
