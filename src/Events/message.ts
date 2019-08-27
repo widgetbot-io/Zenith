@@ -1,5 +1,4 @@
-import { Event } from "..";
-import {Bot} from "../Bot";
+import {Event} from "..";
 import {Message} from "discord.js";
 import {BaseEvent} from "../interfaces/command";
 
@@ -10,6 +9,6 @@ import {BaseEvent} from "../interfaces/command";
 })
 export default class extends BaseEvent<{}> {
 	async runEvent(message: Message): Promise<void> {
-		await (message.client as Bot<{}>).commandHandler.handleMessage(message)
+		await this.bot.commandHandler.handleMessage(message)
 	}
 }
