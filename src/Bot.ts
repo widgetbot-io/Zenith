@@ -4,7 +4,7 @@ import {Client, Collection} from 'discord.js';
 import {CommandHandler, CommandLoader, EventLoader, Logger, ModuleLoader} from "./Classes";
 import {ICommand, IEvent, IModule, Options} from "./interfaces";
 
-export class Bot extends Client {
+export class Bot<C> extends Client {
     private logger: Logger = new Logger(`Bot`);
 
     public static commands: Collection<string, ICommand> = new Collection();
@@ -18,7 +18,7 @@ export class Bot extends Client {
     public eventLoader: EventLoader = new EventLoader(this);
 
     private events: {[key: string]: Function[]} = {};
-    constructor(public settings: Options, public client: any) {
+    constructor(public settings: Options, public client: C) {
         super(settings.clientOptions);
 
         this.logger.info(`Hello World!`)
