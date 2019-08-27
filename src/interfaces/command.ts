@@ -7,8 +7,8 @@ export abstract class BaseCommand {
 	abstract hasPermission(message: Message): Promise<boolean>;
 }
 
-export abstract class BaseEvent {
-	public bot!: Bot;
+export abstract class BaseEvent<C> {
+	public bot!: Bot<C>;
 	abstract runEvent(...args: any): Promise<void>;
 }
 

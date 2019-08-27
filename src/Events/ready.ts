@@ -7,7 +7,7 @@ import {BaseEvent} from "../interfaces/command";
 	eventName: 'ready',
 	description: 'haha'
 })
-export default class extends BaseEvent {
+export default class extends BaseEvent<{}> {
 	async runEvent(): Promise<void> {
 		Logger.Info(`Event`, 'Ready event is fired.')
 	}

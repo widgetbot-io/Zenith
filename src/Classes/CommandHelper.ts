@@ -3,7 +3,7 @@ import {Bot} from "../Bot";
 import {ArgumentHelper} from "./ArgumentHelper";
 
 export class CommandHelper<C, M> {
-    constructor(public message: Message, public bot: Bot, public client: C, public module: M, public argHelper: ArgumentHelper) {}
+    constructor(public message: Message, public bot: Bot<C>, public client: C, public module: M, public argHelper: ArgumentHelper) {}
 
     public get channel() {
         return this.message.channel;

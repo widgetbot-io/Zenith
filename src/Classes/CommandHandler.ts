@@ -7,7 +7,7 @@ import {Parser} from "./Parser";
 export class CommandHandler {
 	public ranCommands: {[key: string]: Message | Message[]} = {};
     // private rateLimit: RateLimit = new RateLimit(this.bot);
-    constructor(private bot: Bot) {}
+    constructor(private bot: Bot<{}>) {}
 
     static parseMessage(prefix: string, content: string): Parsed {
         const command = content.substr(prefix.length).split(' ')[0];

@@ -2,7 +2,7 @@ import {Bot} from "../Bot";
 import {BaseLoader} from "./BaseLoader";
 
 export class ModuleLoader extends BaseLoader {
-    constructor(private bot: Bot) { super('Module') }
+    constructor(private bot: Bot<{}>) { super('Module') }
 
     async loadModules(): Promise<void> {
         const modules: string[] = await this.getLoadable(`${__dirname}/../Modules/*.**`);

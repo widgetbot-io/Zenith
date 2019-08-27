@@ -5,7 +5,7 @@ import {Bot} from "../Bot";
 export class RateLimit {
 	private static channelLimits: Collection<string, Limit> = new Collection();
 	private static userLimits: Collection<string, Limit> = new Collection();
-    constructor(private bot: Bot) {}
+    constructor(private bot: Bot<{}>) {}
 
     async increment(id: string, type: RatelimitType): Promise<void> {
         switch (type) {
@@ -84,10 +84,10 @@ export class RateLimit {
 
 
                if (channel!.amount >= channelLimit.amount) {
-                    message.channel.send(`This channel is currently rate-limited. ${RateLimit.calcTimeLeft(channel!.set, new Date(), channelLimit.timeout)}s left.`);
+                    await message.channel.send(`This channel is currently rate-limited. ${RateLimit.calcTimeLeft(channel!.set, new Date(), channelLimit.timeout)}s left.`);
                     return true;
                 } else if (user!.amount >= userLimit.amount) {
-                    message.channel.send(`You are currently rate-limited. ${RateLimit.calcTimeLeft(user!.set, new Date(), userLimit.timeout)}s left.`);
+                    await message.channel.send(`You are currently rate-limited. ${RateLimit.calcTimeLeft(user!.set, new Date(), userLimit.timeout)}s left.`);
                     return true;
                 }
 

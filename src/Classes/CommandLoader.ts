@@ -2,7 +2,7 @@ import {Bot} from '../Bot';
 import {BaseLoader} from "./BaseLoader";
 
 export class CommandLoader extends BaseLoader {
-    constructor(private bot: Bot) { super('Command') }
+    constructor(private bot: Bot<{}>) { super('Command') }
 
     async loadCommands(): Promise<void> {
         const commands: string[] = await this.getLoadable(`${__dirname}/../Commands/**/*.**`);
