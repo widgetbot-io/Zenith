@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@sentry/core@5.6.1":
-  version "5.6.1"
-  resolved "https://registry.yarnpkg.com/@sentry/core/-/core-5.6.1.tgz#946f064cc500bf4cd2a1bac580192fe440b614c7"
-  integrity sha512-gK8XfkJIZLsBEQehkr2q2fdHI50B3yo4RXiixSZiNBVIzQ+1z3JcMssDzGwhbY81NHUzHZ7of3oQ4Ab4OGRI/g==
+"@sentry/core@5.6.2":
+  version "5.6.2"
+  resolved "https://registry.yarnpkg.com/@sentry/core/-/core-5.6.2.tgz#8c5477654a83ebe41a72e86a79215deb5025e418"
+  integrity sha512-grbjvNmyxP5WSPR6UobN2q+Nss7Hvz+BClBT8QTr7VTEG5q89TwNddn6Ej3bGkaUVbct/GpVlI3XflWYDsnU6Q==
   dependencies:
     "@sentry/hub" "5.6.1"
     "@sentry/minimal" "5.6.1"
@@ -32,11 +32,11 @@
     tslib "^1.9.3"
 
 "@sentry/node@^5.5.0":
-  version "5.6.1"
-  resolved "https://registry.yarnpkg.com/@sentry/node/-/node-5.6.1.tgz#745adde66e78a605d3edfd3b4108a9e2a6859cc4"
-  integrity sha512-8gNjFRrTOG3vu2RpWZnUSxNx6Ui2Dthq2VHeVImt7PYtVaSddlYZvt0xl8L/fJC/TvFZEPfX0d8Is9v8yvsgRQ==
+  version "5.6.2"
+  resolved "https://registry.yarnpkg.com/@sentry/node/-/node-5.6.2.tgz#4b62f056031da65cad78220d48c546b8bfbfaed7"
+  integrity sha512-A9CELco6SjF4zt8iS1pO3KdUVI2WVhtTGhSH6X04OVf2en1fimPR+Vs8YVY/04udwd7o+3mI6byT+rS9+/Qzow==
   dependencies:
-    "@sentry/core" "5.6.1"
+    "@sentry/core" "5.6.2"
     "@sentry/hub" "5.6.1"
     "@sentry/types" "5.6.1"
     "@sentry/utils" "5.6.1"
@@ -176,7 +176,7 @@ delayed-stream@~1.0.0:
 
 discord.js@discordjs/discord.js:
   version "12.0.0-dev"
-  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/4c088123026e520f46cb4ee21bb90140d2501215"
+  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/2a3fb705d0296266e3cd7e9976a47459c69653a9"
   dependencies:
     abort-controller "^3.0.0"
     form-data "^2.3.3"
@@ -210,9 +210,9 @@ flatted@^2.0.0, flatted@^2.0.1:
   integrity sha512-a1hQMktqW9Nmqr5aktAux3JMNqaucxGcjtjWnZLHX7yyPCmlSV3M54nGYbqT8K+0GhF3NBgmJCc3ma+WOgX8Jg==
 
 form-data@^2.3.3:
-  version "2.5.0"
-  resolved "https://registry.yarnpkg.com/form-data/-/form-data-2.5.0.tgz#094ec359dc4b55e7d62e0db4acd76e89fe874d37"
-  integrity sha512-WXieX3G/8side6VIqx44ablyULoGruSde5PNTxoUyo5CeyAMX6nVWUd0rgist/EuX655cjhUhTo1Fo3tRYqbcA==
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/form-data/-/form-data-2.5.1.tgz#f2cbec57b5e59e23716e128fe44d4e5dd23895f4"
+  integrity sha512-m21N3WOmEEURgk6B9GLOE4RuWOFf28Lhh9qGYeNlGq4VDXUlJy2th2slBNU8Gp8EzloYZOibZJ7t5ecIrFSjVA==
   dependencies:
     asynckit "^0.4.0"
     combined-stream "^1.0.6"
@@ -292,15 +292,15 @@ lodash@^4.17.14:
   integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
 
 log4js@*:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/log4js/-/log4js-5.0.0.tgz#8133529479cdc6e2371b2cb6c29f285d2d3f4f3c"
-  integrity sha512-yySdC7uCTYo1cCW3Of79PFQVrR1NVK3XxdFozEkLOYhpFsyhVE68yizMdJV7pcrwhvop5J+GGamwb2ejrDt6ww==
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/log4js/-/log4js-5.1.0.tgz#3fa5372055a4c2611ab92d80496bffc100841508"
+  integrity sha512-QtXrBGZiIwfwBrH9zF2uQarvBuJ5+Icqx9fW+nQL4pnmPITJw8n6kh3bck5IkcTDBQatDeKqUMXXX41fp0TIqw==
   dependencies:
     date-format "^2.1.0"
     debug "^4.1.1"
     flatted "^2.0.1"
     rfdc "^1.1.4"
-    streamroller "^2.0.0"
+    streamroller "^2.1.0"
 
 log4js@^4.5.1:
   version "4.5.1"
@@ -365,9 +365,9 @@ path-is-absolute@^1.0.0:
   integrity sha1-F0uSaHNVNP+8es5r9TpanhtcX18=
 
 prism-media@^1.0.0:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/prism-media/-/prism-media-1.0.2.tgz#1e0f097f67d799211177a50d5276fdd2ef1c7fd7"
-  integrity sha512-KCu3SlT1EtS0lvF74NGLSTzr5jrkRajE9n+S2jnUvvdiN5SpjsGj0/HgR1QK9+985Yv8cxjwZnpFRaj+SimDGA==
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/prism-media/-/prism-media-1.1.0.tgz#64fd9abf64719d627b99360bfbe1a81d3ac0c593"
+  integrity sha512-W+oxjRyjtd7hw3pefNZuc7YEZ6VICORJvVNfCPs0+7CsJ43CqMjGAYGjPL3hQ82vw03EVra+CiX4zisqOBUUGw==
 
 reflect-metadata@^0.1.13:
   version "0.1.13"
@@ -395,10 +395,10 @@ streamroller@^1.0.6:
     fs-extra "^7.0.1"
     lodash "^4.17.14"
 
-streamroller@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/streamroller/-/streamroller-2.0.0.tgz#11545471dca16c3dbb1eb294232685f82f637895"
-  integrity sha512-F3YGsrfLJMqS2QB5NEV1qd8ZluCNw+srK3t/q3odEwXpy+FF9uR7pPg9YiJxi7jKKahMdZBPBL668lf3Lnk43A==
+streamroller@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/streamroller/-/streamroller-2.1.0.tgz#702de4dbba428c82ed3ffc87a75a21a61027e461"
+  integrity sha512-Ps7CuQL0RRG0YAigxNehrGfHrLu+jKSSnhiZBwF8uWi62WmtHDQV1OG5gVgV5SAzitcz1GrM3QVgnRO0mXV2hg==
   dependencies:
     date-format "^2.1.0"
     debug "^4.1.1"
