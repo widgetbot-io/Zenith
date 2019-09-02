@@ -9,14 +9,32 @@ export class ArgumentHelper {
 		this.args = this.command.arguments || [];
 
 		this.flags = this.parsed.args.filter((arg: string, i: number) => this.isFlag(arg, i));
-		this.notFlags = this.parsed.args.filter((arg: string, i: number) => !this.isFlag(arg, i));
+		this.notFlags = this.parsed.args.filter((arg: string, i: number) => !this.flags.find(a => a === arg));
 	}
 
-	get argString(): string {
-		return this.notFlags.join(' ')
+	async argString(): Promise<string> {
+		const flags = this.parsed.stringy.split(' ')
+			.filter((a, i) => this.isFlag(a, i))
+			.map(a => a.startsWith("--") && a.substr(2) || a.substr(1));
+		let { stringy: argstring } = this.parsed;
+		for (const flag of flags) {
+			const val = await this.get(flag);
+			if (val) {
+				argstring = argstring
+				.replace(`--${flag} ${val} `, '')
+				.replace(`--${flag} ${val}`, '')
+				.replace(`-${flag}`, '');
+			} else {
+				argstring = argstring
+					.replace(`-${flag}`, '');
+			}
+		}
+
+		return argstring.trim();
 	}
 
 	isFlag(argument: string, index: number): boolean | undefined {
+		// if (index > 0 && this.parsed.args[index - 1].startsWith("-") && this.args[index - 1] instanceof FlagArgumentWithValue) return true; 
 		if (!argument.startsWith('-'))
 			return false;
 

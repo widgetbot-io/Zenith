@@ -1,12 +1,12 @@
 import { Bot } from '../src';
 
 const bot = new Bot({
-	token: 'changeme',
+	token: 'NTk1NjU1NzQyNTY5MTg1Mjkz.XW1b0A.CssJQnx4NAv06sN_wsRRF71EHFY',
 	clientOptions: {
 		disableEveryone: true,
 	},
 	prefix: '>>',
-	roots: ['96626362277720064'],
+	roots: ['96626362277720064', '242097488507568128'],
 	dirs: {
 		commands: [`${__dirname}/Commands/**/*.**`],
 		events: [`${__dirname}/Events/**/*.**`],

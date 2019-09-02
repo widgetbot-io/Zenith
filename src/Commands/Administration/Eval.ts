@@ -27,7 +27,8 @@ export class Eval extends BaseCommand {
     async runCommand(helper: CommandHelper<{}, Administration>) {
         let res: any;
 
-        const code = await helper.argHelper.argString;
+        const code = await helper.argHelper.argString();
+        console.log(code);
         const asyncFlag = await helper.argHelper.get('async');
         const depthFlag = await helper.argHelper.get('depth');
 
@@ -59,6 +60,6 @@ export class Eval extends BaseCommand {
     }
 
     async hasPermission(message: Message) {
-        return ['96626362277720064'].includes(message.author!.id);
+        return ['96626362277720064', '242097488507568128'].includes(message.author!.id);
     }
 }
