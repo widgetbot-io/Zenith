@@ -8,6 +8,7 @@ import {Administration} from "../../Modules";
 
 @Command({
     name: 'Eval',
+    aliases: ['ev'],
     description: 'Ping command',
     module: 'Administration',
     arguments: [

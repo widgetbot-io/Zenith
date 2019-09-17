@@ -1,6 +1,6 @@
 import {Bot} from "../Bot";
 import {Message} from "discord.js";
-import {ArgumentHelper, CommandHelper} from ".";
+import {ArgumentHelper, CommandHelper, CommandLoader} from ".";
 import {ICommand, IModule, Parsed} from "../interfaces";
 import {Parser} from "./Parser";
 
@@ -27,7 +27,8 @@ export class CommandHandler {
         if (!message.cleanContent.startsWith(this.bot.settings.prefix)) return;
 
         const parsed = CommandHandler.parseMessage(this.bot.settings.prefix, message.cleanContent);
-        const command: ICommand | undefined = Bot.commands.get(parsed.command.toLowerCase());
+        // const command: ICommand | undefined = Bot.commands.get(parsed.command.toLowerCase());
+        const command: ICommand | undefined = await CommandLoader.get(parsed.command.toLowerCase());
         if (!command) return;
 
         const module: IModule | undefined = Bot.modules.get(command.module.toLowerCase());
