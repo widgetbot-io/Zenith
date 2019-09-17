@@ -20,9 +20,7 @@ export class CommandLoader extends BaseLoader {
     }
 
     static async get(cmd: string): Promise<ICommand | undefined> {
-        console.log(cmd);
         return Bot.commands.find((value, key, collection) => {
-            console.log(value);
             if (value.name.toLowerCase() === cmd) {
                 return true;
             } else {
