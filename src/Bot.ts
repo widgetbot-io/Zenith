@@ -4,7 +4,7 @@ import {Client, Collection} from 'discord.js';
 import {CommandHandler, CommandLoader, EventLoader, Logger, ModuleLoader} from "./Classes";
 import {ICommand, IEvent, IModule, Options} from "./interfaces";
 
-export class Bot<C> extends Client {
+export class Bot<C = any> extends Client {
     private logger: Logger = new Logger(`Bot`);
 
     public static commands: Collection<string, ICommand> = new Collection();
