@@ -1,10 +1,12 @@
-import {BaseArgumentOptions} from '../interfaces';
+import {BaseArgumentOptions, ArgumentType} from '../interfaces';
 
 export class BaseArgument {
 	public name: string;
 	public optional: boolean;
 	public short?: string;
+	public type?: ArgumentType;
 	constructor(options: BaseArgumentOptions) {
+		this.type = options.type;
 		this.name = options.name;
 		this.optional = options.optional || false;
 		this.short = options.short;
