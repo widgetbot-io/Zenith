@@ -5,7 +5,7 @@ import {Bot} from "../Bot";
 export class RateLimit {
 	private static channelLimits: Collection<string, Limit> = new Collection();
 	private static userLimits: Collection<string, Limit> = new Collection();
-    constructor(private bot: Bot<{}>) {}
+    constructor(private bot: Bot) {}
 
     async increment(id: string, type: RatelimitType): Promise<void> {
         switch (type) {

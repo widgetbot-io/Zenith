@@ -1,11 +1,12 @@
 import {BaseArgument, FlagArgument, FlagArgumentWithValue, RequiredArgument} from './Bases';
-import {ICommand, Parsed} from '../interfaces';
+import {ArgumentType, ICommand, Parsed} from '../interfaces';
+import {Message} from "discord.js";
 
 export class ArgumentHelper {
 	private readonly args: BaseArgument[];
 	public flags: any[];
 	public notFlags: any[];
-	constructor(public command: ICommand, public parsed: Parsed, public content: string) {
+	constructor(public command: ICommand, public parsed: Parsed, public content: string, private message: Message) {
 		this.args = this.command.arguments || [];
 
 		this.flags = this.parsed.args.filter((arg: string, i: number) => this.isFlag(arg, i));
@@ -33,8 +34,48 @@ export class ArgumentHelper {
 		return argstring.trim();
 	}
 
+	private static GetFor(ic: string, usage: string): string | undefined {
+		if(!usage.startsWith(`<${ic}`) || !usage.endsWith('>')) return; // Ensures it's the proper format.
+		return usage.substr(ic.length + 1, usage.length - ic.length - 2); // Returns just the ID.
+	}
+
+	private async parse(arg: BaseArgument, val: string): Promise<any> {
+		switch (arg.type) {
+			case ArgumentType.BOOLEAN: {
+				if (Boolean(val)) return Boolean(val);
+				throw new Error('Invalid Boolean');
+			}
+			case ArgumentType.NUMBER: {
+				if (!isNaN(Number(val))) return Number(val);
+				throw new Error('Invalid Number');
+			}
+			case ArgumentType.GUILD_MEMBER: {
+				// TODO: Make sure they use it in a guild
+				// TODO: Return a GuildMember
+
+				break;
+			}
+			case ArgumentType.TEXT_CHANNEL: {
+				let channels, channel, id;
+				// TODO: Make sure they use it in a guild
+				// TODO: Stop DM channel retards
+				channels = this.message.guild!.channels;
+				const getFor = ArgumentHelper.GetFor(`#`, val);
+				if (getFor) id = getFor;
+				channel = channels.find(c => c.id === val);
+				if (channel) return channel;
+
+				// TODO: Implement shit for like > 1 channels
+
+				throw new Error(`Invalid text channel`)
+			}
+			default:
+				return String(val);
+		}
+	}
+
 	isFlag(argument: string, index: number): boolean | undefined {
-		// if (index > 0 && this.parsed.args[index - 1].startsWith("-") && this.args[index - 1] instanceof FlagArgumentWithValue) return true; 
+		// if (index > 0 && this.parsed.args[index - 1].startsWith("-") && this.args[index - 1] instanceof FlagArgumentWithValue) return true;
 		if (!argument.startsWith('-'))
 			return false;
 
@@ -59,6 +100,8 @@ export class ArgumentHelper {
 	}
 
 	async get(name: string) {
+		// TODO: Implement proper optional support
+		// TODO: Throw something like "You are missing argument xxx"
 		let id: number = -1, arg: BaseArgument;
 		for (const arg in this.args) {
 			if (this.args[arg].name === name || this.args[arg].short === name) {

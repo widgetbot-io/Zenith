@@ -1,8 +1,9 @@
 import {Bot} from '../Bot';
 import {BaseLoader} from "./BaseLoader";
+import {ICommand} from "../interfaces";
 
 export class CommandLoader extends BaseLoader {
-    constructor(private bot: Bot<{}>) { super('Command') }
+    constructor(private bot: Bot) { super('Command') }
 
     async loadCommands(): Promise<void> {
         const commands: string[] = await this.getLoadable(`${__dirname}/../Commands/**/*.**`);
@@ -16,6 +17,18 @@ export class CommandLoader extends BaseLoader {
         }
 
         this.logger.info(`${commands.length} Commands loaded`)
+    }
+
+    static async get(cmd: string): Promise<ICommand | undefined> {
+        return Bot.commands.find((value, key, collection) => {
+            if (value.name.toLowerCase() === cmd) {
+                return true;
+            } else {
+                if (value.aliases) for (const alias of value.aliases) return alias.toLowerCase() === cmd;
+            }
+
+            return false;
+        });
     }
 
     async loadCustomCommands(): Promise<void> {

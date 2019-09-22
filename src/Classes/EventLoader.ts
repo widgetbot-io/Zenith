@@ -2,7 +2,7 @@ import {Bot} from '../Bot';
 import {BaseLoader} from "./BaseLoader";
 
 export class EventLoader extends BaseLoader {
-    constructor(private bot: Bot<{}>) { super('Event') }
+    constructor(private bot: Bot) { super('Event') }
 
     async loadEvents(): Promise<void> {
         const events: string[] = await this.getLoadable(`${__dirname}/../Events/**/*.**`);

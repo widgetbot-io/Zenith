@@ -18,7 +18,7 @@ export function Module(info: IModule): ClassDecorator {
 
 export function Event(info: IEvent): ClassDecorator {
     return function(Event: any) {
-        const loaded: BaseEvent<{}> = new Event();
+        const loaded: BaseEvent = new Event();
         if(Bot.events.get(info.name.toLowerCase()))
             Logger.Warn(`Event`,`${info.name} already exists, overwriting..`);
 
@@ -34,7 +34,7 @@ export function Command(info: ICommand): ClassDecorator {
     return function(Command: any) {
         const loaded: BaseCommand = new Command();
         if(Bot.commands.get(info.name.toLowerCase()))
-            Logger.Warn(`Command`, `${info.name} already exists, overwriting..`)
+            Logger.Warn(`Command`, `${info.name} already exists, overwriting..`);
 
         Bot.commands.set(info.name.toLowerCase(), {
             ...info,
