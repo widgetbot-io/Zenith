@@ -9,6 +9,6 @@ import {BaseEvent} from "../interfaces/command";
 })
 export default class extends BaseEvent<{}> {
 	async runEvent(): Promise<void> {
-		Logger.Info(`Event`, 'Ready event is fired.')
+		Logger.Warn(`Discord[Events]`, 'Ready event is fired.')
 	}
 }

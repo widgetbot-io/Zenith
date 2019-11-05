@@ -39,7 +39,7 @@ export class CommandHandler {
         const argHelper = new ArgumentHelper(command, parsed, message.cleanContent, message);
         const helper = new CommandHelper(message, this.bot, this.bot.client, module.module, argHelper);
 
-        if (this.bot.settings.roots.includes(message.author.id) || await command.hasPermission!(message)) {
+        if (this.bot.settings.roots.includes(message.author.id) || await command.hasPermission!(message, this.bot)) {
             // await this.rateLimit.increment(message.author.id, RatelimitType.USER);
             // await this.rateLimit.increment(message.channel.id, RatelimitType.CHANNEL);
 
