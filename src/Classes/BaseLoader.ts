@@ -12,4 +12,18 @@ export class BaseLoader {
 
 		return files;
 	}
+
+	async  loadAll(dir: string = this.name) {
+		const files: string[] = this.getLoadable(`${__dirname}/../${dir}/**/*.**`);
+
+		this.logger.info('Loading...');
+		for (const file of files) {
+			if (file.endsWith('.d.ts')) continue;
+			if (file.endsWith('.map')) continue;
+
+			await require(file);
+		}
+
+		this.logger.info(`${files.length} loaded`)
+	}
 }
