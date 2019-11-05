@@ -16,7 +16,7 @@ export class BaseLoader {
 	async loadAll(dir: string = this.name) {
 		const files: string[] = this.getLoadable(`${__dirname}/../${dir}/**/*.**`);
 
-		this.logger.info('Loading...');
+		this.logger.info(`Loading ${this.name}...`);
 		for (const file of files) {
 			if (file.endsWith('.d.ts')) continue;
 			if (file.endsWith('.map')) continue;
@@ -24,6 +24,6 @@ export class BaseLoader {
 			await require(file);
 		}
 
-		this.logger.info(`${files.length} loaded`)
+		this.logger.info(`${files.length} ${this.name} loaded`)
 	}
 }
