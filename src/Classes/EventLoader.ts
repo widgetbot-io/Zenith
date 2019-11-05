@@ -2,21 +2,7 @@ import {Bot} from '../Bot';
 import {BaseLoader} from "./BaseLoader";
 
 export class EventLoader extends BaseLoader {
-    constructor(private bot: Bot) { super('Event') }
-
-    async loadEvents(): Promise<void> {
-        const events: string[] = await this.getLoadable(`${__dirname}/../Events/**/*.**`);
-
-        this.logger.info('Loading Events...');
-        for (const event of events) {
-
-            if (event.endsWith('.d.ts')) continue;
-            if (event.endsWith('.map')) continue;
-            await require(event);
-        }
-
-        this.logger.info(`${events.length} Events loaded`)
-    }
+    constructor(private bot: Bot) { super('Events') }
 
     async loadCustomEvents(): Promise<void> {
         let count: number = 0;

@@ -13,7 +13,7 @@ export class BaseLoader {
 		return files;
 	}
 
-	async  loadAll(dir: string = this.name) {
+	async loadAll(dir: string = this.name) {
 		const files: string[] = this.getLoadable(`${__dirname}/../${dir}/**/*.**`);
 
 		this.logger.info('Loading...');

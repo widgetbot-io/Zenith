@@ -46,15 +46,15 @@ export class Bot<C = any> extends Client {
 
     async setup(): Promise<this> {
         try {
-            await this.moduleLoader.loadModules();
+            await this.moduleLoader.loadAll();
             await this.moduleLoader.loadCustomModules();
-            await this.eventLoader.loadEvents();
+            await this.eventLoader.loadAll();
             await this.eventLoader.loadCustomEvents();
-            await this.commandLoader.loadCommands();
+            await this.commandLoader.loadAll();
             await this.commandLoader.loadCustomCommands();
             await this.eventLoader.digestEvents();
         } catch (e) {
-            this.logger.error(e);
+            this.logger.fatal(e);
         }
 
         return this;
@@ -64,7 +64,7 @@ export class Bot<C = any> extends Client {
         try {
             await this.login(this.settings.token);
         } catch (e) {
-            this.logger.error(e);
+            this.logger.fatal(e);
         }
 
         return this;
