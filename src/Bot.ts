@@ -5,7 +5,7 @@ import {CommandHandler, CommandLoader, EventLoader, Logger, ModuleLoader} from "
 import {ICommand, IEvent, IModule, Options} from "./interfaces";
 
 export class Bot<C = any> extends Client {
-    private logger: Logger = new Logger(`Bot`);
+    private logger: Logger = new Logger('Bot');
 
     public static commands: Collection<string, ICommand> = new Collection();
     public static modules: Collection<string, IModule> = new Collection();
@@ -21,7 +21,7 @@ export class Bot<C = any> extends Client {
     constructor(public settings: Options, public client: C) {
         super(settings.clientOptions);
 
-        this.logger.info(`Hello World!`)
+        this.logger.info('Hello World')
 
         // TODO: Allow for custom logger/config
     }
@@ -62,7 +62,7 @@ export class Bot<C = any> extends Client {
 
     async connect(): Promise<this> {
         try {
-            await this.login(this.settings.token);
+            await super.login(this.settings.token);
         } catch (e) {
             this.logger.fatal(e);
         }
