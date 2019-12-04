@@ -17,21 +17,23 @@ export class ArgumentHelper {
 		const flags = this.parsed.stringy.split(' ')
 			.filter((a, i) => this.isFlag(a, i))
 			.map(a => a.startsWith("--") && a.substr(2) || a.substr(1));
-		let { stringy: argstring } = this.parsed;
+		let { stringy: argString } = this.parsed;
 		for (const flag of flags) {
 			const val = await this.get(flag);
 			if (val) {
-				argstring = argstring
+				argString = argString
 				.replace(`--${flag} ${val} `, '')
 				.replace(`--${flag} ${val}`, '')
+				.replace(`--${flag}`, '')
 				.replace(`-${flag}`, '');
 			} else {
-				argstring = argstring
-					.replace(`-${flag}`, '');
+				argString = argString
+					.replace(`-${flag}`, '')
+					.replace(`--${flag}`, '');
 			}
 		}
 
-		return argstring.trim();
+		return argString.trim();
 	}
 
 	private static GetFor(ic: string, usage: string): string | undefined {
