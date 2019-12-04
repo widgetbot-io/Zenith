@@ -1,6 +1,7 @@
 import {CommandHelper} from "../Classes/CommandHelper";
 import {Message} from "discord.js";
 import {BaseArgument} from "../Classes";
+import {Bot} from "../Bot";
 
 export interface Base {
 	name: string,
@@ -14,7 +15,7 @@ export interface ICommand extends Base {
 	arguments?: BaseArgument[]
 	module: string,
 	run?: (helper: CommandHelper<any, any>) => Promise<void>;
-	hasPermission?: (message: Message) => Promise<boolean>;
+	hasPermission?: (message: Message, bot: Bot) => Promise<boolean>;
 }
 export interface IEvent extends Base {
 	eventName: string,

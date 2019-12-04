@@ -3,28 +3,14 @@ import {BaseLoader} from "./BaseLoader";
 import {ICommand} from "../interfaces";
 
 export class CommandLoader extends BaseLoader {
-    constructor(private bot: Bot) { super('Command') }
-
-    async loadCommands(): Promise<void> {
-        const commands: string[] = await this.getLoadable(`${__dirname}/../Commands/**/*.**`);
-
-        this.logger.info('Loading Commands...');
-        for (const command of commands) {
-            if (command.endsWith('.d.ts')) continue;
-            if (command.endsWith('.map')) continue;
-
-            await require(command);
-        }
-
-        this.logger.info(`${commands.length} Commands loaded`)
-    }
+    constructor(private bot: Bot) { super('Commands') }
 
     static async get(cmd: string): Promise<ICommand | undefined> {
-        return Bot.commands.find((value, key, collection) => {
+        return Bot.commands.find((value) => {
             if (value.name.toLowerCase() === cmd) {
                 return true;
             } else {
-                if (value.aliases) for (const alias of value.aliases) return alias.toLowerCase() === cmd;
+                if (value.aliases) for (const alias of value.aliases) if(alias.toLowerCase() === cmd) return true;
             }
 
             return false;

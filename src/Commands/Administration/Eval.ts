@@ -1,4 +1,4 @@
-import {Command, FlagArgumentWithValue, RequiredArgument} from "../..";
+import {Bot, Command, FlagArgumentWithValue, RequiredArgument} from "../..";
 import {CommandHelper} from "../../Classes";
 import {Message} from "discord.js";
 import * as util from "util";
@@ -29,7 +29,6 @@ export class Eval extends BaseCommand {
         let res: any;
 
         const code = await helper.argHelper.argString();
-        console.log(code);
         const asyncFlag = await helper.argHelper.get('async');
         const depthFlag = await helper.argHelper.get('depth');
 
@@ -60,7 +59,7 @@ export class Eval extends BaseCommand {
         }
     }
 
-    async hasPermission(message: Message) {
-        return ['96626362277720064', '242097488507568128'].includes(message.author!.id);
+    async hasPermission(message: Message, bot: Bot) {
+        return bot.settings.roots.includes(message.author!.id);
     }
 }

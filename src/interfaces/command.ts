@@ -4,7 +4,7 @@ import {Bot} from "../Bot";
 
 export abstract class BaseCommand {
 	abstract runCommand(helper: CommandHelper<any, any>): Promise<void>;
-	abstract hasPermission(message: Message): Promise<boolean>;
+	abstract hasPermission(message: Message, bot: Bot): Promise<boolean>;
 }
 
 export abstract class BaseEvent<C = any> {

@@ -2,22 +2,7 @@ import {Bot} from "../Bot";
 import {BaseLoader} from "./BaseLoader";
 
 export class ModuleLoader extends BaseLoader {
-    constructor(private bot: Bot) { super('Module') }
-
-    async loadModules(): Promise<void> {
-        const modules: string[] = await this.getLoadable(`${__dirname}/../Modules/*.**`);
-
-        this.logger.info('Loading Modules...');
-        for (const module of modules) {
-
-            if (module.endsWith('.d.ts')) continue;
-            if (module.endsWith('.map')) continue;
-
-            await require(module);
-        }
-
-        this.logger.info(`${modules.length} Modules loaded`)
-    }
+    constructor(private bot: Bot) { super('Modules') }
 
     async loadCustomModules(): Promise<void> {
         let count: number = 0;
