@@ -29,11 +29,12 @@ import {General} from "../../Modules";
 })
 export class Ping extends BaseCommand {
     async runCommand(helper: CommandHelper<{}, General>) {
-        await helper.message.channel.send(`
-            You used the following flags: ${helper.argHelper.flags} \n
-            You used the following non-flags: ${helper.argHelper.notFlags} \n
-            depth: ${await helper.argHelper.get('depth')} \n
-            one: ${await helper.argHelper.get('one')} \\ntwo: ${await helper.argHelper.get('two')} \\nthree: ${await helper.argHelper.get('three')}
+        await helper.send(`
+            \nYou used the following flags: ${helper.argHelper.flags}
+            \nYou used the following non-flags: ${helper.argHelper.notFlags}
+            \ndepth: ${await helper.argHelper.get('depth')}
+            \none: ${await helper.argHelper.get('one')} \ntwo: ${await helper.argHelper.get('two')} \nthree: ${await helper.argHelper.get('three')}
+            \nArgStr: ${await helper.argHelper.argString()}
             `
         );
     }
