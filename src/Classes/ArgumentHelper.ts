@@ -1,6 +1,6 @@
 import {BaseArgument, FlagArgument, FlagArgumentWithValue, RequiredArgument} from './Bases';
 import {ArgumentType, ICommand, Parsed} from '../interfaces';
-import {Message} from "discord.js";
+import {GuildChannel, Message} from "discord.js";
 
 export class ArgumentHelper {
 	private cache: {[key: string]: any} = {};
@@ -66,7 +66,7 @@ export class ArgumentHelper {
 
 				if (ArgumentHelper.GetFor('#', val)) newVal = ArgumentHelper.GetFor('#', val);
 
-				const channel = channels.find(c => c.id === newVal || c.id === val);
+				const channel: GuildChannel | undefined = channels.find(c => c.id === newVal || c.id === val);
 				if (channel) {
 					this.cache[arg.name] = channel;
 					return this.cache[arg.name];
