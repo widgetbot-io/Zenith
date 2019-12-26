@@ -26,7 +26,7 @@ export class CommandHandler {
         if (!message.author) return;
         if (!message.cleanContent.startsWith(this.bot.settings.prefix)) return;
 
-        const parsed = CommandHandler.parseMessage(this.bot.settings.prefix, message.cleanContent);
+        const parsed = CommandHandler.parseMessage(this.bot.settings.prefix, message.content);
         // const command: ICommand | undefined = Bot.commands.get(parsed.command.toLowerCase());
         const command: ICommand | undefined = await CommandLoader.get(parsed.command.toLowerCase());
         if (!command) return;
@@ -36,7 +36,7 @@ export class CommandHandler {
 
         // if (await this.rateLimit.checkRatelimit(message, message.channel.id, message.author.id)) return;
 
-        const argHelper = new ArgumentHelper(command, parsed, message.cleanContent, message);
+        const argHelper = new ArgumentHelper(command, parsed, String(message.content), message);
         const helper = new CommandHelper(message, this.bot, this.bot.client, module.module, argHelper);
 
         if (this.bot.settings.roots.includes(message.author.id) || await command.hasPermission!(message, this.bot)) {

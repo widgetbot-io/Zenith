@@ -3,9 +3,10 @@ import {ArgumentType, ICommand, Parsed} from '../interfaces';
 import {Message} from "discord.js";
 
 export class ArgumentHelper {
+	private cache: {[key: string]: any} = {};
 	private readonly args: BaseArgument[];
-	public flags: any[];
 	public notFlags: any[];
+	public flags: any[];
 	constructor(public command: ICommand, public parsed: Parsed, public content: string, private message: Message) {
 		this.args = this.command.arguments || [];
 
@@ -58,18 +59,21 @@ export class ArgumentHelper {
 				break;
 			}
 			case ArgumentType.TEXT_CHANNEL: {
-				let channels, channel, id;
-				// TODO: Make sure they use it in a guild
-				// TODO: Stop DM channel retards
-				channels = this.message.guild!.channels;
-				const getFor = ArgumentHelper.GetFor(`#`, val);
-				if (getFor) id = getFor;
-				channel = channels.find(c => c.id === val);
-				if (channel) return channel;
+				const LocalizationError = Error; // TODO: Localization
+				let newVal: string | undefined;
+				if (this.message.channel.type !== 'text') throw new Error(`Attempt to use ArgumentType.TEXT_CHANNEL outside of a guild.`);
+				const channels = this.message.guild!.channels.filter(c => c.type === 'text');
 
-				// TODO: Implement shit for like > 1 channels
+				if (ArgumentHelper.GetFor('#', val)) newVal = ArgumentHelper.GetFor('#', val);
+				console.log(1);
+				console.log(ArgumentHelper.GetFor('#', val));
 
-				throw new Error(`Invalid text channel`)
+				console.log(2);
+				console.log(this.content);
+				console.log(val);
+				console.log(newVal);
+
+				const channel = channels.find(c => c.id === newVal || c.id === val);
 			}
 			default:
 				return String(val);
@@ -101,7 +105,7 @@ export class ArgumentHelper {
 		return true;
 	}
 
-	async get(name: string) {
+	async get<T = any>(name: string): Promise<T | undefined> {
 		// TODO: Implement proper optional support
 		// TODO: Throw something like "You are missing argument xxx"
 		let id: number = -1, arg: BaseArgument;
@@ -116,7 +120,7 @@ export class ArgumentHelper {
 			if (arg instanceof FlagArgument || arg instanceof FlagArgumentWithValue) {
 				return await this.getFlagValue(arg);
 			} else {
-				return await this.getNotFlagValue(arg);
+				return await this.parse(arg, await this.getNotFlagValue(arg));
 			}
 		}
 	}
