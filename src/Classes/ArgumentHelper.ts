@@ -60,21 +60,17 @@ export class ArgumentHelper {
 				break;
 			}
 			case ArgumentType.TEXT_CHANNEL: {
-				const LocalizationError = Error; // TODO: Localization
-				let newVal: string | undefined;
-				if (this.message.channel.type !== 'text') throw new LocalizationError(`Attempt to use ArgumentType.TEXT_CHANNEL outside of a guild.`);
+				let newVal: string | undefined; // TODO: Localization
+				if (this.message.channel.type !== 'text') throw new Error(`Attempt to use ArgumentType.TEXT_CHANNEL outside of a guild.`);
 				const channels = this.message.guild!.channels.filter(c => c.type === 'text');
 
 				if (ArgumentHelper.GetFor('#', val)) newVal = ArgumentHelper.GetFor('#', val);
-				console.log(1);
-				console.log(ArgumentHelper.GetFor('#', val));
-
-				console.log(2);
-				console.log(this.content);
-				console.log(val);
-				console.log(newVal);
 
 				const channel = channels.find(c => c.id === newVal || c.id === val);
+				if (channel) {
+					this.cache[arg.name] = channel;
+					return this.cache[arg.name];
+				}
 			}
 			default:
 				return String(val);
