@@ -43,6 +43,7 @@ export class ArgumentHelper {
 	}
 
 	private async parse(arg: BaseArgument, val: string): Promise<any> {
+		if (this.cache[arg.name]) return this.cache[arg.name];
 		switch (arg.type) {
 			case ArgumentType.BOOLEAN: {
 				if (Boolean(val)) return Boolean(val);
@@ -61,7 +62,7 @@ export class ArgumentHelper {
 			case ArgumentType.TEXT_CHANNEL: {
 				const LocalizationError = Error; // TODO: Localization
 				let newVal: string | undefined;
-				if (this.message.channel.type !== 'text') throw new Error(`Attempt to use ArgumentType.TEXT_CHANNEL outside of a guild.`);
+				if (this.message.channel.type !== 'text') throw new LocalizationError(`Attempt to use ArgumentType.TEXT_CHANNEL outside of a guild.`);
 				const channels = this.message.guild!.channels.filter(c => c.type === 'text');
 
 				if (ArgumentHelper.GetFor('#', val)) newVal = ArgumentHelper.GetFor('#', val);
