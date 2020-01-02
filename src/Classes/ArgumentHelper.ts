@@ -1,4 +1,4 @@
-import {BaseArgument, FlagArgument, FlagArgumentWithValue, RequiredArgument} from './Bases';
+import {BaseArgument, FlagArgument, FlagArgumentWithValue, OptionalArgument, RequiredArgument} from './Bases';
 import {ArgumentType, ICommand, Parsed} from '../interfaces';
 import {GuildChannel, Message} from "discord.js";
 
@@ -43,6 +43,8 @@ export class ArgumentHelper {
 	}
 
 	private async parse(arg: BaseArgument, val: string): Promise<any> {
+		if (!val) return undefined;
+
 		if (this.cache[arg.name]) return this.cache[arg.name];
 		switch (arg.type) {
 			case ArgumentType.BOOLEAN: {
@@ -71,9 +73,9 @@ export class ArgumentHelper {
 					this.cache[arg.name] = channel;
 					return this.cache[arg.name];
 				}
+				break;
 			}
-			default:
-				return String(val);
+			default: return String(val);
 		}
 	}
 
@@ -102,15 +104,29 @@ export class ArgumentHelper {
 		return true;
 	}
 
-	async get<T = any>(name: string): Promise<T | undefined> {
-		// TODO: Implement proper optional support
-		// TODO: Throw something like "You are missing argument xxx"
-		let id: number = -1, arg: BaseArgument;
+	async validateArguments() {
+		// for (const argument of this.args) {
+		// 	if (!argument.optional) {
+		// 		const val = this.getNotFlagValue(argument)
+		// 	}
+		// }
+	}
+
+	private findArg(name: string): number {
+		let id = -1;
 		for (const arg in this.args) {
 			if (this.args[arg].name === name || this.args[arg].short === name) {
 				id = Number(arg);
 			}
 		}
+		return id;
+	}
+
+	async get<T = any>(name: string): Promise<T | undefined> {
+		let arg: BaseArgument;
+		await this.validateArguments();
+
+		const id = this.findArg(name);
 
 		if (id !== -1) {
 			arg = this.args[id];
