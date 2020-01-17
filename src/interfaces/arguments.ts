@@ -8,6 +8,7 @@ export interface BaseArgumentOptions {
 export enum ArgumentType {
 	BOOLEAN,
 	NUMBER,
+	STRING,
 	GUILD_MEMBER,
 	TEXT_CHANNEL,
 	VOICE_CHANNEL,
