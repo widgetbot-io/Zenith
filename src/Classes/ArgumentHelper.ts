@@ -10,13 +10,13 @@ export class ArgumentHelper {
 	constructor(public command: ICommand, public parsed: Parsed, public content: string, private message: Message) {
 		this.args = this.command.arguments || [];
 
-		this.flags = this.parsed.args.filter((arg: string, i: number) => this.isFlag(arg, i));
-		this.notFlags = this.parsed.args.filter((arg: string, i: number) => !this.flags.find(a => a === arg));
+		this.flags = this.parsed.args.filter(arg => this.isFlag(arg));
+		this.notFlags = this.parsed.args.filter(arg => !this.flags.find(a => a === arg));
 	}
 
 	async argString(): Promise<string> {
 		const flags = this.parsed.stringy.split(' ')
-			.filter((a, i) => this.isFlag(a, i))
+			.filter(a => this.isFlag(a))
 			.map(a => a.startsWith("--") && a.substr(2) || a.substr(1));
 		let { stringy: argString } = this.parsed;
 		for (const flag of flags) {
@@ -79,7 +79,7 @@ export class ArgumentHelper {
 		}
 	}
 
-	isFlag(argument: string, index: number): boolean | undefined {
+	isFlag(argument: string): boolean | undefined {
 		// if (index > 0 && this.parsed.args[index - 1].startsWith("-") && this.args[index - 1] instanceof FlagArgumentWithValue) return true;
 		if (!argument.startsWith('-'))
 			return false;
