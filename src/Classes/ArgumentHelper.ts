@@ -101,7 +101,7 @@ export class ArgumentHelper {
 			}
 		}
 
-		return true;
+		return false;
 	}
 
 	async validateArguments() {
