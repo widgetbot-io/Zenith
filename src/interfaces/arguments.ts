@@ -2,7 +2,8 @@ export interface BaseArgumentOptions {
 	name: string,
 	short?: string,
 	optional?: boolean,
-	type?: ArgumentType
+	type?: ArgumentType,
+	repeating?: boolean
 }
 
 export enum ArgumentType {

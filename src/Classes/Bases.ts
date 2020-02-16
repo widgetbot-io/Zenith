@@ -5,11 +5,13 @@ export class BaseArgument {
 	public optional: boolean;
 	public short?: string;
 	public type?: ArgumentType;
+	public repeating?: boolean;
 	constructor(options: BaseArgumentOptions) {
 		this.type = options.type;
 		this.name = options.name;
 		this.optional = options.optional || false;
 		this.short = options.short;
+		this.repeating = options.repeating;
 	}
 }
 
@@ -32,12 +34,14 @@ export class FlagArgument extends OptionalArgument {
 	public short?: string;
 
 	constructor(options: BaseArgumentOptions) {
+		if (options.repeating) options.repeating = undefined; // Prevent flags from repeating
 		super(options);
 	}
 }
 export class FlagArgumentWithValue extends OptionalArgument {
 	public short?: string;
 	constructor(options: BaseArgumentOptions) {
+		if (options.repeating) options.repeating = undefined; // Prevent flags from repeating
 		super(options);
 	}
 }
