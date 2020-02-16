@@ -44,10 +44,10 @@ export class ArgumentHelper {
 			}
 			case ArgumentType.GUILD_MEMBER: {
 				if (this.message.channel.type !== "text") throw new Error(`Attempt to use ArgumentType.GUILD_MEMBER outside of a guild.`);
-				const { members } = this.message.guild;
+				const { members } = this.message.guild!;
 				for (const v of val) {
 					const match = userMention.exec(v);
-					const m = members.find(x => x.id === (match ? match[1] : v) || x.displayName === v);
+					const m = members.cache.find(x => x.id === (match ? match[1] : v) || x.displayName === v);
 					if (m) args.push(m);
 				}
 				break;
@@ -55,17 +55,17 @@ export class ArgumentHelper {
 			case ArgumentType.TEXT_CHANNEL: {
 				// TODO: Localization
 				if (this.message.channel.type !== 'text') throw new Error(`Attempt to use ArgumentType.TEXT_CHANNEL outside of a guild.`);
-				const channels = this.message.guild!.channels.filter(c => c.type === 'text');
+				const channels = this.message.guild!.channels.cache.filter(c => c.type === 'text');
 				for (let v of val) {
 					if (ArgumentHelper.GetFor('#', v)) v = <string> ArgumentHelper.GetFor('#', v);
-					const channel: GuildChannel = channels.find(c => c.id === v || c.name === v);
+					const channel = channels.find(c => c.id === v || c.name === v);
 					if (channel) args.push(channel);
 				}
 				return args;
 			}
 			case ArgumentType.VOICE_CHANNEL: {
 				if (this.message.channel.type !== "text") throw new Error(`Attempt to use ArgumentType.VOICE_CHANNEL outside of a guild.`);
-				const channels = this.message.guild.channels.filter(c => c.type === "voice");
+				const channels = this.message.guild!.channels.cache.filter(c => c.type === "voice");
 				for (let v of val) {
 					if (ArgumentHelper.GetFor('#', v)) v = <string> ArgumentHelper.GetFor('#', v);
 					const c = channels.find(x => x.id === v || x.name === v);
@@ -75,21 +75,21 @@ export class ArgumentHelper {
 			}
 			case ArgumentType.GUILD_ROLE: {
 				if (this.message.channel.type !== "text") throw new Error(`Attempt to use ArgumentType.GUILD_ROLE outside of a guild.`);
-				const { roles } = this.message.guild;
+				const { roles } = this.message.guild!;
 				for (let v of val) {
 					const match = roleMention.exec(v);
-					const r = roles.find(x => x.id === (match ? match[1] : v) || x.name === v);
+					const r = roles.cache.find(x => x.id === (match ? match[1] : v) || x.name === v);
 					if (r) args.push(r);
 				}
 				break;
 			}
 			case ArgumentType.TEXT_EMOJI: {
 				if (this.message.channel.type !== "text") throw new Error(`Attempt to use ArgumentType.GUILD_ROLE outside of a guild.`);
-				const { emojis } = this.message.guild;
+				const { emojis } = this.message.guild!;
 				for (let v of val) {
 					const match = emojiPattern.exec(v);
 					if (!match) continue;
-					const emoji = emojis.find(x => x.id === (match ? match[1] : v));
+					const emoji = emojis.cache.find(x => x.id === (match ? match[1] : v));
 					if (emoji) args.push(emoji);
 				}
 				break;
