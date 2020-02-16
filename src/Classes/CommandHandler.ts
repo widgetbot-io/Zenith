@@ -3,11 +3,12 @@ import {Message} from "discord.js";
 import {ArgumentHelper, CommandHelper, CommandLoader} from ".";
 import {ICommand, IModule, Parsed} from "../interfaces";
 import {Parser} from "./Parser";
+import { EventEmitter } from "events";
 
-export class CommandHandler {
+export class CommandHandler extends EventEmitter {
 	public ranCommands: {[key: string]: Message | Message[]} = {};
     // private rateLimit: RateLimit = new RateLimit(this.bot);
-    constructor(private bot: Bot) {}
+    constructor(private bot: Bot) { super() }
 
     static parseMessage(prefix: string, content: string): Parsed {
         const command = content.substr(prefix.length).split(' ')[0];
@@ -44,10 +45,7 @@ export class CommandHandler {
             // await this.rateLimit.increment(message.channel.id, RatelimitType.CHANNEL);
 
             await command.run!(helper);
-
-            if (this.bot.settings.postCommandFunction)
-                await this.bot.settings.postCommandFunction(command);
-
+            this.emit('command', command)
         } else {
             // TODO: Handle no permission
         }

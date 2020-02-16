@@ -148,7 +148,7 @@ export class ArgumentHelper {
 		return id;
 	}
 
-	async get<T = any | any[]>(name: string): Promise<T | T[] | undefined> {
+	async get<T = any>(name: string): Promise<T | T[] | undefined> {
 		let arg: BaseArgument;
 		await this.validateArguments();
 		const id = this.findArg(name);

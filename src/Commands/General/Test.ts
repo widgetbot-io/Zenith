@@ -1,7 +1,7 @@
 import {Command, FlagArgument, FlagArgumentWithValue, RequiredArgument} from "../..";
 import {CommandHelper} from "../../Classes";
-import {Message} from "discord.js";
-import {BaseCommand} from "../../interfaces";
+import {GuildMember, Message} from "discord.js";
+import {ArgumentType, BaseCommand} from "../../interfaces";
 import {General} from "../../Modules";
 
 @Command({
@@ -10,10 +10,12 @@ import {General} from "../../Modules";
     module: 'General',
     arguments: [
         new RequiredArgument({
-            name: 'one'
+            name: 'one',
+            type: ArgumentType.GUILD_MEMBER
         }),
         new RequiredArgument({
-            name: 'two'
+            name: 'two',
+            type: ArgumentType.TEXT_CHANNEL
         }),
         new RequiredArgument({
             name: 'three'
