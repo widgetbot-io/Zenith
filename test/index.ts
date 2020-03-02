@@ -3,7 +3,7 @@ import { Bot } from '../src';
 const bot = new Bot({
 	token: 'changeme',
 	clientOptions: {
-		disableMentions: true,
+		disableMentions: 'everyone',
 	},
 	prefix: '>>',
 	roots: ['96626362277720064'],
