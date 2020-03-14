@@ -17,6 +17,7 @@ export interface ICommand extends Base {
 	module: string,
 	run?: (helper: CommandHelper<any, any>) => Promise<void>;
 	hasPermission?: (message: Message, bot: Bot) => Promise<boolean>;
+	allowQuotes?: boolean;
 }
 export interface IEvent extends Base {
 	eventName: string,

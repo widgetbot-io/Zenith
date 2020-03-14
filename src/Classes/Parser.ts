@@ -1,6 +1,6 @@
 // thanks viction#0001, go bother him :)
 export class Parser {
-	static parseArgs(argStr: string) {
+	static parseArgs(argStr: string, allowQuotes?: boolean) {
 		const Res = [];
 		let InString = false;
 		let StrChar = '';
@@ -9,20 +9,22 @@ export class Parser {
 		const Str = argStr.split('');
 		for (let i = 0; i < argStr.length; i++) {
 			const Char = Str[i];
-			if (Escaped) {
-				Chr = Chr + Char;
-				Escaped = false;
-				continue;
+			if (!allowQuotes) {
+				if (Escaped) {
+					Chr = Chr + StrChar;
+					Escaped = false;
+					continue;
+				}
+				if (Char.match('["|\']') && !InString && !Escaped) {
+					InString = true;
+					StrChar = Char;
+				}
+				else if (Char.match('[\]')) {
+					Escaped = true;
+					continue;
+				}
 			}
-			if (Char.match('["|\']') && !InString && !Escaped) {
-				InString = true;
-				StrChar = Char;
-			}
-			else if (Char.match('[\]')) {
-				Escaped = true;
-				continue;
-			}
-			else if (InString && Char === StrChar) {
+			if (InString && Char === StrChar) {
 				Res.push(Chr.trim());
 				Chr = '';
 				InString = false;
