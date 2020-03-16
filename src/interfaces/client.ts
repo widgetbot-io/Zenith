@@ -8,7 +8,8 @@ export interface Options {
 	dirs: DirectoryOptions,
 	clientOptions: ClientOptions,
 	roots: string[],
-	limits: LimitSettings
+	limits: LimitSettings,
+	postCommandFunction?: (command: ICommand) => Promise<void>;
 }
 
 export interface DirectoryOptions {

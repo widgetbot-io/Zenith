@@ -1,17 +1,8 @@
-import {
-	BaseArgument,
-	BaseFlagArgument,
-	FlagArgument,
-	FlagArgumentWithValue,
-	OptionalArgument,
-	RequiredArgument
-} from './Bases';
+import {BaseArgument, FlagArgument, FlagArgumentWithValue, OptionalArgument, RequiredArgument} from './Bases';
 import {ArgumentType, ICommand, Parsed} from '../interfaces';
 import {GuildChannel, Message} from "discord.js";
-import {NoArgumentValue} from '../Exceptions';
 
 export class ArgumentHelper {
-	private flagValues: {[name: string]: string } = {};
 	private cache: {[key: string]: any} = {};
 	private readonly args: BaseArgument[];
 	public notFlags: any[];
@@ -24,7 +15,26 @@ export class ArgumentHelper {
 	}
 
 	async argString(): Promise<string> {
-		return this.notFlags.join(' ');
+		const flags = this.parsed.stringy.split(' ')
+			.filter(a => this.isFlag(a))
+			.map(a => a.startsWith("--") && a.substr(2) || a.substr(1));
+		let { stringy: argString } = this.parsed;
+		for (const flag of flags) {
+			const val = await this.get(flag);
+			if (val) {
+				argString = argString
+				.replace(`--${flag} ${val} `, '')
+				.replace(`--${flag} ${val}`, '')
+				.replace(`--${flag}`, '')
+				.replace(`-${flag}`, '');
+			} else {
+				argString = argString
+					.replace(`-${flag}`, '')
+					.replace(`--${flag}`, '');
+			}
+		}
+
+		return argString.trim();
 	}
 
 	private static GetFor(ic: string, usage: string): string | undefined {
@@ -54,7 +64,7 @@ export class ArgumentHelper {
 			case ArgumentType.TEXT_CHANNEL: {
 				let newVal: string | undefined; // TODO: Localization
 				if (this.message.channel.type !== 'text') throw new Error(`Attempt to use ArgumentType.TEXT_CHANNEL outside of a guild.`);
-				const channels = this.message.guild!.channels.cache.filter(c => c.type === 'text');
+				const channels = this.message.guild!.channels.filter(c => c.type === 'text');
 
 				if (ArgumentHelper.GetFor('#', val)) newVal = ArgumentHelper.GetFor('#', val);
 
@@ -81,12 +91,11 @@ export class ArgumentHelper {
 			const arg = this.args[i];
 
 			if (arg instanceof FlagArgument) {
-				if (arg.name === longArgument || arg.short === shortArgument) return true;
+				if (arg.name === longArgument || arg.short === shortArgument) {
+					return true;
+				}
 			} else if (arg instanceof FlagArgumentWithValue) {
 				if (arg.name === longArgument || arg.short === shortArgument) {
-					const index = this.parsed.args.indexOf(argument);
-					this.flagValues[arg.name] = this.parsed.args[index + 1];
-					delete this.parsed.args[index + 1]; // the val
 					return true;
 				}
 			}
@@ -95,43 +104,50 @@ export class ArgumentHelper {
 		return false;
 	}
 
-	private findArg(name: string): [number, boolean] {
-		for (const arg in this.args) {
-			const indexedArg = this.args[arg];
+	async validateArguments() {
+		// for (const argument of this.args) {
+		// 	if (!argument.optional) {
+		// 		const val = this.getNotFlagValue(argument)
+		// 	}
+		// }
+	}
 
-			if (indexedArg instanceof BaseFlagArgument) if (indexedArg.name === name || indexedArg.short === name) return [Number(arg), true];
-			if (indexedArg.name === name) return [Number(arg), false]
+	private findArg(name: string): number {
+		let id = -1;
+		for (const arg in this.args) {
+			if (this.args[arg].name === name || this.args[arg].short === name) {
+				id = Number(arg);
+			}
 		}
-		return [-1, false]
+		return id;
 	}
 
 	async get<T = any>(name: string): Promise<T | undefined> {
 		let arg: BaseArgument;
+		await this.validateArguments();
 
-		const [id, flag] = this.findArg(name);
+		const id = this.findArg(name);
 
 		if (id !== -1) {
 			arg = this.args[id];
-			if (flag) {
+			if (arg instanceof FlagArgument || arg instanceof FlagArgumentWithValue) {
 				return await this.getFlagValue(arg);
 			} else {
-				if (arg instanceof RequiredArgument) {
-					const val = this.getNotFlagValue(arg);
-					if (!val) throw new NoArgumentValue(`Missing argument ${arg.name}`, arg);
-
-					return this.parse(arg, val);
-				} else {
-					return await this.parse(arg, await this.getNotFlagValue(arg));
-				}
+				return await this.parse(arg, await this.getNotFlagValue(arg));
 			}
 		}
 	}
 
-	private async getFlagValue(arg: BaseFlagArgument): Promise<any> {
+	private async getFlagValue(arg: BaseArgument): Promise<any> {
 		if (arg instanceof FlagArgument) {
 			return this.parsed.args.includes(`--${arg.name}`) || this.parsed.args.includes(`-${arg.short}`)
 		} else if (arg instanceof FlagArgumentWithValue) {
-			return this.flagValues[arg.name];
+			const index = this.parsed.args.indexOf(`--${arg.name}`);
+			if (index && index >= 0) {
+				const value = this.parsed.args[index + 1];
+				if (value)
+					return value;
+			}
 		}
 	}
 
@@ -144,22 +160,24 @@ export class ArgumentHelper {
 		return -1;
 	}
 
-	private getNotFlagValue(arg: RequiredArgument | OptionalArgument) {
+	private getNotFlagValue(arg: BaseArgument) {
 		const index = this.getIndex(arg.name);
 
 		let only: boolean = true;
-		for (const arg in this.args) {
-			if (this.args[arg] instanceof RequiredArgument) {
-				only = false;
+		if (arg instanceof RequiredArgument) {
+			for (const arg in this.args) {
+				if (this.args[arg] instanceof RequiredArgument) {
+					only = false;
+				}
 			}
-		}
 
-		if (only) {
-			return this.notFlags.join(' ');
-		} else {
-			const notFlag = this.notFlags[index];
-			if (notFlag)
-				return notFlag;
+			if (only) {
+				return this.notFlags.join(' ');
+			} else {
+				const arg = this.notFlags[index];
+				if (arg)
+					return arg;
+			}
 		}
 	}
 }

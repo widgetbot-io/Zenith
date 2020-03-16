@@ -1,45 +1,43 @@
-import {BaseArgumentOptions, ArgumentType, FlagArgumentOptions} from '../interfaces';
-import {MainArgumentOptions} from '../interfaces/arguments';
+import {BaseArgumentOptions, ArgumentType} from '../interfaces';
 
 export class BaseArgument {
 	public name: string;
+	public optional: boolean;
+	public short?: string;
 	public type?: ArgumentType;
-	constructor(options: BaseArgumentOptions, public optional = false) {
+	constructor(options: BaseArgumentOptions) {
 		this.type = options.type;
 		this.name = options.name;
-	}
-}
-
-export class OptionalArgument extends BaseArgument {
-	constructor(options: MainArgumentOptions) {
-		super({
-			...options
-		}, true);
-	}
-}
-export class RequiredArgument extends BaseArgument {
-	constructor(options: MainArgumentOptions) {
-		super({
-			...options
-		}, false);
-	}
-}
-
-export class BaseFlagArgument extends OptionalArgument {
-	public short?: string;
-	constructor(options: FlagArgumentOptions) {
-		super(options);
+		this.optional = options.optional || false;
 		this.short = options.short;
 	}
 }
 
-export class FlagArgument extends BaseFlagArgument {
-	constructor(options: FlagArgumentOptions) {
+export class OptionalArgument extends BaseArgument {
+	constructor(options: BaseArgumentOptions) {
+		super(Object.assign(options, {
+			optional: true // TODO: Make this less awkward
+		}));
+	}
+}
+export class RequiredArgument extends BaseArgument {
+	constructor(options: BaseArgumentOptions) {
+		super(Object.assign(options, {
+			optional: false // TODO: Make this less awkward
+		}));
+	}
+}
+
+export class FlagArgument extends OptionalArgument {
+	public short?: string;
+
+	constructor(options: BaseArgumentOptions) {
 		super(options);
 	}
 }
-export class FlagArgumentWithValue extends BaseFlagArgument {
-	constructor(options: FlagArgumentOptions) {
+export class FlagArgumentWithValue extends OptionalArgument {
+	public short?: string;
+	constructor(options: BaseArgumentOptions) {
 		super(options);
 	}
 }
