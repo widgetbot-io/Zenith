@@ -1,6 +1,6 @@
 import {BaseArgument, BaseFlagArgument, FlagArgument, FlagArgumentWithValue, RequiredArgument} from './Bases';
 import {ArgumentType, ICommand, Parsed} from '../interfaces';
-import {GuildChannel, Message} from 'discord.js';
+import {Message} from 'discord.js';
 
 const userMention = /<@!?(\d{17,})>/;
 const roleMention = /<@&(\d{17,})>/;
@@ -10,7 +10,8 @@ export class ArgumentHelper {
 	private readonly args: BaseArgument[];
 	public notFlags: any[];
 	public flags: any[];
-	public flagValues: { arg: BaseFlagArgument, val: string}[] = [];
+	public flagValues: { arg: BaseFlagArgument, val: string }[] = [];
+
 	constructor(public command: ICommand, public parsed: Parsed, public content: string, private message: Message) {
 		this.args = this.command.arguments || [];
 		this.flags = this.parsed.args.filter(arg => this.isFlag(arg));
@@ -22,12 +23,12 @@ export class ArgumentHelper {
 	}
 
 	private static GetFor(ic: string, usage: string): string | undefined {
-		if(!usage.startsWith(`<${ic}`) || !usage.endsWith('>')) return; // Ensures it's the proper format.
+		if (!usage.startsWith(`<${ic}`) || !usage.endsWith('>')) return; // Ensures it's the proper format.
 		return usage.substr(ic.length + 1, usage.length - ic.length - 2); // Returns just the ID.
 	}
 
 	private async parse(arg: BaseArgument, val: string[]): Promise<any[]> {
-		if (!val.filter(a=>!!a).length) return [];
+		if (!val.filter(a => !!a).length) return [];
 		const args = [];
 		switch (arg.type) {
 			case ArgumentType.BOOLEAN: {
@@ -44,7 +45,7 @@ export class ArgumentHelper {
 			}
 			case ArgumentType.GUILD_MEMBER: {
 				if (this.message.channel.type !== 'text') throw new Error(`Attempt to use ArgumentType.GUILD_MEMBER outside of a guild.`);
-				const { members } = this.message.guild!;
+				const {members} = this.message.guild!;
 				for (const v of val) {
 					const match = userMention.exec(v);
 					const m = members.cache.find(x => x.id === (match ? match[1] : v) || x.displayName === v);
@@ -57,7 +58,7 @@ export class ArgumentHelper {
 				if (this.message.channel.type !== 'text') throw new Error(`Attempt to use ArgumentType.TEXT_CHANNEL outside of a guild.`);
 				const channels = this.message.guild!.channels.cache.filter(c => c.type === 'text');
 				for (let v of val) {
-					if (ArgumentHelper.GetFor('#', v)) v = <string> ArgumentHelper.GetFor('#', v);
+					if (ArgumentHelper.GetFor('#', v)) v = <string>ArgumentHelper.GetFor('#', v);
 					const channel = channels.find(c => c.id === v || c.name === v);
 					if (channel) args.push(channel);
 				}
@@ -67,7 +68,7 @@ export class ArgumentHelper {
 				if (this.message.channel.type !== 'text') throw new Error(`Attempt to use ArgumentType.VOICE_CHANNEL outside of a guild.`);
 				const channels = this.message.guild!.channels.cache.filter(c => c.type === 'voice');
 				for (let v of val) {
-					if (ArgumentHelper.GetFor('#', v)) v = <string> ArgumentHelper.GetFor('#', v);
+					if (ArgumentHelper.GetFor('#', v)) v = <string>ArgumentHelper.GetFor('#', v);
 					const c = channels.find(x => x.id === v || x.name === v);
 					if (c) args.push(c);
 				}
@@ -75,7 +76,7 @@ export class ArgumentHelper {
 			}
 			case ArgumentType.GUILD_ROLE: {
 				if (this.message.channel.type !== 'text') throw new Error(`Attempt to use ArgumentType.GUILD_ROLE outside of a guild.`);
-				const { roles } = this.message.guild!;
+				const {roles} = this.message.guild!;
 				for (let v of val) {
 					const match = roleMention.exec(v);
 					const r = roles.cache.find(x => x.id === (match ? match[1] : v) || x.name === v);
@@ -85,7 +86,7 @@ export class ArgumentHelper {
 			}
 			case ArgumentType.TEXT_EMOJI: {
 				if (this.message.channel.type !== 'text') throw new Error(`Attempt to use ArgumentType.GUILD_ROLE outside of a guild.`);
-				const { emojis } = this.message.guild!;
+				const {emojis} = this.message.guild!;
 				for (let v of val) {
 					const match = emojiPattern.exec(v);
 					if (!match) continue;
@@ -94,7 +95,8 @@ export class ArgumentHelper {
 				}
 				break;
 			}
-			default: return val;
+			default:
+				return val;
 		}
 		return args;
 	}
@@ -104,7 +106,7 @@ export class ArgumentHelper {
 		if (!argument.startsWith('-'))
 			return false;
 
-		const longArgument  = argument.substr(2);
+		const longArgument = argument.substr(2);
 		const shortArgument = argument.substr(1);
 
 		for (const i in this.args) {
@@ -118,7 +120,7 @@ export class ArgumentHelper {
 				const index = this.parsed.args.indexOf(argument) + 1;
 				const val = this.parsed.args[index];
 				if (val !== null) {
-					this.flagValues.push({ arg, val });
+					this.flagValues.push({arg, val});
 					this.parsed.args.splice(index, 1);
 				}
 				if (arg.name === longArgument || arg.short === shortArgument) {
