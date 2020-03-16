@@ -22,7 +22,7 @@ export class CommandHandler extends EventEmitter {
         const command: ICommand | undefined = await CommandLoader.get(name.toLowerCase());
         if (!command) return null;
         const stringy = content.substr(name.length + (prefix.length));
-        const args = Parser.parseArgs(stringy, command!.allowQuotes);
+        const args = Parser.parseArgs(stringy);
 
         return {
             command,

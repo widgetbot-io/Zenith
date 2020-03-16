@@ -1,111 +1,99 @@
-import {BaseArgument, BaseFlagArgument, FlagArgument, FlagArgumentWithValue, RequiredArgument} from './Bases';
+import {
+	BaseArgument,
+	BaseFlagArgument,
+	FlagArgument,
+	FlagArgumentWithValue,
+	OptionalArgument,
+	RequiredArgument
+} from './Bases';
 import {ArgumentType, ICommand, Parsed} from '../interfaces';
-import {Message} from 'discord.js';
-
-const userMention = /<@!?(\d{17,})>/;
-const roleMention = /<@&(\d{17,})>/;
-const emojiPattern = /^(?:<a?:\w{2,32}:)?(\d{17,})>?$/;
+import {GuildChannel, Message} from "discord.js";
 
 export class ArgumentHelper {
+	private cache: {[key: string]: any} = {};
 	private readonly args: BaseArgument[];
 	public notFlags: any[];
 	public flags: any[];
-	public flagValues: { arg: BaseFlagArgument, val: string }[] = [];
-
 	constructor(public command: ICommand, public parsed: Parsed, public content: string, private message: Message) {
 		this.args = this.command.arguments || [];
+
 		this.flags = this.parsed.args.filter(arg => this.isFlag(arg));
 		this.notFlags = this.parsed.args.filter(arg => !this.flags.find(a => a === arg));
 	}
 
 	async argString(): Promise<string> {
-		return this.notFlags.join(' ');
+		const flags = this.parsed.stringy.split(' ')
+			.filter(a => this.isFlag(a))
+			.map(a => a.startsWith("--") && a.substr(2) || a.substr(1));
+		let { stringy: argString } = this.parsed;
+		for (const flag of flags) {
+			const val = await this.get(flag);
+			console.log(val);
+			console.log(flag);
+			if (val) {
+				argString = argString
+					.replace(`--${flag} ${val} `, '')
+					.replace(`--${flag} ${val}`, '')
+					.replace(`--${flag}`, '')
+					.replace(`-${flag}`, '');
+			} else {
+				argString = argString
+					.replace(`-${flag}`, '')
+					.replace(`--${flag}`, '');
+			}
+		}
+
+		return argString.trim();
 	}
 
 	private static GetFor(ic: string, usage: string): string | undefined {
-		if (!usage.startsWith(`<${ic}`) || !usage.endsWith('>')) return; // Ensures it's the proper format.
+		if(!usage.startsWith(`<${ic}`) || !usage.endsWith('>')) return; // Ensures it's the proper format.
 		return usage.substr(ic.length + 1, usage.length - ic.length - 2); // Returns just the ID.
 	}
 
-	private async parse(arg: BaseArgument, val: string[]): Promise<any[]> {
-		if (!val.filter(a => !!a).length) return [];
-		const args = [];
+	private async parse(arg: BaseArgument, val: string): Promise<any> {
+		if (!val) return undefined;
+
+		if (this.cache[arg.name]) return this.cache[arg.name];
 		switch (arg.type) {
 			case ArgumentType.BOOLEAN: {
-				for (const v of val) {
-					if (Boolean(v)) args.push(Boolean(v));
-				}
-				break;
+				if (Boolean(val)) return Boolean(val);
+				throw new Error('Invalid Boolean');
 			}
 			case ArgumentType.NUMBER: {
-				for (const v of val) {
-					if (!isNaN(Number(val))) args.push(Number(v));
-				}
-				break;
+				if (!isNaN(Number(val))) return Number(val);
+				throw new Error('Invalid Number');
 			}
 			case ArgumentType.GUILD_MEMBER: {
-				if (this.message.channel.type !== 'text') throw new Error(`Attempt to use ArgumentType.GUILD_MEMBER outside of a guild.`);
-				const {members} = this.message.guild!;
-				for (const v of val) {
-					const match = userMention.exec(v);
-					const m = members.cache.find(x => x.id === (match ? match[1] : v) || x.displayName === v);
-					if (m) args.push(m);
-				}
+				// TODO: Make sure they use it in a guild
+				// TODO: Return a GuildMember
+
 				break;
 			}
 			case ArgumentType.TEXT_CHANNEL: {
-				// TODO: Localization
+				let newVal: string | undefined; // TODO: Localization
 				if (this.message.channel.type !== 'text') throw new Error(`Attempt to use ArgumentType.TEXT_CHANNEL outside of a guild.`);
 				const channels = this.message.guild!.channels.cache.filter(c => c.type === 'text');
-				for (let v of val) {
-					if (ArgumentHelper.GetFor('#', v)) v = <string>ArgumentHelper.GetFor('#', v);
-					const channel = channels.find(c => c.id === v || c.name === v);
-					if (channel) args.push(channel);
-				}
-				return args;
-			}
-			case ArgumentType.VOICE_CHANNEL: {
-				if (this.message.channel.type !== 'text') throw new Error(`Attempt to use ArgumentType.VOICE_CHANNEL outside of a guild.`);
-				const channels = this.message.guild!.channels.cache.filter(c => c.type === 'voice');
-				for (let v of val) {
-					if (ArgumentHelper.GetFor('#', v)) v = <string>ArgumentHelper.GetFor('#', v);
-					const c = channels.find(x => x.id === v || x.name === v);
-					if (c) args.push(c);
+
+				if (ArgumentHelper.GetFor('#', val)) newVal = ArgumentHelper.GetFor('#', val);
+
+				const channel: GuildChannel | undefined = channels.find(c => c.id === newVal || c.id === val);
+				if (channel) {
+					this.cache[arg.name] = channel;
+					return this.cache[arg.name];
 				}
 				break;
 			}
-			case ArgumentType.GUILD_ROLE: {
-				if (this.message.channel.type !== 'text') throw new Error(`Attempt to use ArgumentType.GUILD_ROLE outside of a guild.`);
-				const {roles} = this.message.guild!;
-				for (let v of val) {
-					const match = roleMention.exec(v);
-					const r = roles.cache.find(x => x.id === (match ? match[1] : v) || x.name === v);
-					if (r) args.push(r);
-				}
-				break;
-			}
-			case ArgumentType.TEXT_EMOJI: {
-				if (this.message.channel.type !== 'text') throw new Error(`Attempt to use ArgumentType.GUILD_ROLE outside of a guild.`);
-				for (let v of val) {
-					const match = emojiPattern.exec(v);
-					if (!match) continue;
-					const emoji = this.message.guild?.emojis.cache.find(x => x.id === (match ? match[1] : v));
-					if (emoji) args.push(emoji);
-				}
-				break;
-			}
-			default:
-				return val;
+			default: return String(val);
 		}
-		return args;
 	}
 
 	isFlag(argument: string): boolean | undefined {
-		// if (index > 0 && this.parsed.args[index - 1].startsWith('-') && this.args[index - 1] instanceof FlagArgumentWithValue) return true;
+		// if (index > 0 && this.parsed.args[index - 1].startsWith("-") && this.args[index - 1] instanceof FlagArgumentWithValue) return true;
 		if (!argument.startsWith('-'))
 			return false;
 
-		const longArgument = argument.substr(2);
+		const longArgument  = argument.substr(2);
 		const shortArgument = argument.substr(1);
 
 		for (const i in this.args) {
@@ -116,12 +104,6 @@ export class ArgumentHelper {
 					return true;
 				}
 			} else if (arg instanceof FlagArgumentWithValue) {
-				const index = this.parsed.args.indexOf(argument) + 1;
-				const val = this.parsed.args[index];
-				if (val) {
-					this.flagValues.push({ arg, val });
-					this.parsed.args.splice(index, 1);
-				}
 				if (arg.name === longArgument || arg.short === shortArgument) {
 					return true;
 				}
@@ -152,14 +134,15 @@ export class ArgumentHelper {
 	async get<T = any>(name: string): Promise<T | undefined> {
 		let arg: BaseArgument;
 		await this.validateArguments();
+
 		const [id, flag] = this.findArg(name);
+
 		if (id !== -1) {
 			arg = this.args[id];
 			if (flag) {
 				return await this.getFlagValue(arg);
 			} else {
-				const res = await this.parse(arg, arg.repeating ? this.notFlags.slice(id) : [await this.getNotFlagValue(arg)]);
-				return arg.repeating ? res : res[0];
+				return await this.parse(arg, await this.getNotFlagValue(arg));
 			}
 		}
 	}
@@ -168,8 +151,12 @@ export class ArgumentHelper {
 		if (arg instanceof FlagArgument) {
 			return this.parsed.args.includes(`--${arg.name}`) || this.parsed.args.includes(`-${arg.short}`)
 		} else if (arg instanceof FlagArgumentWithValue) {
-			const e = this.flagValues.find(x => x.arg === arg);
-			return e ? e.val : undefined;
+			const index = this.parsed.args.indexOf(`--${arg.name}`);
+			if (index && index >= 0) {
+				const value = this.parsed.args[index + 1];
+				if (value)
+					return value;
+			}
 		}
 	}
 

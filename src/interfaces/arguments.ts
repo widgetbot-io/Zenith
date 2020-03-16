@@ -4,9 +4,7 @@ export interface BaseArgumentOptions {
 	type?: ArgumentType
 }
 
-export interface MainArgumentOptions extends BaseArgumentOptions {
-	repeating?: boolean
-}
+export interface MainArgumentOptions extends BaseArgumentOptions {}
 
 export interface FlagArgumentOptions extends BaseArgumentOptions {
 	short?: string

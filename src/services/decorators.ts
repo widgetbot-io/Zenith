@@ -35,14 +35,7 @@ export function Command(info: ICommand): ClassDecorator {
         const loaded: BaseCommand = new Command();
         if(Bot.commands.get(info.name.toLowerCase()))
             Logger.Warn('Command', `${info.name} already exists, overwriting..`);
-        if (info.arguments && info.arguments.length > 0) {
-            const filtered = info.arguments.filter(a => a.repeating !== undefined);
-            if (filtered.filter(a => a.repeating).length > 1)
-                throw new Error("Multiple repeating tags aren't supported!");
-            for (let i = 0; i < filtered.length; i++) {
-                if (!filtered[i].repeating && (i + 1) <= filtered.length) throw new Error("A repeating tag must come after all non repeating tags.");
-            }
-        }
+
         Bot.commands.set(info.name.toLowerCase(), {
             ...info,
             run: loaded.runCommand,

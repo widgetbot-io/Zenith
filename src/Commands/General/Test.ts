@@ -17,7 +17,7 @@ import {General} from "../../Modules";
         new OptionalArgument({
             name: 'two',
             description: 'testing',
-            type: ArgumentType.TEXT_CHANNEL
+            type: ArgumentType.STRING
         }),
         new OptionalArgument({
             name: 'three',

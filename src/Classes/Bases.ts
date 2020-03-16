@@ -4,7 +4,6 @@ import {MainArgumentOptions} from '../interfaces/arguments';
 export class BaseArgument {
 	public name: string;
 	public type?: ArgumentType;
-	public repeating?: boolean;
 	constructor(options: BaseArgumentOptions, public optional = false) {
 		this.type = options.type;
 		this.name = options.name;
@@ -16,7 +15,6 @@ export class OptionalArgument extends BaseArgument {
 		super({
 			...options
 		}, true);
-		this.repeating = options.repeating;
 	}
 }
 export class RequiredArgument extends BaseArgument {
@@ -24,7 +22,6 @@ export class RequiredArgument extends BaseArgument {
 		super({
 			...options
 		}, false);
-		this.repeating = options.repeating;
 	}
 }
 
