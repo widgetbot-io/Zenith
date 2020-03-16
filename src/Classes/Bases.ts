@@ -3,8 +3,10 @@ import {MainArgumentOptions} from '../interfaces/arguments';
 
 export class BaseArgument {
 	public name: string;
+	public description: string;
 	public type?: ArgumentType;
 	constructor(options: BaseArgumentOptions, public optional = false) {
+		this.description = options.description;
 		this.type = options.type;
 		this.name = options.name;
 	}
