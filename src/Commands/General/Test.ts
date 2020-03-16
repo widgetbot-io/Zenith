@@ -1,4 +1,4 @@
-import {Command, FlagArgument, FlagArgumentWithValue, RequiredArgument} from "../..";
+import {Command, FlagArgument, FlagArgumentWithValue, OptionalArgument, RequiredArgument} from "../..";
 import {CommandHelper} from "../../Classes";
 import {GuildMember, Message} from "discord.js";
 import {ArgumentType, BaseCommand} from "../../interfaces";
@@ -11,20 +11,25 @@ import {General} from "../../Modules";
     arguments: [
         new RequiredArgument({
             name: 'one',
-            type: ArgumentType.GUILD_MEMBER
+            description: 'testing',
+            type: ArgumentType.STRING
         }),
-        new RequiredArgument({
+        new OptionalArgument({
             name: 'two',
+            description: 'testing',
             type: ArgumentType.TEXT_CHANNEL
         }),
-        new RequiredArgument({
-            name: 'three'
+        new OptionalArgument({
+            name: 'three',
+            description: 'testing'
         }),
         new FlagArgumentWithValue({
-            name: 'depth'
+            name: 'depth',
+            description: 'testing'
         }),
         new FlagArgument({
             name: 'async',
+            description: 'testing',
             short: 'a'
         })
     ]
