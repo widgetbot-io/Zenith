@@ -14,13 +14,16 @@ import {Administration} from "../../Modules";
     arguments: [
         new FlagArgument({
             name: 'async',
+            description: 'Allows the code to be ran asynchronously.',
 			short: 'a'
         }),
         new FlagArgumentWithValue({
-            name: 'depth'
+            name: 'depth',
+            description: 'Allows the code to be inspected to a depth'
         }),
         new RequiredArgument({
-            name: 'code'
+            name: 'code',
+            description: 'The code that is executed.'
         })
     ]
 })

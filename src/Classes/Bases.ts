@@ -1,47 +1,45 @@
-import {BaseArgumentOptions, ArgumentType} from '../interfaces';
+import {BaseArgumentOptions, ArgumentType, FlagArgumentOptions} from '../interfaces';
+import {MainArgumentOptions} from '../interfaces/arguments';
 
 export class BaseArgument {
 	public name: string;
-	public optional: boolean;
-	public short?: string;
 	public type?: ArgumentType;
-	public repeating?: boolean;
-	constructor(options: BaseArgumentOptions) {
+	constructor(options: BaseArgumentOptions, public optional = false) {
 		this.type = options.type;
 		this.name = options.name;
-		this.optional = options.optional || false;
-		this.short = options.short;
-		this.repeating = options.repeating;
 	}
 }
 
 export class OptionalArgument extends BaseArgument {
-	constructor(options: BaseArgumentOptions) {
-		super(Object.assign(options, {
-			optional: true // TODO: Make this less awkward
-		}));
+	constructor(options: MainArgumentOptions) {
+		super({
+			...options
+		}, true);
 	}
 }
 export class RequiredArgument extends BaseArgument {
-	constructor(options: BaseArgumentOptions) {
-		super(Object.assign(options, {
-			optional: false // TODO: Make this less awkward
-		}));
+	constructor(options: MainArgumentOptions) {
+		super({
+			...options
+		}, false);
 	}
 }
 
-export class FlagArgument extends OptionalArgument {
+export class BaseFlagArgument extends OptionalArgument {
 	public short?: string;
+	constructor(options: FlagArgumentOptions) {
+		super(options);
+		this.short = options.short;
+	}
+}
 
-	constructor(options: BaseArgumentOptions) {
-		if (options.repeating) options.repeating = undefined; // Prevent flags from repeating
+export class FlagArgument extends BaseFlagArgument {
+	constructor(options: FlagArgumentOptions) {
 		super(options);
 	}
 }
-export class FlagArgumentWithValue extends OptionalArgument {
-	public short?: string;
-	constructor(options: BaseArgumentOptions) {
-		if (options.repeating) options.repeating = undefined; // Prevent flags from repeating
+export class FlagArgumentWithValue extends BaseFlagArgument {
+	constructor(options: FlagArgumentOptions) {
 		super(options);
 	}
 }

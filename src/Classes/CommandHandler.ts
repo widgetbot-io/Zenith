@@ -8,14 +8,21 @@ import { EventEmitter } from "events";
 export class CommandHandler extends EventEmitter {
 	public ranCommands: {[key: string]: Message | Message[]} = {};
     // private rateLimit: RateLimit = new RateLimit(this.bot);
-    constructor(private bot: Bot) { super() }
+    constructor(private bot: Bot) {
+        super();
+        process.nextTick(() => { // TODO: Why the fuck do I have to wrap this in a process.nextTick
+            this.bot.digestEvent('messageDelete', (m: Message) =>
+                this.ranCommands[m.id] && delete this.ranCommands[m.id]
+            )
+        })
+    }
 
     static async parseMessage(prefix: string, content: string): Promise<Parsed | null> {
         const name = content.substr(prefix.length).split(' ')[0];
         const command: ICommand | undefined = await CommandLoader.get(name.toLowerCase());
         if (!command) return null;
         const stringy = content.substr(name.length + (prefix.length));
-        const args = Parser.parseArgs(stringy, command!.allowQuotes);
+        const args = Parser.parseArgs(stringy);
 
         return {
             command,

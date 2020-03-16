@@ -1,8 +1,9 @@
-import {Command, FlagArgument, FlagArgumentWithValue, RequiredArgument} from "../..";
+import {Command, FlagArgument, FlagArgumentWithValue, OptionalArgument, RequiredArgument} from "../..";
 import {CommandHelper} from "../../Classes";
 import {GuildMember, Message} from "discord.js";
 import {ArgumentType, BaseCommand} from "../../interfaces";
 import {General} from "../../Modules";
+import {NoArgumentValue} from '../../Exceptions';
 
 @Command({
     name: 'Test',
@@ -11,34 +12,45 @@ import {General} from "../../Modules";
     arguments: [
         new RequiredArgument({
             name: 'one',
-            type: ArgumentType.GUILD_MEMBER
+            description: 'testing',
+            type: ArgumentType.STRING
         }),
-        new RequiredArgument({
+        new OptionalArgument({
             name: 'two',
-            type: ArgumentType.TEXT_CHANNEL
+            description: 'testing',
+            type: ArgumentType.STRING
         }),
-        new RequiredArgument({
-            name: 'three'
+        new OptionalArgument({
+            name: 'three',
+            description: 'testing'
         }),
         new FlagArgumentWithValue({
-            name: 'depth'
+            name: 'depth',
+            description: 'testing'
         }),
         new FlagArgument({
             name: 'async',
+            description: 'testing',
             short: 'a'
         })
     ]
 })
 export class Ping extends BaseCommand {
-    async runCommand(helper: CommandHelper<{}, General>) {
-        await helper.send(`
+    async runCommand(helper: CommandHelper<{}, General>): Promise<any> {
+         try {
+             await helper.send(`
             \nYou used the following flags: ${helper.argHelper.flags}
             \nYou used the following non-flags: ${helper.argHelper.notFlags}
             \ndepth: ${await helper.argHelper.get('depth')}
             \none: ${await helper.argHelper.get('one')} \ntwo: ${await helper.argHelper.get('two')} \nthree: ${await helper.argHelper.get('three')}
             \nArgStr: ${await helper.argHelper.argString()}
             `
-        );
+             );
+         } catch (e) {
+             if (e instanceof NoArgumentValue) {
+                 return helper.send(e.message);
+             }
+         }
     }
 
     async hasPermission(message: Message) {
