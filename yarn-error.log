@@ -1,8 +1,8 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Users\Daave\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add discordjs.
+  C:\Program Files\nodejs\node.exe C:\Users\Daave\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js publish
 
 PATH: 
-  F:\DisWeb\zenith\node_modules\.bin;C:\Program Files\Oculus\Support\oculus-runtime;C:\Python27\;C:\Python27\Scripts;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Git\cmd;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\ProgramData\chocolatey\bin;C:\Program Files\nodejs\;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files\PowerShell\7-preview\preview;C:\Program Files\kubemqctl;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\Program Files\dotnet\;C:\Users\Daave\AppData\Local\Programs\Python\Python38-32\Scripts\;C:\Users\Daave\AppData\Local\Programs\Python\Python38-32\;C:\Users\Daave\AppData\Local\Microsoft\WindowsApps;C:\tools\Cmder;;C:\Users\Daave\AppData\Local\Programs\Microsoft VS Code Insiders\bin;C:\Users\Daave\AppData\Roaming\npm
+  F:\DisWeb\zenith\node_modules\.bin;C:\Program Files\Oculus\Support\oculus-runtime;C:\Python27\;C:\Python27\Scripts;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Git\cmd;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\ProgramData\chocolatey\bin;C:\Program Files\nodejs\;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files\PowerShell\7-preview\preview;C:\Program Files\kubemqctl;C:\Program Files\dotnet\;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\Users\Daave\AppData\Local\Programs\Python\Python38-32\Scripts\;C:\Users\Daave\AppData\Local\Programs\Python\Python38-32\;C:\Users\Daave\AppData\Local\Microsoft\WindowsApps;C:\tools\Cmder;;C:\Users\Daave\AppData\Local\Programs\Microsoft VS Code Insiders\bin;C:\Users\Daave\AppData\Roaming\npm
 
 Yarn version: 
   1.21.1
@@ -14,22 +14,22 @@ Platform:
   win32 x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/discordjs.: Not found
-      at Request.params.callback [as _callback] (C:\Users\Daave\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:66947:18)
-      at Request.self.callback (C:\Users\Daave\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:140665:22)
-      at Request.emit (events.js:210:5)
-      at Request.<anonymous> (C:\Users\Daave\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:141637:10)
-      at Request.emit (events.js:210:5)
-      at IncomingMessage.<anonymous> (C:\Users\Daave\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:141559:12)
-      at Object.onceWrapper (events.js:299:28)
-      at IncomingMessage.emit (events.js:215:7)
-      at endReadableNT (_stream_readable.js:1183:12)
-      at processTicksAndRejections (internal/process/task_queues.js:80:21)
+  Error: canceled
+      at Interface.<anonymous> (C:\Users\Daave\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:136925:13)
+      at Interface.emit (events.js:210:5)
+      at Interface._ttyWrite (readline.js:887:16)
+      at ReadStream.onkeypress (readline.js:191:10)
+      at ReadStream.emit (events.js:210:5)
+      at emitKeys (internal/readline/utils.js:433:14)
+      at emitKeys.next (<anonymous>)
+      at ReadStream.onData (readline.js:1153:36)
+      at ReadStream.emit (events.js:210:5)
+      at addChunk (_stream_readable.js:308:12)
 
 npm manifest: 
   {
     "name": "zenith-ts",
-    "version": "0.8.2",
+    "version": "0.8.3",
     "license": "MIT",
     "author": "Daave <daave@aaathats3as.com>",
     "main": "compiled/index.js",
@@ -42,7 +42,7 @@ npm manifest:
     },
     "dependencies": {
       "@sentry/node": "^5.5.0",
-      "discord.js": "discordjs/discord.js",
+      "discord.js": "^12.0.1",
       "glob": "^7.1.3",
       "log4js": "^4.5.1",
       "reflect-metadata": "^0.1.13"
@@ -234,9 +234,10 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/delayed-stream/-/delayed-stream-1.0.0.tgz#df3ae199acadfb7d440aaae0b29e2272b24ec619"
     integrity sha1-3zrhmayt+31ECqrgsp4icrJOxhk=
   
-  discord.js@discordjs/discord.js:
-    version "12.0.0-dev"
-    resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/653784b56445b015a1584de1b693e57fc9069050"
+  discord.js@^12.0.1:
+    version "12.0.1"
+    resolved "https://registry.yarnpkg.com/discord.js/-/discord.js-12.0.1.tgz#58574c0c9acc598095f943d6b14da4725d37b8b9"
+    integrity sha512-lUlrkAWSb5YTB1WpSZHjeUXxGlHK8VDjrlHLEP4lJj+etFAellURpmRYl29OPJ/7arQWB879pP4rvhhzpdOF7w==
     dependencies:
       "@discordjs/collection" "^0.1.5"
       abort-controller "^3.0.0"

@@ -1,7 +1,7 @@
 import { Bot } from '../src';
 
 const bot = new Bot({
-	token: 'changeme',
+	token: 'NjA0MDU2MjEyNzA2Njg5MDc2.Xm4bYQ.8Ry6g1JT0taMvbJ5Cx7L1_UjLXU',
 	clientOptions: {
 		disableMentions: 'everyone',
 	},
