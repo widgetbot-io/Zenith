@@ -4,7 +4,7 @@ import {Bot} from "../Bot";
 import {ICommand} from "./decorators";
 
 export abstract class BaseCommand {
-	abstract runCommand(helper: CommandHelper<any, any>): Promise<void>;
+	abstract runCommand(helper: CommandHelper): Promise<any>;
 	abstract hasPermission(message: Message, bot: Bot): Promise<boolean>;
 }
 
