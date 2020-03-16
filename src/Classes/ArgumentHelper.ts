@@ -27,7 +27,7 @@ export class ArgumentHelper {
 	}
 
 	private async parse(arg: BaseArgument, val: string[]): Promise<any[]> {
-		if (!val.length) return [];
+		if (!val.filter(a=>!!a).length) return [];
 		const args = [];
 		switch (arg.type) {
 			case ArgumentType.BOOLEAN: {
