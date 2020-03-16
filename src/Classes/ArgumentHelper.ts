@@ -1,16 +1,9 @@
-import {
-	BaseArgument,
-	BaseFlagArgument,
-	FlagArgument,
-	FlagArgumentWithValue,
-	OptionalArgument,
-	RequiredArgument
-} from './Bases';
+import {BaseArgument, BaseFlagArgument, FlagArgument, FlagArgumentWithValue, RequiredArgument} from './Bases';
 import {ArgumentType, ICommand, Parsed} from '../interfaces';
 import {GuildChannel, Message} from "discord.js";
 
 export class ArgumentHelper {
-	private flagValues: {[name: string]: [BaseFlagArgument, string] } = {};
+	private flagValues: {[name: string]: string } = {};
 	private cache: {[key: string]: any} = {};
 	private readonly args: BaseArgument[];
 	public notFlags: any[];
@@ -84,7 +77,7 @@ export class ArgumentHelper {
 			} else if (arg instanceof FlagArgumentWithValue) {
 				if (arg.name === longArgument || arg.short === shortArgument) {
 					const index = this.parsed.args.indexOf(argument);
-					this.flagValues[arg.name] = [arg, this.parsed.args[index + 1]];
+					this.flagValues[arg.name] = this.parsed.args[index + 1];
 					delete this.parsed.args[index + 1]; // the val
 					return true;
 				}
@@ -132,8 +125,7 @@ export class ArgumentHelper {
 		if (arg instanceof FlagArgument) {
 			return this.parsed.args.includes(`--${arg.name}`) || this.parsed.args.includes(`-${arg.short}`)
 		} else if (arg instanceof FlagArgumentWithValue) {
-			const val = this.flagValues[arg.name];
-			return val && val[1];
+			return this.flagValues[arg.name];
 		}
 	}
 

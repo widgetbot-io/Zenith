@@ -15,8 +15,9 @@ export interface ICommand extends Base {
 	aliases?: string[],
 	arguments?: BaseArgument[],
 	hidden?: boolean,
+	help?: string,
 	module: string,
-	run?: (helper: CommandHelper<any, any>) => Promise<void>,
+	run?: (helper: CommandHelper) => Promise<void>,
 	hasPermission?: (message: Message, bot: Bot) => Promise<boolean>,
 	discordPermissions?: string[]
 }
