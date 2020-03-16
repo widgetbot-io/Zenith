@@ -86,11 +86,10 @@ export class ArgumentHelper {
 			}
 			case ArgumentType.TEXT_EMOJI: {
 				if (this.message.channel.type !== 'text') throw new Error(`Attempt to use ArgumentType.GUILD_ROLE outside of a guild.`);
-				const {emojis} = this.message.guild!;
 				for (let v of val) {
 					const match = emojiPattern.exec(v);
 					if (!match) continue;
-					const emoji = emojis.cache.find(x => x.id === (match ? match[1] : v));
+					const emoji = this.message.guild?.emojis.cache.find(x => x.id === (match ? match[1] : v));
 					if (emoji) args.push(emoji);
 				}
 				break;
@@ -119,8 +118,8 @@ export class ArgumentHelper {
 			} else if (arg instanceof FlagArgumentWithValue) {
 				const index = this.parsed.args.indexOf(argument) + 1;
 				const val = this.parsed.args[index];
-				if (val !== null) {
-					this.flagValues.push({arg, val});
+				if (val) {
+					this.flagValues.push({ arg, val });
 					this.parsed.args.splice(index, 1);
 				}
 				if (arg.name === longArgument || arg.short === shortArgument) {
@@ -140,24 +139,23 @@ export class ArgumentHelper {
 		// }
 	}
 
-	private findArg(name: string): number {
-		let id = -1;
+	private findArg(name: string): [number, boolean] {
 		for (const arg in this.args) {
-			// @ts-ignore TODO: Fix this
-			if (this.args[arg].name === name || (this.args[arg] instanceof BaseFlagArgument && this.args[arg].short === name)) {
-				id = Number(arg);
-			}
+			const indexedArg = this.args[arg];
+
+			if (indexedArg instanceof BaseFlagArgument) if (indexedArg.name === name || indexedArg.short === name) return [Number(arg), true];
+			if (indexedArg.name === name) return [Number(arg), false]
 		}
-		return id;
+		return [-1, false]
 	}
 
 	async get<T = any>(name: string): Promise<T | undefined> {
 		let arg: BaseArgument;
 		await this.validateArguments();
-		const id = this.findArg(name);
+		const [id, flag] = this.findArg(name);
 		if (id !== -1) {
 			arg = this.args[id];
-			if (arg instanceof FlagArgument || arg instanceof FlagArgumentWithValue) {
+			if (flag) {
 				return await this.getFlagValue(arg);
 			} else {
 				const res = await this.parse(arg, arg.repeating ? this.notFlags.slice(id) : [await this.getNotFlagValue(arg)]);
@@ -171,7 +169,7 @@ export class ArgumentHelper {
 			return this.parsed.args.includes(`--${arg.name}`) || this.parsed.args.includes(`-${arg.short}`)
 		} else if (arg instanceof FlagArgumentWithValue) {
 			const e = this.flagValues.find(x => x.arg === arg);
-			return e ? e.val : null;
+			return e ? e.val : undefined;
 		}
 	}
 
