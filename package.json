@@ -1,6 +1,6 @@
 {
   "name": "zenith-ts",
-  "version": "0.8.3",
+  "version": "0.9.0",
   "license": "MIT",
   "author": "Daave <daave@aaathats3as.com>",
   "main": "compiled/index.js",
