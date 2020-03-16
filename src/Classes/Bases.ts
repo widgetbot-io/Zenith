@@ -28,10 +28,10 @@ export class OptionalArgument extends BaseArgument {
 	}
 }
 
-export class BaseFlagArgument extends OptionalArgument {
+export class BaseFlagArgument extends BaseArgument {
 	public short?: string;
 	constructor(options: FlagArgumentOptions) {
-		super(options);
+		super(options, true);
 		this.short = options.short;
 	}
 }
