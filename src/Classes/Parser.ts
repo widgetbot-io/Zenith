@@ -10,7 +10,7 @@ export class Parser {
 		for (let i = 0; i < argStr.length; i++) {
 			const Char = Str[i];
 			if (Escaped) {
-				Chr = Chr + StrChar;
+				Chr += Char;
 				Escaped = false;
 				continue;
 			}
@@ -20,9 +20,8 @@ export class Parser {
 			}
 			else if (Char.match('[\]')) {
 				Escaped = true;
-				continue;
 			}
-			if (InString && Char === StrChar) {
+			else if (InString && Char === StrChar) {
 				Res.push(Chr.trim());
 				Chr = '';
 				InString = false;
@@ -34,7 +33,7 @@ export class Parser {
 				}
 			}
 			else {
-				Chr = Chr + Char;
+				Chr += Char;
 			}
 		}
 		if (Chr.trim().length !== 0) Res.push(Chr);
