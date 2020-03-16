@@ -152,9 +152,9 @@ export class ArgumentHelper {
 			if (only) {
 				return this.notFlags.join(' ');
 			} else {
-				const arg = this.notFlags[index];
-				if (arg)
-					return arg;
+				const notFlag = this.notFlags[index];
+				if (notFlag)
+					return notFlag;
 			}
 		}
 	}
