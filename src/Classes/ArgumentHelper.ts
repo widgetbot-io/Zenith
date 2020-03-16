@@ -1,6 +1,14 @@
-import {BaseArgument, BaseFlagArgument, FlagArgument, FlagArgumentWithValue, RequiredArgument} from './Bases';
+import {
+	BaseArgument,
+	BaseFlagArgument,
+	FlagArgument,
+	FlagArgumentWithValue,
+	OptionalArgument,
+	RequiredArgument
+} from './Bases';
 import {ArgumentType, ICommand, Parsed} from '../interfaces';
 import {GuildChannel, Message} from "discord.js";
+import {NoArgumentValue} from '../Exceptions';
 
 export class ArgumentHelper {
 	private flagValues: {[name: string]: string } = {};
@@ -87,14 +95,6 @@ export class ArgumentHelper {
 		return false;
 	}
 
-	async validateArguments() {
-		// for (const argument of this.args) {
-		// 	if (!argument.optional) {
-		// 		const val = this.getNotFlagValue(argument)
-		// 	}
-		// }
-	}
-
 	private findArg(name: string): [number, boolean] {
 		for (const arg in this.args) {
 			const indexedArg = this.args[arg];
@@ -107,7 +107,6 @@ export class ArgumentHelper {
 
 	async get<T = any>(name: string): Promise<T | undefined> {
 		let arg: BaseArgument;
-		await this.validateArguments();
 
 		const [id, flag] = this.findArg(name);
 
@@ -116,7 +115,14 @@ export class ArgumentHelper {
 			if (flag) {
 				return await this.getFlagValue(arg);
 			} else {
-				return await this.parse(arg, await this.getNotFlagValue(arg));
+				if (arg instanceof RequiredArgument) {
+					const val = this.getNotFlagValue(arg);
+					if (!val) throw new NoArgumentValue(`Missing argument ${arg.name}`, arg);
+
+					return this.parse(arg, val);
+				} else {
+					return await this.parse(arg, await this.getNotFlagValue(arg));
+				}
 			}
 		}
 	}
@@ -138,24 +144,22 @@ export class ArgumentHelper {
 		return -1;
 	}
 
-	private getNotFlagValue(arg: BaseArgument) {
+	private getNotFlagValue(arg: RequiredArgument | OptionalArgument) {
 		const index = this.getIndex(arg.name);
 
 		let only: boolean = true;
-		if (arg instanceof RequiredArgument) {
-			for (const arg in this.args) {
-				if (this.args[arg] instanceof RequiredArgument) {
-					only = false;
-				}
+		for (const arg in this.args) {
+			if (this.args[arg] instanceof RequiredArgument) {
+				only = false;
 			}
+		}
 
-			if (only) {
-				return this.notFlags.join(' ');
-			} else {
-				const notFlag = this.notFlags[index];
-				if (notFlag)
-					return notFlag;
-			}
+		if (only) {
+			return this.notFlags.join(' ');
+		} else {
+			const notFlag = this.notFlags[index];
+			if (notFlag)
+				return notFlag;
 		}
 	}
 }
