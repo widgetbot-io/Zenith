@@ -13,10 +13,12 @@ export interface IModule extends Base {
 }
 export interface ICommand extends Base {
 	aliases?: string[],
-	arguments?: BaseArgument[]
+	arguments?: BaseArgument[],
+	hidden?: boolean,
 	module: string,
 	run?: (helper: CommandHelper<any, any>) => Promise<void>;
 	hasPermission?: (message: Message, bot: Bot) => Promise<boolean>;
+	discordPermissions?: string[],
 	allowQuotes?: boolean;
 }
 export interface IEvent extends Base {
