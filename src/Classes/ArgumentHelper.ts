@@ -10,6 +10,7 @@ import {ArgumentType, ICommand, Parsed} from '../interfaces';
 import {GuildChannel, Message} from "discord.js";
 
 export class ArgumentHelper {
+	private flagValues: {[name: string]: [BaseFlagArgument, string] } = {};
 	private cache: {[key: string]: any} = {};
 	private readonly args: BaseArgument[];
 	public notFlags: any[];
@@ -22,28 +23,7 @@ export class ArgumentHelper {
 	}
 
 	async argString(): Promise<string> {
-		const flags = this.parsed.stringy.split(' ')
-			.filter(a => this.isFlag(a))
-			.map(a => a.startsWith("--") && a.substr(2) || a.substr(1));
-		let { stringy: argString } = this.parsed;
-		for (const flag of flags) {
-			const val = await this.get(flag);
-			console.log(val);
-			console.log(flag);
-			if (val) {
-				argString = argString
-					.replace(`--${flag} ${val} `, '')
-					.replace(`--${flag} ${val}`, '')
-					.replace(`--${flag}`, '')
-					.replace(`-${flag}`, '');
-			} else {
-				argString = argString
-					.replace(`-${flag}`, '')
-					.replace(`--${flag}`, '');
-			}
-		}
-
-		return argString.trim();
+		return this.notFlags.join(' ');
 	}
 
 	private static GetFor(ic: string, usage: string): string | undefined {
@@ -100,11 +80,12 @@ export class ArgumentHelper {
 			const arg = this.args[i];
 
 			if (arg instanceof FlagArgument) {
-				if (arg.name === longArgument || arg.short === shortArgument) {
-					return true;
-				}
+				if (arg.name === longArgument || arg.short === shortArgument) return true;
 			} else if (arg instanceof FlagArgumentWithValue) {
 				if (arg.name === longArgument || arg.short === shortArgument) {
+					const index = this.parsed.args.indexOf(argument);
+					this.flagValues[arg.name] = [arg, this.parsed.args[index + 1]];
+					delete this.parsed.args[index + 1]; // the val
 					return true;
 				}
 			}
@@ -147,16 +128,12 @@ export class ArgumentHelper {
 		}
 	}
 
-	private async getFlagValue(arg: BaseArgument): Promise<any> {
+	private async getFlagValue(arg: BaseFlagArgument): Promise<any> {
 		if (arg instanceof FlagArgument) {
 			return this.parsed.args.includes(`--${arg.name}`) || this.parsed.args.includes(`-${arg.short}`)
 		} else if (arg instanceof FlagArgumentWithValue) {
-			const index = this.parsed.args.indexOf(`--${arg.name}`);
-			if (index && index >= 0) {
-				const value = this.parsed.args[index + 1];
-				if (value)
-					return value;
-			}
+			const val = this.flagValues[arg.name];
+			return val && val[1];
 		}
 	}
 

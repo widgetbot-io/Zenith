@@ -14,12 +14,12 @@ import {General} from "../../Modules";
             description: 'testing',
             type: ArgumentType.STRING
         }),
-        new OptionalArgument({
+        new RequiredArgument({
             name: 'two',
             description: 'testing',
             type: ArgumentType.STRING
         }),
-        new OptionalArgument({
+        new RequiredArgument({
             name: 'three',
             description: 'testing'
         }),
