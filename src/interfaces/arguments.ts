@@ -1,8 +1,13 @@
 export interface BaseArgumentOptions {
 	name: string,
-	short?: string,
-	optional?: boolean,
+	description: string,
 	type?: ArgumentType
+}
+
+export interface MainArgumentOptions extends BaseArgumentOptions {}
+
+export interface FlagArgumentOptions extends BaseArgumentOptions {
+	short?: string
 }
 
 export enum ArgumentType {

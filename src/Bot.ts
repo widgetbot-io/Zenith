@@ -27,14 +27,12 @@ export class Bot<C = any> extends Client {
     }
 
     public digestEvent(event: string, cb: (...args: any[]) => void ): void {
-        if (!(this.events[event] && this.events[event].length)) {
+        if (!this.events[event] || !this.events[event].length) {
             this.events[event] = [cb];
 
             this.on(event, (...args: any[]) => {
                 try {
-                    for (const callback of this.events[event]) {
-                        callback(...args)
-                    }
+                    for (const callback of this.events[event]) callback(...args)
                 } catch (e) {
                     this.logger.error(e);
                 }

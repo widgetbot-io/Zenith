@@ -17,6 +17,8 @@
     "tests"
   ],
   "include": [
-    "./src/**/*.ts"
+    "./node_modules/@types/**/*.d.ts",
+    "./src/**/*.ts",
+    "./src/*.ts"
   ]
 }
