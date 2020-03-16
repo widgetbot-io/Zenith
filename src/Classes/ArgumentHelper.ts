@@ -1,6 +1,6 @@
-import {BaseArgument, FlagArgument, FlagArgumentWithValue, RequiredArgument} from './Bases';
+import {BaseArgument, BaseFlagArgument, FlagArgument, FlagArgumentWithValue, RequiredArgument} from './Bases';
 import {ArgumentType, ICommand, Parsed} from '../interfaces';
-import {GuildChannel, Message} from "discord.js";
+import {GuildChannel, Message} from 'discord.js';
 
 const userMention = /<@!?(\d{17,})>/;
 const roleMention = /<@&(\d{17,})>/;
@@ -10,7 +10,7 @@ export class ArgumentHelper {
 	private readonly args: BaseArgument[];
 	public notFlags: any[];
 	public flags: any[];
-	public flagValues: { arg: BaseArgument, val: string}[] = [];
+	public flagValues: { arg: BaseFlagArgument, val: string}[] = [];
 	constructor(public command: ICommand, public parsed: Parsed, public content: string, private message: Message) {
 		this.args = this.command.arguments || [];
 		this.flags = this.parsed.args.filter(arg => this.isFlag(arg));
@@ -18,7 +18,7 @@ export class ArgumentHelper {
 	}
 
 	async argString(): Promise<string> {
-		return this.notFlags.join(" ");
+		return this.notFlags.join(' ');
 	}
 
 	private static GetFor(ic: string, usage: string): string | undefined {
@@ -43,7 +43,7 @@ export class ArgumentHelper {
 				break;
 			}
 			case ArgumentType.GUILD_MEMBER: {
-				if (this.message.channel.type !== "text") throw new Error(`Attempt to use ArgumentType.GUILD_MEMBER outside of a guild.`);
+				if (this.message.channel.type !== 'text') throw new Error(`Attempt to use ArgumentType.GUILD_MEMBER outside of a guild.`);
 				const { members } = this.message.guild!;
 				for (const v of val) {
 					const match = userMention.exec(v);
@@ -64,8 +64,8 @@ export class ArgumentHelper {
 				return args;
 			}
 			case ArgumentType.VOICE_CHANNEL: {
-				if (this.message.channel.type !== "text") throw new Error(`Attempt to use ArgumentType.VOICE_CHANNEL outside of a guild.`);
-				const channels = this.message.guild!.channels.cache.filter(c => c.type === "voice");
+				if (this.message.channel.type !== 'text') throw new Error(`Attempt to use ArgumentType.VOICE_CHANNEL outside of a guild.`);
+				const channels = this.message.guild!.channels.cache.filter(c => c.type === 'voice');
 				for (let v of val) {
 					if (ArgumentHelper.GetFor('#', v)) v = <string> ArgumentHelper.GetFor('#', v);
 					const c = channels.find(x => x.id === v || x.name === v);
@@ -74,7 +74,7 @@ export class ArgumentHelper {
 				break;
 			}
 			case ArgumentType.GUILD_ROLE: {
-				if (this.message.channel.type !== "text") throw new Error(`Attempt to use ArgumentType.GUILD_ROLE outside of a guild.`);
+				if (this.message.channel.type !== 'text') throw new Error(`Attempt to use ArgumentType.GUILD_ROLE outside of a guild.`);
 				const { roles } = this.message.guild!;
 				for (let v of val) {
 					const match = roleMention.exec(v);
@@ -84,7 +84,7 @@ export class ArgumentHelper {
 				break;
 			}
 			case ArgumentType.TEXT_EMOJI: {
-				if (this.message.channel.type !== "text") throw new Error(`Attempt to use ArgumentType.GUILD_ROLE outside of a guild.`);
+				if (this.message.channel.type !== 'text') throw new Error(`Attempt to use ArgumentType.GUILD_ROLE outside of a guild.`);
 				const { emojis } = this.message.guild!;
 				for (let v of val) {
 					const match = emojiPattern.exec(v);
@@ -100,7 +100,7 @@ export class ArgumentHelper {
 	}
 
 	isFlag(argument: string): boolean | undefined {
-		// if (index > 0 && this.parsed.args[index - 1].startsWith("-") && this.args[index - 1] instanceof FlagArgumentWithValue) return true;
+		// if (index > 0 && this.parsed.args[index - 1].startsWith('-') && this.args[index - 1] instanceof FlagArgumentWithValue) return true;
 		if (!argument.startsWith('-'))
 			return false;
 
@@ -141,14 +141,15 @@ export class ArgumentHelper {
 	private findArg(name: string): number {
 		let id = -1;
 		for (const arg in this.args) {
-			if (this.args[arg].name === name || this.args[arg].short === name) {
+			// @ts-ignore TODO: Fix this
+			if (this.args[arg].name === name || (this.args[arg] instanceof BaseFlagArgument && this.args[arg].short === name)) {
 				id = Number(arg);
 			}
 		}
 		return id;
 	}
 
-	async get<T = any>(name: string): Promise<T | T[] | undefined> {
+	async get<T = any>(name: string): Promise<T | undefined> {
 		let arg: BaseArgument;
 		await this.validateArguments();
 		const id = this.findArg(name);
