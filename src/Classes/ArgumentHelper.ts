@@ -11,11 +11,12 @@ import {GuildChannel, Message} from "discord.js";
 import {NoArgumentValue} from '../Exceptions';
 
 export class ArgumentHelper {
-	private flagValues: {[name: string]: string } = {};
-	private cache: {[key: string]: any} = {};
+	private flagValues: { [name: string]: string } = {};
+	private cache: { [key: string]: any } = {};
 	private readonly args: BaseArgument[];
 	public notFlags: any[];
 	public flags: any[];
+
 	constructor(public command: ICommand, public parsed: Parsed, public content: string, private message: Message) {
 		this.args = this.command.arguments || [];
 
@@ -28,7 +29,7 @@ export class ArgumentHelper {
 	}
 
 	private static GetFor(ic: string, usage: string): string | undefined {
-		if(!usage.startsWith(`<${ic}`) || !usage.endsWith('>')) return; // Ensures it's the proper format.
+		if (!usage.startsWith(`<${ic}`) || !usage.endsWith('>')) return; // Ensures it's the proper format.
 		return usage.substr(ic.length + 1, usage.length - ic.length - 2); // Returns just the ID.
 	}
 
@@ -65,7 +66,8 @@ export class ArgumentHelper {
 				}
 				break;
 			}
-			default: return String(val);
+			default:
+				return String(val);
 		}
 	}
 
@@ -74,7 +76,7 @@ export class ArgumentHelper {
 		if (!argument.startsWith('-'))
 			return false;
 
-		const longArgument  = argument.substr(2);
+		const longArgument = argument.substr(2);
 		const shortArgument = argument.substr(1);
 
 		for (const i in this.args) {

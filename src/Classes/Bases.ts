@@ -12,18 +12,19 @@ export class BaseArgument {
 	}
 }
 
-export class OptionalArgument extends BaseArgument {
-	constructor(options: MainArgumentOptions) {
-		super({
-			...options
-		}, true);
-	}
-}
 export class RequiredArgument extends BaseArgument {
 	constructor(options: MainArgumentOptions) {
 		super({
 			...options
 		}, false);
+	}
+}
+
+export class OptionalArgument extends BaseArgument {
+	constructor(options: MainArgumentOptions) {
+		super({
+			...options
+		}, true);
 	}
 }
 
