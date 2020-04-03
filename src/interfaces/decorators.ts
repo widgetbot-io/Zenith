@@ -1,5 +1,5 @@
 import {CommandHelper} from "../Classes";
-import {Message} from "discord.js";
+import {ClientEvents, Message} from "discord.js";
 import {BaseArgument} from "../Classes";
 import {Bot} from "../Bot";
 import {BaseModule} from "../services/modules";
@@ -22,6 +22,6 @@ export interface ICommand extends Base {
 	discordPermissions?: string[]
 }
 export interface IEvent extends Base {
-	eventName: string,
+	eventName: keyof ClientEvents,
 	run?: (...args: any[]) => Promise<void>
 }

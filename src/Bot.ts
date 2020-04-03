@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 
-import {Client, Collection} from 'discord.js';
+import {Client, ClientEvents, Collection} from 'discord.js';
 import {CommandHandler, CommandLoader, EventLoader, Logger, ModuleLoader} from "./Classes";
 import {ICommand, IEvent, IModule, Options} from "./interfaces";
 
@@ -26,7 +26,7 @@ export class Bot<C = any> extends Client {
         // TODO: Allow for custom logger/config
     }
 
-    public digestEvent(event: string, cb: (...args: any[]) => void ): void {
+    public digestEvent(event: keyof ClientEvents, cb: (...args: any[]) => void ): void {
         if (!this.events[event] || !this.events[event].length) {
             this.events[event] = [cb];
 
