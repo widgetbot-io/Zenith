@@ -7,7 +7,7 @@ import {BaseEvent} from "../interfaces/command";
 	eventName: 'messageUpdate',
 	description: 'Message Update Event'
 })
-export default class extends BaseEvent<{}> {
+export default class extends BaseEvent<{}, 'messageUpdate'> {
 	async runEvent(oldMessage: Message, newMessage: Message): Promise<void> {
 		if (oldMessage === newMessage) return;
 

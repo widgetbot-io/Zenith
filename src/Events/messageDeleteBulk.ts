@@ -7,7 +7,7 @@ import {BaseEvent} from "../interfaces/command";
 	eventName: 'messageDeleteBulk',
 	description: 'Message Delete Bulk Event'
 })
-export default class extends BaseEvent<{}> {
+export default class extends BaseEvent<{}, 'messageDeleteBulk'> {
 	async runEvent(messages:  Collection<Snowflake, Message>): Promise<void> {
 		for (const id of messages.keyArray()) {
 			if (this.bot.commandHandler.ranCommands[id])

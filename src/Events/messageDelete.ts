@@ -7,7 +7,7 @@ import {BaseEvent} from "../interfaces/command";
 	eventName: 'messageDelete',
 	description: 'Message Delete Event'
 })
-export default class extends BaseEvent<{}> {
+export default class extends BaseEvent<{}, 'messageDelete'> {
 	async runEvent(message: Message): Promise<void> {
 		if (this.bot.commandHandler.ranCommands[message.id]) delete this.bot.commandHandler.ranCommands[message.id];
 	}

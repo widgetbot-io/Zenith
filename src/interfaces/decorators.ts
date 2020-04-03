@@ -17,11 +17,11 @@ export interface ICommand extends Base {
 	hidden?: boolean,
 	help?: string,
 	module: string,
-	run?: (helper: CommandHelper) => Promise<void>,
-	hasPermission?: (message: Message, bot: Bot) => Promise<boolean>,
+	run?: (helper: CommandHelper) => any | Promise<any>,
+	hasPermission?: (message: Message, bot: Bot) => boolean | Promise<boolean>,
 	discordPermissions?: string[]
 }
-export interface IEvent extends Base {
-	eventName: keyof ClientEvents,
-	run?: (...args: any[]) => Promise<void>
+export interface IEvent<K extends keyof ClientEvents> extends Base {
+	eventName: K,
+	run?: (...args: ClientEvents[K]) => Promise<any>
 }

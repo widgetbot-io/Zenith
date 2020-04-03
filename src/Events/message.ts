@@ -7,7 +7,7 @@ import {BaseEvent} from "../interfaces/command";
 	eventName: 'message',
 	description: 'haha'
 })
-export default class extends BaseEvent<{}> {
+export default class extends BaseEvent<{}, 'message'> {
 	async runEvent(message: Message): Promise<void> {
 		await this.bot.commandHandler.handleMessage(message)
 	}

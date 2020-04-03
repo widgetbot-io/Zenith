@@ -1,5 +1,5 @@
 import {CommandHelper} from "../Classes";
-import {Message} from "discord.js";
+import {ClientEvents, Message} from "discord.js";
 import {Bot} from "../Bot";
 import {ICommand} from "./decorators";
 
@@ -8,9 +8,9 @@ export abstract class BaseCommand {
 	abstract hasPermission(message: Message, bot: Bot): Promise<boolean>;
 }
 
-export abstract class BaseEvent<C = any> {
+export abstract class BaseEvent<C = any, K extends keyof ClientEvents = keyof ClientEvents> {
 	public bot!: Bot<C>;
-	abstract runEvent(...args: any): Promise<void>;
+	abstract runEvent(...args: ClientEvents[K]): any | Promise<any>;
 }
 
 export interface Parsed {

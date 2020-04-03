@@ -9,7 +9,7 @@ export class Bot<C = any> extends Client {
 
     public static commands: Collection<string, ICommand> = new Collection();
     public static modules: Collection<string, IModule> = new Collection();
-    public static events: Collection<string, IEvent> = new Collection();
+    public static events: Collection<string, IEvent<keyof ClientEvents>> = new Collection();
 
 
     public commandHandler: CommandHandler = new CommandHandler(this);
@@ -26,11 +26,11 @@ export class Bot<C = any> extends Client {
         // TODO: Allow for custom logger/config
     }
 
-    public digestEvent(event: keyof ClientEvents, cb: (...args: any[]) => void ): void {
+    public digestEvent<K extends keyof ClientEvents>(event: K, cb: (...args: any[]) => void ): void {
         if (!this.events[event] || !this.events[event].length) {
             this.events[event] = [cb];
 
-            this.on(event, (...args: any[]) => {
+            this.on(event, (...args: ClientEvents[K]) => {
                 try {
                     for (const callback of this.events[event]) callback(...args)
                 } catch (e) {
