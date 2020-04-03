@@ -21,7 +21,7 @@ export interface ICommand extends Base {
 	hasPermission?: (message: Message, bot: Bot) => boolean | Promise<boolean>,
 	discordPermissions?: string[]
 }
-export interface IEvent<K extends keyof ClientEvents> extends Base {
+export interface IEvent<K extends keyof ClientEvents = keyof ClientEvents> extends Base {
 	eventName: K,
 	run?: (...args: ClientEvents[K]) => Promise<any>
 }
