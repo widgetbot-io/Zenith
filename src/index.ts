@@ -9,7 +9,10 @@ export {
 	LimitSettings,
 	Limit,
 	BaseCommand,
-	Options
+	Options,
+	FlagArgumentOptions,
+	ArgumentType,
+	Parsed
 } from './interfaces';
 export {
 	BaseArgument,
@@ -20,11 +23,12 @@ export {
 	BaseLoader,
 	CommandLoader,
 	CommandHelper,
-	Logger,
 	ArgumentHelper,
 	EventLoader,
-	ModuleLoader
+	ModuleLoader,
+	CommandHandler
 } from './Classes';
+export {NoArgumentValue} from './Exceptions'
 export {General, Administration} from './Modules'
 export {Module, Event, Command} from './services/decorators';
 export {Bot} from './Bot';
