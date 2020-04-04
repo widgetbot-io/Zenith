@@ -25,7 +25,26 @@ export class ArgumentHelper {
 	}
 
 	async argString(): Promise<string> {
-		return this.notFlags.join(' ');
+		const flags = this.parsed.stringy.split(' ')
+			.filter(a => this.isFlag(a))
+			.map(a => a.startsWith("--") && a.substr(2) || a.substr(1));
+		let { stringy: argString } = this.parsed;
+		for (const flag of flags) {
+			const val = await this.get(flag);
+			if (val) {
+				argString = argString
+				.replace(`--${flag} ${val} `, '')
+				.replace(`--${flag} ${val}`, '')
+				.replace(`--${flag}`, '')
+				.replace(`-${flag}`, '');
+			} else {
+				argString = argString
+					.replace(`-${flag}`, '')
+					.replace(`--${flag}`, '');
+			}
+		}
+
+		return argString.trim();
 	}
 
 	private static GetFor(ic: string, usage: string): string | undefined {
