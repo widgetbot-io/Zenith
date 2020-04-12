@@ -24,12 +24,16 @@ export class CommandHandler extends EventEmitter {
 		}
 	}
 
-
-	async handleMessage(message: Message) {
+	public async validCommand(message: Message) {
 		if (!message.author) return;
 		if (!message.cleanContent.startsWith(this.bot.settings.prefix)) return;
 
-		const parsed = await CommandHandler.parseMessage(this.bot.settings.prefix, message.content);
+		return await CommandHandler.parseMessage(this.bot.settings.prefix, message.content);
+	}
+
+
+	async handleMessage(message: Message) {
+		const parsed = await this.validCommand(message);
 		if (!parsed) return;
 
 		const module: IModule | undefined = Bot.modules.get(parsed.command.module.toLowerCase());

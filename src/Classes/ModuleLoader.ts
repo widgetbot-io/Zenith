@@ -8,15 +8,11 @@ export class ModuleLoader extends BaseLoader {
         let count: number = 0;
         let modules: string[][] = [];
 
-        // TODO: Progress bar
-        for (const moduleDir of this.bot.settings.dirs.modules) {
-            modules.push(await this.getLoadable(moduleDir))
-        }
+        for (const moduleDir of this.bot.settings.dirs.modules) modules.push(await this.getLoadable(moduleDir));
 
         for (const module of modules) {
             for (const m of module) {
-                if (m.endsWith('.d.ts')) continue;
-                if (m.endsWith('.map')) continue;
+                if (m.endsWith('.d.ts') || m.endsWith('.map')) continue;
                 count += 1;
                 require(m);
             }

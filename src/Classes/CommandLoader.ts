@@ -21,15 +21,11 @@ export class CommandLoader extends BaseLoader {
         let count: number = 0;
         let commands: string[][] = [];
 
-        // TODO: Progress bar
-        for (const commandDir of this.bot.settings.dirs.commands) {
-            commands.push(await this.getLoadable(commandDir))
-        }
+        for (const commandDir of this.bot.settings.dirs.commands) commands.push(await this.getLoadable(commandDir));
 
         for (const command of commands) {
             for (const c of command) {
-                if (c.endsWith('.d.ts')) continue;
-                if (c.endsWith('.map')) continue;
+                if (c.endsWith('.d.ts') || c.endsWith('.map')) continue;
                 count += 1;
                 require(c);
             }

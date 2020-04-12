@@ -8,15 +8,11 @@ export class EventLoader extends BaseLoader {
         let count: number = 0;
         let events: string[][] = [];
 
-        // TODO: Progress bar
-        for (const eventDir of this.bot.settings.dirs.events) {
-            events.push(await this.getLoadable(eventDir))
-        }
+        for (const eventDir of this.bot.settings.dirs.events) events.push(await this.getLoadable(eventDir));
 
         for (const event of events) {
             for (const e of event) {
-                if (e.endsWith('.d.ts')) continue;
-                if (e.endsWith('.map')) continue;
+                if (e.endsWith('.d.ts') || e.endsWith('.map')) continue;
                 count += 1;
                 require(e);
             }
