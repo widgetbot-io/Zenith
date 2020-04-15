@@ -6,7 +6,7 @@ import {Parser} from "./Parser";
 import {EventEmitter} from "events";
 
 export class CommandHandler extends EventEmitter {
-	public ranCommands: { [key: string]: Message | Message[] } = {};
+	public ranCommands: { [key: string]: Message } = {};
 	// private rateLimit: RateLimit = new RateLimit(this.bot);
 	constructor(private bot: Bot) { super(); }
 
