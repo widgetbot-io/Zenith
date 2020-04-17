@@ -21,9 +21,9 @@ export class Bot<C = any> extends Client {
     constructor(public settings: Options, public client: C) {
         super(settings.clientOptions);
 
-        this.logger.info('Hello World')
+        this.logger.info('Hello World');
 
-        // TODO: Allow for custom logger/config
+        if (this.settings.mentionPrefix === undefined) this.settings.mentionPrefix = true;
     }
 
     public digestEvent<K extends keyof ClientEvents>(event: K, cb: (...args: any[]) => void ): void {
