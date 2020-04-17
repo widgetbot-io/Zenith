@@ -1,7 +1,7 @@
 import { Bot } from '../src';
 
 const bot = new Bot({
-	token: 'NjA0MDU2MjEyNzA2Njg5MDc2.Xm4bYQ.8Ry6g1JT0taMvbJ5Cx7L1_UjLXU',
+	token: process.env.TOKEN!,
 	clientOptions: {
 		disableMentions: 'everyone',
 	},
@@ -25,4 +25,6 @@ const bot = new Bot({
 }, {});
 
 bot.setup();
-bot.connect();
+bot.connect().then(() => {
+	console.log(bot.user!)
+});
