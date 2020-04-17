@@ -24,11 +24,19 @@ export class CommandHandler extends EventEmitter {
 		}
 	}
 
+	private getPrefix(content: string, prefix: string): string | false {
+		return content.startsWith(`<@${this.bot.user!.id}> `) && `<@${this.bot.user!.id}> `
+			|| content.startsWith(`<@!${this.bot.user!.id}> `) && `<@!${this.bot.user!.id}> `
+			|| content.startsWith(prefix) && prefix;
+	}
+
 	public async validCommand(message: Message) {
 		if (!message.author) return;
-		if (!message.cleanContent.startsWith(this.bot.settings.prefix)) return;
 
-		return await CommandHandler.parseMessage(this.bot.settings.prefix, message.content);
+		const prefix = this.getPrefix(message.content, this.bot.settings.prefix);
+		if (!prefix) return;
+
+		return await CommandHandler.parseMessage(prefix, message.content);
 	}
 
 
