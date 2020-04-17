@@ -25,9 +25,9 @@ export class CommandHandler extends EventEmitter {
 	}
 
 	private getPrefix(content: string, prefix: string): string | false {
-		return content.startsWith(`<@${this.bot.user!.id}> `) && `<@${this.bot.user!.id}> `
+		return this.bot.settings.mentionPrefix ? content.startsWith(`<@${this.bot.user!.id}> `) && `<@${this.bot.user!.id}> `
 			|| content.startsWith(`<@!${this.bot.user!.id}> `) && `<@!${this.bot.user!.id}> `
-			|| content.startsWith(prefix) && prefix;
+			|| content.startsWith(prefix) && prefix : content.startsWith(prefix) && prefix;
 	}
 
 	public async validCommand(message: Message) {

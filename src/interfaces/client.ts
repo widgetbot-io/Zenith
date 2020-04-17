@@ -8,6 +8,7 @@ export interface Options {
 	dirs: DirectoryOptions,
 	clientOptions: ClientOptions,
 	roots: string[],
+	mentionPrefix?: boolean,
 	limits: LimitSettings
 }
 
