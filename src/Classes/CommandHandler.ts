@@ -31,7 +31,7 @@ export class CommandHandler extends EventEmitter {
 	}
 
 	public async validCommand(message: Message) {
-		if (!message.author) return;
+		if (!message.author || message.author.bot) return;
 
 		const prefix = this.getPrefix(message.content, this.bot.settings.prefix);
 		if (!prefix) return;
