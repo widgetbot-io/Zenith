@@ -25,7 +25,7 @@ export function Event(info: IEvent): ClassDecorator {
 
         Bot.events.set(info.name.toLowerCase(), {
             ...info,
-            run: loaded.runEvent
+            run: loaded.runEvent.bind(loaded)
         });
     }
 }
@@ -38,8 +38,8 @@ export function Command(info: ICommand): ClassDecorator {
 
         Bot.commands.set(info.name.toLowerCase(), {
             ...info,
-            run: loaded.runCommand,
-            hasPermission: loaded.hasPermission
+            run: loaded.runCommand.bind(loaded),
+            hasPermission: loaded.hasPermission.bind(loaded)
         })
     }
 }
